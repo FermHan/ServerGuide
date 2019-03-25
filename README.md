@@ -9,7 +9,6 @@ For theory and texture group only.
 - 创建了大家主要用的python2.7和python3.6，不再需要 ~~conda install 你名字~~ 这种步骤了，主要是考虑到了有的同学不熟悉anaconda命令，也节省了一些服务器内存。
 - 与原有服务器用法不冲突，可以继续参考之前的用法。所以你可能只需要看3.3的两行代码即可关闭文档。
 - 考虑到留学生，所以采用了中英结合的书写方式
-- 
 
 [TOC]
 
@@ -34,6 +33,7 @@ For theory and texture group only.
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325172652.png?token=AkTVJYakMJzCIiVJDfjlIcg5KLcv0mctks5cmJ8owA%3D%3D)
 
 **2.3 Type in username and password**
+
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325135817.png?token=AkTVJVynPSWj1sb4ZEbO8wRyjpg_8P4cks5cmG46wA%3D%3D)
 
 **2.4 Once in the system, modify someone.txt to note your name and usage time.And you can put your personal files in directory  /home/ouc-xx/**
