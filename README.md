@@ -6,7 +6,7 @@ For theory and texture group only.
 
 本次更新内容：
 
-- 创建了大家主要用的python2.7和python3.6，不再需要 ~~conda install 你名字~~ 这种步骤了，主要是考虑到了有的同学不熟悉anaconda命令，也节省了一些服务器内存。
+- 创建了大家主要用的python2.7和python3.6，不再需要 ~~conda install 你名字~~ 这种步骤了，主要是考虑到了有的同学不熟悉anaconda命令，也节省了一些服务器内存，避免了同学们在重新使用每个服务器时都需要重建环境的漫长等待。
 - 与原有服务器用法不冲突，可以继续参考之前的用法。所以你可能只需要看3.3的两行代码即可关闭文档。
 - 考虑到留学生，所以采用了中英结合的书写方式
 
@@ -136,4 +136,4 @@ please type in `no`
 
 4.3 please debug your code on your PC to to save server resources.
 
-4.4 If your server resources are insufficient, please contact me. 1 or 2 servers are unalocated.
+4.4 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
