@@ -6,8 +6,8 @@ For theory and texture group only.
 
 本次更新内容：
 
-- 会让3个人左右共同使用和维护一台专属服务器，也留下了2台机动的服务器。
-- 创建了大家主要用的python2.7和python3.6，不再需要 ~~conda create -n YOURNAME~~ 这种步骤了，主要是考虑到了有的同学不熟悉anaconda命令，也节省了一些服务器内存，避免了同学们在重新使用每个服务器时都需要重建环境的漫长等待。
+- 会让3个人左右共同使用和维护一台专属服务器，也留下了1,2台机动的服务器。
+- 创建了大家主要用的python2.7和python3.6，不再需要 ~~conda create -n 你名字~~ 这种步骤了，主要是考虑到了有的同学不熟悉anaconda命令，也节省了一些服务器内存，避免了同学们在新使用某个服务器时都需要重建环境的漫长等待。
 - 与原有服务器用法不冲突，可以继续参考之前的用法。所以你可能只需要看3.3的两行代码即可关闭文档。
 - 考虑到留学生，所以采用了中英结合的书写方式
 
@@ -40,7 +40,7 @@ For theory and texture group only.
 **2.4 Once in the system, modify someone.txt to note your name and usage time.And you can put your personal files in directory  /home/ouc-xx/**
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325144734.png?token=AkTVJRoQTQFVopFyApR5WI9oEZziwdXtks5cmHnIwA%3D%3D)
 
-**2.5 Before you run the code, please type in  ` nvidia - smi ` in the terminal to make sure there's no another user.**(在你正式跑代码之前，请输入`nvidia-smi`查看有没有其他用户在跑程序（通过红框部分看）)。
+**2.5 Before you run the code, please type in  ` nvidia-smi ` in the terminal to make sure there's no another user.**(在你正式跑代码之前，请输入`nvidia-smi`查看有没有其他用户在跑程序（通过红框部分看）)。
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325150409.png?token=AkTVJdMwtfgMAto3CRd4hvoScKzyrl_kks5cmH2rwA%3D%3D)
 
@@ -109,7 +109,7 @@ In addition, you can check your modules installed
 
 You can find your ANACONDA in the directory such as: `/home/ouc/Anaconda3`.
 
-You can find your personal python in: `Anaconda3/env/YOURNAME/python`.You can open terminal and type in `Anaconda3/env/YOURNAME/python` to enter YOURNAME python.
+You can find your personal python in: `/home/Anaconda3/env/YOURNAME/python`.You can open terminal and type in `/home/Anaconda3/env/YOURNAME/python` to enter YOURNAME python.
 
 And you may need to change the python path from relative path to absolute path in some sh files.
 
