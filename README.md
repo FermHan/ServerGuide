@@ -6,7 +6,7 @@ For theory and texture group only.
 
 本次更新内容：
 
-- 会让3个人左右共同使用和维护一台专属服务器，也留下了1,2台机动的服务器。
+- 会让3个人左右共同使用和维护一台专属服务器，也留下了2台机动的服务器。
 - 创建了大家主要用的python2.7和python3.6，不再需要 ~~conda install 你名字~~ 这种步骤了，主要是考虑到了有的同学不熟悉anaconda命令，也节省了一些服务器内存，避免了同学们在重新使用每个服务器时都需要重建环境的漫长等待。
 - 与原有服务器用法不冲突，可以继续参考之前的用法。所以你可能只需要看3.3的两行代码即可关闭文档。
 - 考虑到留学生，所以采用了中英结合的书写方式
@@ -65,7 +65,7 @@ For theory and texture group only.
 - **==Method 1:==**(proposed)
 
 ```python
-conda deactivate  #退出原有环境，或source deactivate python36
+source deactivate  #退出原有环境，或deactivate python36
 source activate python27 #大多数人只需要知道前两命令即可，接下来可以不用看了
 #or
 source avtivate python36
@@ -135,6 +135,6 @@ please type in `no`
 
 4.2 Some environment variables are configured in `~/.bashrc`
 
-4.3 please debug your code on your PC to to save server resources.
+4.3 please debug your code on your PC to save server resources.
 
 4.4 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
