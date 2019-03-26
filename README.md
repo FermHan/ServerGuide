@@ -115,7 +115,7 @@ And you may need to change the python path from relative path to absolute path i
 
 # 4、What's more
 
-4.1 Maybe you want to install Anaconda2, but to be honest, it's not usually used. Because python2.7 has been involved in Anaconda3. If you think about it, What is noteworthy is that when you install anaconda2,
+4.1 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
 
 > Anaconda2 will now be installed into this location:home/xx/anaconda2
 >
