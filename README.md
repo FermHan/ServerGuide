@@ -179,18 +179,15 @@ please type in `no`
 
 
 
-### 5.3 如果远程连接很卡桌面解决？
+### 5.3 如果远程连接很卡桌面解决？（使用命令行）
 
 windows的远程的确有时候很卡。解决的第一种方法是开teamviewer。第二种方法是用ssh命令行模式，ssh的操作如下：
 
-```
-如果ubuntu里没有ssh可以通过如下命令安装
-`sudo apt-get install openssh-server`，在ubuntu端安装ssh。
+> 如果ubuntu里没有ssh可以通过如下命令安装
+> `sudo apt-get install openssh-server`，在ubuntu端安装ssh。
+> 输入"sudo ps -e |grep ssh"-->回车-->有sshd,说明ssh服务已经启动，如果没有启动，输入"sudo service ssh start"-->回车-->ssh服务就会启动。
 
-输入"sudo ps -e |grep ssh"-->回车-->有sshd,说明ssh服务已经启动，如果没有启动，输入"sudo service ssh start"-->回车-->ssh服务就会启动。
-```
-
-然后在windows上安装xshell使用命令行：
+在windows上安装xshell使用命令行：
 
 破解xshell地址：https://blog.csdn.net/u011622631/article/details/88991941
 
@@ -201,6 +198,10 @@ windows的远程的确有时候很卡。解决的第一种方法是开teamviewer
 然后输入账户密码 后点ok
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531232837.png)
+
+连接成功
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531233523.png)
 
 ### 5.4 为什么要安装小老鼠这个界面？
 
