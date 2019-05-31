@@ -4,7 +4,7 @@
 
 本次更新内容：
 
-- 会让3个人左右共同使用和维护一台专属服务器，也留下了1台机动的服务器。
+- 会让3个人左右共同使用和维护一台专属服务器（自己组的服务器自行解决），也留下了1台机动的服务器。
 - 考虑到留学生，所以采用了中英结合的书写方式
 - 解释了一些虚拟环境的知识
 
@@ -157,7 +157,9 @@ show_channel_urls: true
 
 5.2.3 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
 
-5.2.4 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
+5.2.4 以后更新尽量在此github更新IP等内容，账号即OUCvisionLab，密码可问管理员索要。
+
+5.2.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
 
 > Anaconda2 will now be installed into this location:home/xx/anaconda2
 >
@@ -181,11 +183,24 @@ please type in `no`
 
 windows的远程的确有时候很卡。解决的第一种方法是开teamviewer。第二种方法是用ssh命令行模式，ssh的操作如下：
 
-下ubuntu终端里输入`sudo apt-get install openssh-server`，在ubuntu端安装ssh。
+```
+如果ubuntu里没有ssh可以通过如下命令安装
+`sudo apt-get install openssh-server`，在ubuntu端安装ssh。
 
 输入"sudo ps -e |grep ssh"-->回车-->有sshd,说明ssh服务已经启动，如果没有启动，输入"sudo service ssh start"-->回车-->ssh服务就会启动。
+```
 
-然后在windows上安装xshell5/6、winscp或xftp等软件进行连接，见上面4。
+然后在windows上安装xshell使用命令行：
+
+破解xshell地址：https://blog.csdn.net/u011622631/article/details/88991941
+
+安装后，打开xshell，新建链接如图，端口为91--
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531232754.png)
+
+然后输入账户密码 后点ok
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531232837.png)
 
 ### 5.4 为什么要安装小老鼠这个界面？
 
