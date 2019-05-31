@@ -175,6 +175,8 @@ windows的远程的确有时候很卡。解决的第一种方法是开teamviewer
 
 ### 为什么要安装小老鼠这个界面？
 
+因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
+
 因为ubuntu不好实现远程连接，必须通过安装小老鼠界面间接控制ubuntu。ubuntu16可能有解决方案，但ubuntu18较难解决，所以尽管小老鼠界面不美观，但还得接着使用。
 
 ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2523/article/details/81152890
