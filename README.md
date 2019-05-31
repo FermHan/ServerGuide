@@ -49,7 +49,7 @@ For theory and texture group only.
 
 # 3、Use python and tensorflow
 
-### 3.1 First and Foremost：`nvidia-smi`**
+### 3.1 First and Foremost：`nvidia-smi`
 
 此处是作用是验证没有人在使用此服务器
 
@@ -99,6 +99,7 @@ python -m pip install 模块
 # offline installation # 离线安装方式 
 python -m pip install FILE
 # 官网给出的pip后面的网址即是包的地址，可以去掉pip复制网址到浏览器下载，下载后用pip安装，安装时候输入完python -m pip install 把文件拖进去即可，相当于要输入文件绝对路径
+
 ```
 
 
@@ -135,7 +136,28 @@ port is NOT 90-- BUT 91--  # 端口号是91--，而不是原来的90--
 
 # 5、What's more
 
-4.1 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
+### 5.1 镜像问题change channel
+
+清华源目前崩了，国内源基本不能用了，可以尝试中科大的镜像。实在不行就只好用pip或离线安装了
+
+更改源的方式：
+
+终端输入`gedit ~/.condarc`，删除原来全部内容，添加如下内容
+
+```
+channels:
+  - https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
+  - default
+show_channel_urls: true
+```
+
+5.2 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
+
+5.3 please debug your code on your PC to save server resources.
+
+5.4 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
+
+5.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
 
 > Anaconda2 will now be installed into this location:home/xx/anaconda2
 >
@@ -153,11 +175,7 @@ don't press ENTER, you should type in your personal directory such as : `/home/o
 
 please type in `no`
 
-4.2 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
 
-4.3 please debug your code on your PC to save server resources.
-
-4.4 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
 
 
 
