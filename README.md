@@ -128,7 +128,7 @@ port is NOT 90-- BUT 91--  # 端口号是91--，而不是原来的90--
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220350.png)
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220518.png)
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531222935.png)
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220703.png)
 
