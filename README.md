@@ -4,7 +4,7 @@
 
 本次更新内容：
 
-- 会让3个人左右共同使用和维护一台专属服务器，也留下了1,2台机动的服务器。
+- 会让3个人左右共同使用和维护一台专属服务器，也留下了1台机动的服务器。
 - 考虑到留学生，所以采用了中英结合的书写方式
 - 解释了一些虚拟环境的知识
 
@@ -151,13 +151,13 @@ channels:
 show_channel_urls: true
 ```
 
-5.2 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
+5.2.1 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
 
-5.3 please debug your code on your PC to save server resources.
+5.2.2 please debug your code on your PC to save server resources.
 
-5.4 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
+5.2.3 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
 
-5.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
+5.2.4 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
 
 > Anaconda2 will now be installed into this location:home/xx/anaconda2
 >
@@ -177,11 +177,7 @@ please type in `no`
 
 
 
-
-
-
-
-### 如果远程连接很卡桌面解决？
+### 5.3 如果远程连接很卡桌面解决？
 
 windows的远程的确有时候很卡。解决的第一种方法是开teamviewer。第二种方法是用ssh命令行模式，ssh的操作如下：
 
@@ -191,7 +187,7 @@ windows的远程的确有时候很卡。解决的第一种方法是开teamviewer
 
 然后在windows上安装xshell5/6、winscp或xftp等软件进行连接，见上面4。
 
-### 为什么要安装小老鼠这个界面？
+### 5.4 为什么要安装小老鼠这个界面？
 
 因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
 
@@ -204,3 +200,27 @@ ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2
 原来服务器配置人员的博客：https://blog.csdn.net/zhouxiaowei1120/article/details/80872919
 
 > 如有在远程上打不开终端，可以使用sudo apt-get remove gnome*
+
+### 5.5 如何安装cuda，显卡驱动等
+
+参考链接 https://blog.csdn.net/hancoder/article/details/86634415
+
+### 5.5 重装服务器系统后需要做什么
+
+配置显卡驱动，cuda，cudnn
+
+重新配置IP以便可以远程连接
+
+安装ssh以便文件传输：
+
+​	`apt-get install openssh-server`
+
+​	vim /etc/ssh/sshd_config
+
+​	将PermitRootLoginwithout-password注释，                                
+
+​	添加一行： PermitRootLoginyes
+
+​	`service ssh restart`
+
+远程连接方式可看上面小老鼠问题
