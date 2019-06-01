@@ -108,9 +108,7 @@ ps：你也可以使用navigator界面的方式进行上面创建虚拟环境安
 
 ps: Similarly,you can type in 
 
-```
-anaconda-navigator
-```
+`anaconda-navigator`
 
 in the terminal to open NAVIGATOR, and choose python from NAVIGATOR.
 
@@ -120,15 +118,13 @@ in the terminal to open NAVIGATOR, and choose python from NAVIGATOR.
 
 # 4、How to transfer files传文件
 
-You can **Xftp** software to transfer files, which is faster than Teamviewer. # windows安装xftp软件
+You can install **Xftp** in windows to transfer files. # windows安装xftp软件
 
 Protocol:sftp  # 协议选sftp
 
 port is NOT 90-- BUT 91--  # 端口号是91--，而不是原来的90--
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220350.png)
-
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531222935.png)
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220350.png)![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531222935.png)
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220703.png)
 
