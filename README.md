@@ -92,14 +92,14 @@ conda install tensorflow-gpu=版本号
 
 # use pip # pip安装方式
 # if you wanna use pip,use 'python -m pip install' after 'source activate YOURNAME'
-# 如果你要使用pip，务必先激活到自己的虚拟环境，然后使用下面的用法，因为直接输入的pip指向的并不是你的python，而是别人的，想要一探究竟可以打开/usr/local/bin下的pip文件
+# 如果你要使用pip，务必先激活到自己的虚拟环境，然后使用下面的用法，因为直接输入的pip指向的并不是你的python，而是别人的。想要一探究竟可以打开/usr/local/bin下的pip文件看其原理
 python -m pip install 模块
+
 
 # offline installation # 离线安装方式 
 # 尤其是像pytorch这种包，conda命令经常安不上，使用pip命令的时候一定要使用上面的方式。
 python -m pip install FILE
 # 官网给出的pip后面的网址即是包的地址，可以去掉pip复制网址到浏览器下载，下载后用pip安装，安装时候输入完python -m pip install 把文件拖进去即可，相当于要输入文件绝对路径
-
 ```
 
 
@@ -116,9 +116,9 @@ in the terminal to open NAVIGATOR, and choose python from NAVIGATOR.
 
 
 
-# 4、How to transfer files传文件
+# 4、How to transfer files 传文件
 
-如果需要传文件，无需去机房拷贝，用Xftp传即可。
+如果需要传文件，无需去机房拷贝，用Xftp传即可，文件可在网上下载破解版。
 
 You can install **Xftp** in windows to transfer files. # windows安装xftp软件
 
@@ -134,11 +134,13 @@ port is NOT 90-- BUT 91--  # 端口号是91--，而不是原来的90--
 
 # 5、只使用命令行不使用界面：Xshell
 
-windows的远程的确有时候很卡，目前我也不知道该如何解决。这里提高两种暂时的解决方案。
+windows的远程的确有时候很卡，目前我也不知道该如何解决，或许在ubuntu18没有解决方案。至于为什么卡还在使用这个远程的原因请看6.2。
 
-第一种方法是开teamviewer。但teamviewer与远程界面有时候有些矛盾，这可能是安的桌面的问题。所有teamviewer不一定100%有效。
+这里提高两种暂时的解决方案。
 
-第二种方法是用ssh命令行模式，ssh的操作如下：
+- 第一种方法是开teamviewer。但teamviewer与远程界面有时候有些矛盾，这可能是安的桌面的问题。所有teamviewer不一定100%有效。
+
+- 第二种方法是用ssh命令行模式，ssh的操作如下：
 
 > 如果ubuntu里没有ssh可以通过如下命令安装
 > `sudo apt-get install openssh-server`，在ubuntu端安装ssh。
@@ -159,6 +161,8 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决。�
 连接成功，界面如下：
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531233523.png)
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190605152403.png)
 
 # 6、What's more
 
@@ -181,13 +185,13 @@ show_channel_urls: true
 
 因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
 
-因为ubuntu不好实现远程连接，必须通过安装小老鼠界面间接控制ubuntu。ubuntu16可能有解决方案，但ubuntu18较难解决，所以尽管小老鼠界面不美观，但还得接着使用。
+因为ubuntu不好实现远程连接，必须通过安装小老鼠界面间接控制ubuntu。ubuntu16可能有解决方案，但ubuntu18较难解决，而我们的ubuntu当初安装的是18版本，所以尽管小老鼠界面不美观，但还得接着使用。
 
-ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2523/article/details/81152890
+- ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2523/article/details/81152890
 
-在ubuntu16下可能存在完美的解决方式请参考：https://blog.csdn.net/qq_37674858/article/details/80931254 ， https://www.cnblogs.com/xuliangxing/p/7642650.html
+- 在ubuntu16下可能存在完美的解决方式请参考：https://blog.csdn.net/qq_37674858/article/details/80931254 ， https://www.cnblogs.com/xuliangxing/p/7642650.html
 
-原来服务器配置人员的博客：https://blog.csdn.net/zhouxiaowei1120/article/details/80872919
+- 原来服务器配置人员的博客：https://blog.csdn.net/zhouxiaowei1120/article/details/80872919
 
 > 如有在远程上打不开终端，可以使用sudo apt-get remove gnome*
 
@@ -197,11 +201,11 @@ ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2
 
 ### 6.4 重装服务器系统后需要做什么
 
-配置显卡驱动，cuda，cudnn
+- 配置显卡驱动，cuda，cudnn
 
-重新配置IP以便可以远程连接
+- 重新配置IP以便可以远程连接
 
-安装ssh以便文件传输：
+- 安装ssh以便文件传输：
 
 ​	`apt-get install openssh-server`
 
