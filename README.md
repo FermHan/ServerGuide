@@ -90,13 +90,13 @@ conda remove -n YOURNAME --all
 # use conda
 conda install tensorflow-gpu=版本号
 
-# use pip
+# use pip # pip安装方式
 # if you wanna use pip,use 'python -m pip install' after 'source activate YOURNAME'
 # 如果你要使用pip，务必先激活到自己的虚拟环境，然后使用下面的用法，因为直接输入的pip指向的并不是你的python，而是别人的，想要一探究竟可以打开/usr/local/bin下的pip文件
 python -m pip install 模块
 
-# 尤其是像pytorch这种包，conda命令经常安不上，使用pip命令的时候一定要使用上面的方式。
 # offline installation # 离线安装方式 
+# 尤其是像pytorch这种包，conda命令经常安不上，使用pip命令的时候一定要使用上面的方式。
 python -m pip install FILE
 # 官网给出的pip后面的网址即是包的地址，可以去掉pip复制网址到浏览器下载，下载后用pip安装，安装时候输入完python -m pip install 把文件拖进去即可，相当于要输入文件绝对路径
 
@@ -118,6 +118,8 @@ in the terminal to open NAVIGATOR, and choose python from NAVIGATOR.
 
 # 4、How to transfer files传文件
 
+如果需要传文件，无需去机房拷贝，用Xftp传即可。
+
 You can install **Xftp** in windows to transfer files. # windows安装xftp软件
 
 Protocol:sftp  # 协议选sftp
@@ -130,11 +132,13 @@ port is NOT 90-- BUT 91--  # 端口号是91--，而不是原来的90--
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220819.png)
 
-## 5、只使用命令行不使用界面
+# 5、只使用命令行不使用界面：Xshell
 
 windows的远程的确有时候很卡，目前我也不知道该如何解决。这里提高两种暂时的解决方案。
 
-解决的第一种方法是开teamviewer。第二种方法是用ssh命令行模式，ssh的操作如下：
+第一种方法是开teamviewer。但teamviewer与远程界面有时候有些矛盾，这可能是安的桌面的问题。所有teamviewer不一定100%有效。
+
+第二种方法是用ssh命令行模式，ssh的操作如下：
 
 > 如果ubuntu里没有ssh可以通过如下命令安装
 > `sudo apt-get install openssh-server`，在ubuntu端安装ssh。
@@ -152,7 +156,7 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决。�
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531232837.png)
 
-连接成功
+连接成功，界面如下：
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531233523.png)
 
