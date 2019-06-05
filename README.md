@@ -130,54 +130,11 @@ port is NOT 90-- BUT 91--  # 端口号是91--，而不是原来的90--
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220819.png)
 
-# 5、What's more
+## 5、只使用命令行不使用界面
 
-### 5.1 镜像问题change channel
+windows的远程的确有时候很卡，目前我也不知道该如何解决。这里提高两种暂时的解决方案。
 
-清华源目前崩了，国内源基本不能用了，可以尝试中科大的镜像。实在不行就只好用pip或离线安装了
-
-更改源的方式：
-
-终端输入`gedit ~/.condarc`，删除原来全部内容，添加如下内容
-
-```
-channels:
-  - https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
-  - default
-show_channel_urls: true
-```
-
-5.2.1 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
-
-5.2.2 please debug your code on your PC to save server resources.
-
-5.2.3 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
-
-5.2.4 以后更新尽量在此github更新IP等内容，账号即OUCvisionLab，密码可问管理员索要。
-
-5.2.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
-
-> Anaconda2 will now be installed into this location:home/xx/anaconda2
->
-> -Press ENTER to confirm the location
->
-> -Press CTRL-C to abort the installation
->
-> -Or specify a different location below
->
-> [/home/xx/anaconda2]>>>
-
-don't press ENTER, you should type in your personal directory such as : `/home/ouc/Tom/Anaconda2/`
-
-> Do you with the installer to prepend the Anaconda2 install location to PATH in your /home/ouc/.bashrc ?[yes|no]
-
-please type in `no`
-
-
-
-### 5.3 如果远程连接很卡桌面解决？（使用命令行）
-
-windows的远程的确有时候很卡。解决的第一种方法是开teamviewer。第二种方法是用ssh命令行模式，ssh的操作如下：
+解决的第一种方法是开teamviewer。第二种方法是用ssh命令行模式，ssh的操作如下：
 
 > 如果ubuntu里没有ssh可以通过如下命令安装
 > `sudo apt-get install openssh-server`，在ubuntu端安装ssh。
@@ -199,7 +156,24 @@ windows的远程的确有时候很卡。解决的第一种方法是开teamviewer
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531233523.png)
 
-### 5.4 为什么要安装小老鼠这个界面？
+# 6、What's more
+
+### 6.1 镜像问题change channel
+
+清华源目前崩了，国内源基本不能用了，可以尝试中科大的镜像。实在不行就只好用pip或离线安装了
+
+更改源的方式：
+
+终端输入`gedit ~/.condarc`，删除原来全部内容，添加如下内容
+
+```
+channels:
+  - https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
+  - default
+show_channel_urls: true
+```
+
+### 6.2 为什么要安装小老鼠这个界面？
 
 因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
 
@@ -213,11 +187,11 @@ ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2
 
 > 如有在远程上打不开终端，可以使用sudo apt-get remove gnome*
 
-### 5.5 如何安装cuda，显卡驱动等
+### 6.3 如何安装cuda，显卡驱动等
 
 参考链接 https://blog.csdn.net/hancoder/article/details/86634415
 
-### 5.5 重装服务器系统后需要做什么
+### 6.4 重装服务器系统后需要做什么
 
 配置显卡驱动，cuda，cudnn
 
@@ -236,3 +210,36 @@ ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2
 ​	`service ssh restart`
 
 远程连接方式可看上面小老鼠问题
+
+### 6.5 一些其他内容
+
+6.5.1 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
+
+6.5.2 please debug your code on your PC to save server resources.
+
+6.5.3 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
+
+6.5.4 以后更新尽量在此github更新IP等内容，账号即OUCvisionLab，密码可问管理员索要。
+
+5.2.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
+
+> Anaconda2 will now be installed into this location:home/xx/anaconda2
+>
+> -Press ENTER to confirm the location
+>
+> -Press CTRL-C to abort the installation
+>
+> -Or specify a different location below
+>
+> [/home/xx/anaconda2]>>>
+
+don't press ENTER, you should type in your personal directory such as : `/home/ouc/Tom/Anaconda2/`
+
+> Do you with the installer to prepend the Anaconda2 install location to PATH in your /home/ouc/.bashrc ?[yes|no]
+
+please type in `no`
+
+
+
+
+
