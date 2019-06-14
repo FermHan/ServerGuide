@@ -71,7 +71,7 @@ conda info -e
 
 # How to create a new environment创建环境
 conda create -n YOURENAME python=PYTHONVERSION
-# 如conda create -n hanfeng python=3.6
+# 如conda create -n hanfeng python=3.6。可以指定python版本
 
 source activate YOURENAME 
 #or 
@@ -87,19 +87,28 @@ conda remove -n YOURNAME --all
 #### install modules安装包：
 
 ```python
-# use conda
+1. # use conda。conda安装方式
 conda install tensorflow-gpu=版本号
 
-# use pip # pip安装方式
+=======================
+2. # use pip # pip安装方式
 # if you wanna use pip,use 'python -m pip install' after 'source activate YOURNAME'
 # 如果你要使用pip，务必先激活到自己的虚拟环境，然后使用下面的用法，因为直接输入的pip指向的并不是你的python，而是别人的。想要一探究竟可以打开/usr/local/bin下的pip文件看其原理
+# 尤其是像pytorch这种包，conda命令经常安不上，使用pip命令的时候一定要使用'python -m'方式。
+'--------offline pip installation，使用pip离线安装方式----------'
+# 怎么下载文件：官网给出的pip安装方式显示的网址即是包的下载地址，可以去掉pip复制网址到浏览器下载，提供参考地址：
+1.全：https://repo.continuum.io/pkgs/free/linux-64/
+2.pytorch地址：https://pytorch.org/get-started/previous-versions/
+3.tensorflow地址：https://mirrors.tuna.tsinghua.edu.cn/tensorflow/linux/gpu/
+4.pip官方搜索地址（慢）：https://pypi.org/
+#下载后用pip安装，安装时候输入完python -m pip install 把文件拖进去即可，相当于要输入文件绝对路径。注意文件两侧各有一个'号
+# 如下：
+conda activate YOURENAME # or：source activate YOURENAME
+python -m pip install FILE下载的文件
+'--------online pip installation，使用pip在线安装方式----------'
+conda activate YOURENAME # or：source activate YOURENAME
 python -m pip install 模块
-
-
-# offline installation # 离线安装方式 
-# 尤其是像pytorch这种包，conda命令经常安不上，使用pip命令的时候一定要使用上面的方式。
-python -m pip install FILE
-# 官网给出的pip后面的网址即是包的地址，可以去掉pip复制网址到浏览器下载，下载后用pip安装，安装时候输入完python -m pip install 把文件拖进去即可，相当于要输入文件绝对路径
+=======================
 ```
 
 
@@ -139,7 +148,6 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 这里提高两种暂时的解决方案。
 
 - 第一种方法是开teamviewer。但teamviewer与远程界面有时候有些矛盾，这可能是安的桌面的问题。所有teamviewer不一定100%有效。
-
 - 第二种方法是用ssh命令行模式，ssh的操作如下：
 
 > 如果ubuntu里没有ssh可以通过如下命令安装
@@ -188,9 +196,7 @@ show_channel_urls: true
 因为ubuntu不好实现远程连接，必须通过安装小老鼠界面间接控制ubuntu。ubuntu16可能有解决方案，但ubuntu18较难解决，而我们的ubuntu当初安装的是18版本，所以尽管小老鼠界面不美观，但还得接着使用。
 
 - ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2523/article/details/81152890
-
 - 在ubuntu16下可能存在完美的解决方式请参考：https://blog.csdn.net/qq_37674858/article/details/80931254 ， https://www.cnblogs.com/xuliangxing/p/7642650.html
-
 - 原来服务器配置人员的博客：https://blog.csdn.net/zhouxiaowei1120/article/details/80872919
 
 > 如有在远程上打不开终端，可以使用sudo apt-get remove gnome*
@@ -202,9 +208,7 @@ show_channel_urls: true
 ### 6.4 重装服务器系统后需要做什么
 
 - 配置显卡驱动，cuda，cudnn
-
 - 重新配置IP以便可以远程连接
-
 - 安装ssh以便文件传输：
 
 ​	`apt-get install openssh-server`
