@@ -10,8 +10,6 @@
 
 [TOC]
 
-
-
 # 1、服务器列表Server list
 
 | IP              | 端口号Port | capacity                                       | user name | password | Note任玉环    |
@@ -47,7 +45,19 @@
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325150409.png?token=AkTVJdMwtfgMAto3CRd4hvoScKzyrl_kks5cmH2rwA%3D%3D)
 
+nvidia-smi参数解释：
 
+```
+- Fan：显示风扇转速，数值在0到100%之间，是计算机的期望转速，如果计算机不是通过风扇冷却或者风扇坏了，显示出来就是N/A；
+- Temp：显卡内部的温度，单位是摄氏度；
+- Perf：表征性能状态，从P0到P12，P0表示最大性能，P12表示状态最小性能；
+- Pwr：能耗表示；
+- Bus-Id：涉及GPU总线的相关信息；
+- Disp.A：是Display Active的意思，表示GPU的显示是否初始化；
+- Memory Usage：显存的使用率；
+- Volatile GPU-Util：浮动的GPU利用率；
+- Compute M：计算模式；
+```
 
 # 3、Use python and tensorflow
 
@@ -55,7 +65,7 @@
 
 此处是作用是验证没有人在使用此服务器
 
-### 3.2 create environment 
+### 3.2 create environment # 创建你自己的环境
 
 > 之前为大家创建过公用的python3.6和python2.7等，但是大家好像更倾向于使用很特殊的环境。所以此处修改为创建自己虚拟环境的注意项。 
 >
@@ -64,8 +74,6 @@
 > 你的python的位置：Anaconda原有的python路径是/home/ouc/Anaconda3/python，而你的python地址是/home/Anaconda3/env/YOURNAME/python
 >
 > 环境变量在~/.bashrc文件里，不要轻易改动。~代表home目录
-
-#### create environment # 创建你自己的环境
 
 ```python 
 # View existing conda list 查看现有环境
@@ -86,34 +94,111 @@ source deactivate  #退出原有环境，
 conda remove -n YOURNAME --all
 ```
 
-#### install modules安装包：
+### 3.3 install modules安装包：
 
-```python
+#### 3.3.1 conda install
+
+```PYTHON
 1. # use conda。conda安装方式
 conda install tensorflow-gpu=版本号
-
-=======================
-2. # use pip # pip安装方式
-# if you wanna use pip,use 'python -m pip install' after 'source activate YOURNAME'
-# 如果你要使用pip，务必先激活到自己的虚拟环境，然后使用下面的用法，因为直接输入的pip指向的并不是你的python，而是别人的。想要一探究竟可以打开/usr/local/bin下的pip文件看其原理
-# 尤其是像pytorch这种包，conda命令经常安不上，使用pip命令的时候一定要使用'python -m'方式。
-'--------offline pip installation，使用pip离线安装方式----------'
-# 怎么下载文件：官网给出的pip安装方式显示的网址即是包的下载地址，可以去掉pip复制网址到浏览器下载，提供参考地址：
-1.全：https://repo.continuum.io/pkgs/free/linux-64/
-2.pytorch地址：https://pytorch.org/get-started/previous-versions/
-3.tensorflow地址：https://mirrors.tuna.tsinghua.edu.cn/tensorflow/linux/gpu/
-4.pip官方搜索地址（慢）：https://pypi.org/
-#下载后用pip安装，安装时候输入完python -m pip install 把文件拖进去即可，相当于要输入文件绝对路径。注意文件两侧各有一个'号
-# 如下：
-conda activate YOURENAME # or：source activate YOURENAME
-python -m pip install FILE下载的文件
-'--------online pip installation，使用pip在线安装方式----------'
-conda activate YOURENAME # or：source activate YOURENAME
-python -m pip install 模块
-=======================
 ```
 
+附conda更换镜像方式：
 
+#### 3.3.2 pip install
+
+- 更换pip源
+
+```PYTHON
+终端输入gedit  ~/.pip/pip.conf，打开后复制以下内容保存：
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
+- pip在线安装：
+
+```PYTHON
+conda activate YOURENAME # or：source activate YOURENAME
+python -m pip install 模块
+```
+
+- pip离线安装
+
+```PYTHON
+# 如何下载离线包查看3.3.3
+#下载后用pip安装，安装时候输入完python -m pip install 把文件拖进去即可，相当于要输入文件绝对路径。注意文件两侧各有一个'号，压缩包直接拖进去即可，无需解压
+conda activate YOURENAME # or：source activate YOURENAME
+python -m pip install FILE下载的文件
+```
+
+- pip知识补充
+
+注：if you wanna use pip,use 'python -m pip install' after 'source activate YOURNAME'
+如果你要使用pip，务必先激活到自己的虚拟环境`conda activate YOURENAME`，因为直接输入的pip指向的并不是你的python，而是别人的。想要一探究竟可以打开/usr/local/bin下的pip文件看其原理
+尤其是像pytorch这种包，conda命令经常安不上，使用pip命令的时候一定要使用'python -m'方式。
+
+pip3和pip是两个文件。
+
+如下图，使用`pip3 -V`或`pip -V`可以查看这两个文件指向哪里，即使用pip时默认为哪个python安装包。如图，分别指向的python是系统的python和anaconda的其中一个python。
+
+使用`which pip3`或`which pip`可以查看默认的pip3和pip在哪里。如图，pip3在/usr/bin目录下，pip在anaconda3/bin目录下
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164105.png)
+
+输入`gedit /usr/local/pip3`可以打开pip3修改第一行，修改为自己python的路径以后pip3以后默认的安装的就是你的python了。
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164221.png)
+
+但是上面只是介绍原理，实例使用中最实用的还是直接使用`python -m pip install 在线/离线包`，相当于指定了为哪个python安装包，如下
+
+```PYTHON
+conda activate YOURENAME # or：source activate YOURENAME
+python -m pip install FILE下载的文件（在线离线均可）
+```
+
+#### 源问题
+
+清华源在2019-04-16被迫停止了anaconda镜像服务，但随后2019-06-15又获得了Anaconda镜像的授权。见下图，所以以后又能继续在线使用anaconda安装module了。
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621155850.png)
+
+更改conda源的方式：
+
+- 添加源：一般常用的是中科大源和清华源
+
+```python
+# 输入gedit ~/.condarc复制以下内容后保存：
+channels:
+  - https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
+  - https://mirrors.ustc.edu.cn/anaconda/cloud/conda-forge/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+  - defaults
+show_channel_urls: true
+```
+
+- 删除源：conda config --remove-key channels
+
+### 3.3.3 离线安装包的下载
+
+- 方式一：module官网下载离线包
+
+例：pytorch，官网https://pytorch.org/ 给出的pip安装方式显示的网址即是包的下载地址，可以去掉pip复制网址到浏览器下载。如下图选择部分即下载地址。
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621160354.png)
+
+注：经测试cuda-9.0官网没给出下载地址，第三方给的下载文件https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/linux-64/ 测试时有次未安装成功，可以自己尝试。
+
+- 方式二：镜像往下载离线包https://mirrors.tuna.tsinghua.edu.cn/anaconda/ 。
+
+archive下是anaconda安装包
+
+/pkgs/free/linux-64/下是如tensorflow等安装包
+
+/cloud/pytorch/linux-64/下是torch和torchvision安装包
+
+- 方式三：anaconda官网给的离线包：https://repo.continuum.io/pkgs/free/linux-64/
+
+### 3.4 navigator
 
 ps：你也可以使用navigator界面的方式进行上面创建虚拟环境安装包等操作
 
@@ -176,22 +261,7 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 
 # 6、What's more
 
-### 6.1 镜像问题change channel
-
-清华源目前崩了，国内源基本不能用了，可以尝试中科大的镜像。实在不行就只好用pip或离线安装了
-
-更改源的方式：
-
-终端输入`gedit ~/.condarc`，删除原来全部内容，添加如下内容
-
-```
-channels:
-  - https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
-  - default
-show_channel_urls: true
-```
-
-### 6.2 为什么要安装小老鼠这个界面？
+### 6.1 为什么要安装小老鼠这个界面？
 
 因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
 
@@ -203,11 +273,11 @@ show_channel_urls: true
 
 > 如有在远程上打不开终端，可以使用sudo apt-get remove gnome*
 
-### 6.3 如何安装cuda，显卡驱动等
+### 6.2 如何安装cuda，显卡驱动等
 
 参考链接 https://blog.csdn.net/hancoder/article/details/86634415
 
-### 6.4 重装服务器系统后需要做什么
+### 6.3 重装服务器系统后需要做什么
 
 - 配置显卡驱动，cuda，cudnn
 - 重新配置IP以便可以远程连接
@@ -225,7 +295,7 @@ show_channel_urls: true
 
 远程连接方式可看上面小老鼠问题
 
-### 6.5 一些其他内容
+### 6.4 一些其他内容
 
 6.5.1 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
 
@@ -235,7 +305,7 @@ show_channel_urls: true
 
 6.5.4 以后更新尽量在此github更新IP等内容，账号即OUCvisionLab，密码可问管理员索要。
 
-5.2.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
+6.5.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
 
 > Anaconda2 will now be installed into this location:home/xx/anaconda2
 >
@@ -252,8 +322,5 @@ don't press ENTER, you should type in your personal directory such as : `/home/o
 > Do you with the installer to prepend the Anaconda2 install location to PATH in your /home/ouc/.bashrc ?[yes|no]
 
 please type in `no`
-
-
-
 
 
