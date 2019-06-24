@@ -6,13 +6,13 @@
 
 - 会让3个人左右共同使用和维护一台专属服务器（自己组的服务器自行解决），也留下了1台机动的服务器。
 - 考虑到留学生，所以采用了中英结合的书写方式
-- 解释了一些虚拟环境的知识
+- 解释了一些虚拟环境、源、ssh，传文件的知识
 
 [TOC]
 
 # 1、服务器列表Server list
 
-| IP              | 端口号Port | capacity                                       | user name | password | Note任玉环    |
+| IP              | 端口号Port | capacity                                       | user name | password | Note          |
 | --------------- | ---------- | :--------------------------------------------- | --------- | -------- | ------------- |
 | 222.195.151.170 | 9013       | RAM:128G, CPU:2.3GHz*40, GPU:none              | ouc-13    | b301     | GPU:none      |
 | 222.195.151.170 | 9015       | RAM:128G, CPU:2.3GHz*40, GPU:TESLA K40c 11G *1 | ouc-15    | b301     | LY,ZTG        |
@@ -157,7 +157,7 @@ conda activate YOURENAME # or：source activate YOURENAME
 python -m pip install FILE下载的文件（在线离线均可）
 ```
 
-### 3.3.3 离线安装包的下载
+#### 3.3.3 离线安装包的下载
 
 - 方式一：module官网下载离线包
 
@@ -236,11 +236,15 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 这里提高两种暂时的解决方案。
 
 - 第一种方法是开teamviewer。但teamviewer与远程界面有时候有些矛盾，这可能是安的桌面的问题。所有teamviewer不一定100%有效。
-- 第二种方法是用ssh命令行模式，ssh的操作如下：
+- 第二种方法是用ssh命令行模式
 
+> 若链接ssh不成功，可先安装：
+>
 > 如果ubuntu里没有ssh可以通过如下命令安装
 > `sudo apt-get install openssh-server`，在ubuntu端安装ssh。
 > 输入"sudo ps -e |grep ssh"-->回车-->有sshd,说明ssh服务已经启动，如果没有启动，输入"sudo service ssh start"-->回车-->ssh服务就会启动。
+>
+> 注：ssh也可在安装显卡驱动时使用，无需跑去机房安装。
 
 在windows上安装xshell使用命令行：
 
