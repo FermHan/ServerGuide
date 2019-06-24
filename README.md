@@ -67,18 +67,19 @@ nvidia-smi参数解释：
 
 ### 3.2 create environment # 创建你自己的环境
 
+> 环境解释：
+>
 > 之前为大家创建过公用的python3.6和python2.7等，但是大家好像更倾向于使用很特殊的环境。所以此处修改为创建自己虚拟环境的注意项。 
 >
-> 虚拟环境的原因：相当于两台服务器，互相使用的python不影响，即python版本和模块版本和独立的。
+> 虚拟环境的原因：相当于两台服务器，互相使用的python不影响，即安装模块是安装到了指定某一python上，而不是为全部python安装模块。
 >
 > 公共python的位置：Anaconda原有的python路径是/home/ouc/Anaconda3/python。而你创建私有的python地址是/home/Anaconda3/env/YOURNAME/python
 >
 > 环境变量在~/.bashrc文件里，不要轻易改动。~代表home目录。安装anaconda时一路默认会自动写入bashrc中。
 
-```python 
-# View existing conda list 查看现有环境
-conda info -e
+创建于使用虚拟环境方法：
 
+```python 
 # How to create a new environment创建环境
 conda create -n YOURENAME python=PYTHONVERSION
 # 如conda create -n hanfeng python=3.6。可以指定python版本，重要的是指定python版本。名称任意，推荐自己名字。anaconda3上也可安装python2.7。创建完可在/home/Anaconda3/env/YOURNAME/python目录下找到你的python
@@ -89,6 +90,9 @@ source activate YOURENAME
 conda activate YOURENAME
 -------------------------------
 # 不常用命令：
+# View existing conda list 查看现有环境
+conda info -e
+
 source deactivate  #退出私有环境，返回公共环境
 #or#conda deactivate
 
