@@ -105,7 +105,7 @@ conda remove -n YOURNAME --all
 #### 3.3.1 conda install
 
 ```PYTHON
-1. # use conda。conda安装方式
+1. # use conda。conda安装方式，必须先激活到自己创建的环境中
 conda activate YOURENAME # or：source activate YOURENAME
 conda install tensorflow-gpu=版本号
 ```
@@ -150,11 +150,11 @@ python -m pip install FILE下载的文件
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164105.png)
 
-​	输入`gedit /usr/local/pip3`可以打开pip3修改第一行，修改为自己python的路径以后pip3以后默认的安装的就是你的python了。
+​		输入`gedit /usr/local/pip3`可以打开pip3修改第一行，修改为自己python的路径以后pip3以后默认的安装的就是你的python了。
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164221.png)
 
-​	但是上面只是介绍原理，实例使用中最实用的还是直接使用`python -m pip install 在线/离线包`，相当于指定了为哪个python安装包。
+​		但是上面只是介绍原理，实例使用中最实用的还是直接使用`python -m pip install 在线/离线包`，相当于指定了为哪个python安装包。
 
 ```PYTHON
 conda activate YOURENAME # or：source activate YOURENAME
@@ -165,13 +165,13 @@ python -m pip install FILE下载的文件（在线离线均可）
 
 - 方式一：module官网下载离线包
 
-例：pytorch，官网https://pytorch.org/ 给出的pip安装方式显示的网址即是包的下载地址，可以去掉pip复制网址到浏览器下载。如下图选择部分即下载地址。
+例：pytorch，官网https://pytorch.org/ 给出的pip安装方式显示的网址即是包的下载地址，可以去掉pip复制网址到浏览器下载。如下图选中部分即下载地址。
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621160354.png)
 
-注：经测试cuda-9.0官网没给出下载地址，第三方给的下载文件https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/linux-64/ 测试时有次未安装成功，可以自己尝试。
+注：经测试cuda-9.0官网没给出下载pytorch地址，第三方给的下载文件https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/linux-64/ 测试时有次未安装成功，可以自己尝试。
 
-- 方式二：镜像往下载离线包https://mirrors.tuna.tsinghua.edu.cn/anaconda/ 。
+- 方式二：镜像网下载离线包https://mirrors.tuna.tsinghua.edu.cn/anaconda/ 。
 
 archive下是anaconda安装包
 
@@ -191,8 +191,8 @@ archive下是anaconda安装包
 
 - 添加源：一般常用的是中科大源和清华源
 
-```python
-# 输入gedit ~/.condarc复制以下内容后保存：
+```python 
+#输入gedit ~/.condarc复制以下内容后保存：
 channels:
   - https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
   - https://mirrors.ustc.edu.cn/anaconda/cloud/conda-forge/
@@ -331,8 +331,3 @@ don't press ENTER, you should type in your personal directory such as : `/home/o
 > Do you with the installer to prepend the Anaconda2 install location to PATH in your /home/ouc/.bashrc ?[yes|no]
 
 please type in `no`
-
-
-
-
-
