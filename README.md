@@ -1,5 +1,5 @@
 ==**For theory and texture group only.**==
-
+测试
 为增加查阅体验与防止后续服务器内容的更改，请直接在github观看 https://github.com/OUCvisionLab/ServerGuide
 
 本次更新内容：
@@ -8,7 +8,20 @@
 - 考虑到留学生，所以采用了中英结合的书写方式
 - 解释了一些虚拟环境、源、ssh，传文件的知识
 
-[TOC]
+目录：
+
+- [1、服务器列表Server list](# 1、服务器列表Server list)
+- [2、登录服务器](# 2、登录服务器login)
+- [3、使用TensorFlow等](#3、Use python and tensorflow)
+- [4、传文件：Xftp](# 4、How to transfer files 传输文件:Xftp)
+- [5、查看文件、修改文件：UltraEdit](# 5、查看文件、修改文件：UltraEdit)
+- [6、命令行工具：Xshell](# 6、命令行工具：Xshell)
+
+
+
+
+
+
 
 # 1、服务器列表Server list
 
@@ -148,13 +161,13 @@ python -m pip install FILE下载的文件
 
   使用`which pip3`或`which pip`可以查看默认的pip3和pip在哪里。如图，pip3在/usr/bin目录下，pip在anaconda3/bin目录下
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164105.png)
+  ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164105.png)
 
-​		输入`gedit /usr/local/pip3`可以打开pip3修改第一行，修改为自己python的路径以后pip3以后默认的安装的就是你的python了。
+  输入`gedit /usr/local/pip3`可以打开pip3修改第一行，修改为自己python的路径以后pip3以后默认的安装的就是你的python了。
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164221.png)
+  ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164221.png)
 
-​		但是上面只是介绍原理，实例使用中最实用的还是直接使用`python -m pip install 在线/离线包`，相当于指定了为哪个python安装包。
+  但是上面只是介绍原理，实例使用中最实用的还是直接使用`python -m pip install 在线/离线包`，相当于指定了为哪个python安装包。
 
 ```PYTHON
 conda activate YOURENAME # or：source activate YOURENAME
@@ -217,7 +230,7 @@ in the terminal to open NAVIGATOR, and choose python from NAVIGATOR.
 
 
 
-# 4、How to transfer files 传文件
+# 4、How to transfer files 传输文件:Xftp
 
 如果需要传文件，无需去机房拷贝，用Xftp传即可，文件可在网上下载破解版。
 
@@ -233,7 +246,29 @@ port is NOT 90-- BUT 91--  # 端口号是91--，而不是原来的90--
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220819.png)
 
-# 5、只使用命令行不使用界面：Xshell
+# 5、查看文件、修改文件：UltraEdit
+
+
+
+在此给大家推荐一个软件UltraEdit：这是一个文本编辑软件，类似于windows下的记事本。想必大家很喜欢用ubuntu下的gedit命令，因为vim命令太难了。而UltraEdit是比gedit还要好用的一个文本编辑器。
+
+UltraEdit有windows+mac+ubuntu版本，所以你在任何系统下都可以下载这个软件
+
+首先去UltraEdit官网下载UltraEdit，购(po)买(jie)后点击菜单栏中的FTP，点击从FTP打开。
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20191025145530.png)
+
+然后像xftp一样填写信息，填写后点击确定，再点击链接，就可以看到文件了。
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20191025145928.png)
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20191025150213.png)
+
+![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20191025150724.png)
+
+我们在上面解决了传文件、看文件、修改文件的需求，我们跑程序时候还有使用命令行，xshell就是命令行工具
+
+# 6、命令行工具：Xshell
 
 windows的远程的确有时候很卡，目前我也不知道该如何解决，或许在ubuntu18没有解决方案。至于为什么卡还在使用这个远程的原因请看6.2。
 
@@ -268,9 +303,9 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190605152403.png)
 
-# 6、What's more
+# 7、What's more
 
-### 6.1 为什么要安装小老鼠这个界面？
+### 7.1 为什么要安装小老鼠这个界面？
 
 因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
 
@@ -282,11 +317,11 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 
 > 如有在远程上打不开终端，可以使用sudo apt-get remove gnome*
 
-### 6.2 如何安装cuda，显卡驱动等
+### 7.2 如何安装cuda，显卡驱动等
 
 参考链接 https://blog.csdn.net/hancoder/article/details/86634415
 
-### 6.3 重装服务器系统后需要做什么
+### 7.3 重装服务器系统后需要做什么
 
 - 配置显卡驱动，cuda，cudnn
 - 重新配置IP以便可以远程连接
@@ -304,17 +339,17 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 
 远程连接方式可看上面小老鼠问题
 
-### 6.4 一些其他内容
+### 7.4 一些其他内容
 
-6.5.1 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
+7.5.1 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
 
-6.5.2 please debug your code on your PC to save server resources.
+7.5.2 please debug your code on your PC to save server resources.
 
-6.5.3 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
+7.5.3 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
 
-6.5.4 以后更新尽量在此github更新IP等内容，账号即OUCvisionLab，密码可问管理员索要。
+7.5.4 以后更新尽量在此github更新IP等内容，账号即OUCvisionLab，密码可问管理员索要。
 
-6.5.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
+7.5.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
 
 > Anaconda2 will now be installed into this location:home/xx/anaconda2
 >
