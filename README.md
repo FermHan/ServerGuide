@@ -11,12 +11,12 @@
 
 目录：
 
-  - [1、服务器列表Server list](# 1、服务器列表Server list)
-  - [2、登录服务器](# 2、登录服务器login)
-  - [3、Use python and tensorflow](# 3、Use python and tensorflow)
-  - [4、How to transfer files 传输文件:Xftp](# 4、How to transfer files 传输文件:Xftp)
-  - [5、查看文件、修改文件：UltraEdit](# 5、查看文件、修改文件：UltraEdit)
-  - [6、命令行工具：Xshell](# 6、命令行工具：Xshell)
+  - [1、服务器列表Server list](#1、服务器列表Server list)
+  - [2、登录服务器](#2、登录服务器login)
+  - [3、Use python and tensorflow](#3、Use python and tensorflow)
+  - [4、How to transfer files 传输文件:Xftp](#4、How to transfer files 传输文件:Xftp)
+  - [5、查看文件、修改文件：UltraEdit](#5、查看文件、修改文件：UltraEdit)
+  - [6、命令行工具：Xshell](#6、命令行工具：Xshell)
 
 
 
