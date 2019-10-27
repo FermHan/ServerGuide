@@ -8,15 +8,14 @@
 - 考虑到留学生，所以采用了中英结合的书写方式
 - 解释了一些虚拟环境、源、ssh，传文件的知识
 
-
 目录：
 
-  - [1、服务器列表Server list](#1、服务器列表Server list)
-  - [2、登录服务器](#2、登录服务器login)
-  - [3、Use python and tensorflow](#3、Use python and tensorflow)
-  - [4、How to transfer files 传输文件:Xftp](#4、How to transfer files 传输文件:Xftp)
-  - [5、查看文件、修改文件：UltraEdit](#5、查看文件、修改文件：UltraEdit)
-  - [6、命令行工具：Xshell](#6、命令行工具：Xshell)
+- [1、服务器列表Server list](#1、服务器列表Server list)
+- [2、登录服务器](#2、登录服务器login)
+- [3、Use python and tensorflow](#3、Use python and tensorflow)
+- [4、How to transfer files 传输文件:Xftp](#4、How to transfer files 传输文件:Xftp)
+- [5、查看文件、修改文件：UltraEdit](#5、查看文件、修改文件：UltraEdit)
+- [6、命令行工具：Xshell](#6、命令行工具：Xshell)
 
 
 
@@ -73,7 +72,7 @@ nvidia-smi参数解释：
 - Compute M：计算模式；
 ```
 
-#  3、Use python and tensorflow
+# 3、Use python and tensorflow
 
 ### 3.1 First and Foremost：`nvidia-smi`
 
@@ -153,21 +152,22 @@ python -m pip install FILE下载的文件
   [global]
   index-url = https://pypi.tuna.tsinghua.edu.cn/simple
   ```
+
   - 如果你要使用pip，**务必先激活到自己的虚拟环境`conda activate YOURENAME`，然后使用`python -m pip install XXX`的形式代替`pip install xxx`的形式**。因为直接输入的pip指向的并不是你的python，而是别人的。想要一探究竟可以打开/usr/local/bin下的pip文件看其原理
     尤其是像pytorch这种包，conda命令经常安不上，使用pip命令的时候一定要使用'python -m'方式。
   - pip3和pip是两个文件。
 
-	如下图，使用`pip3 -V`或`pip -V`可以查看这两个文件指向哪里，即使用pip时默认为哪个python安装包。如图，分别指向的python是系统的python和anaconda的其中一个python。
+  如下图，使用`pip3 -V`或`pip -V`可以查看这两个文件指向哪里，即使用pip时默认为哪个python安装包。如图，分别指向的python是系统的python和anaconda的其中一个python。
 
   使用`which pip3`或`which pip`可以查看默认的pip3和pip在哪里。如图，pip3在/usr/bin目录下，pip在anaconda3/bin目录下
 
-	![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164105.png)
+  ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164105.png)
 
-	输入`gedit /usr/local/pip3`可以打开pip3修改第一行，修改为自己python的路径以后pip3以后默认的安装的就是你的python了。
+  输入`gedit /usr/local/pip3`可以打开pip3修改第一行，修改为自己python的路径以后pip3以后默认的安装的就是你的python了。
 
-	![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164221.png)
+  ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164221.png)
 
-	但是上面只是介绍原理，实例使用中最实用的还是直接使用`python -m pip install 在线/离线包`，相当于指定了为哪个python安装包。
+  但是上面只是介绍原理，实例使用中最实用的还是直接使用`python -m pip install 在线/离线包`，相当于指定了为哪个python安装包。
 
 ```PYTHON
 conda activate YOURENAME # or：source activate YOURENAME
@@ -204,7 +204,7 @@ archive下是anaconda安装包
 
 - 添加源：一般常用的是中科大源和清华源
 
-``` python 
+```python 
 #输入gedit ~/.condarc复制以下内容后保存：
 channels:
   - https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
@@ -216,8 +216,8 @@ show_channel_urls: true
 
 - 删除源：conda config --remove-key channels
 
-
 ### 3.4 navigator
+
 ps：你也可以使用navigator界面的方式进行上面创建虚拟环境安装包等操作
 
 ps: Similarly,you can type in 
@@ -235,6 +235,10 @@ in the terminal to open NAVIGATOR, and choose python from NAVIGATOR.
 如果需要传文件，无需去机房拷贝，用Xftp传即可，文件可在网上下载破解版。
 
 You can install **Xftp** in windows to transfer files. # windows安装xftp软件
+
+Xftp+Xshell下载地址：填写姓名邮件后开始下载（需要科学上网）：https://www.netsarang.com/zh/free-for-home-school/
+
+我在此github也上传了软件，不过可能过期
 
 Protocol:sftp  # 协议选sftp
 
@@ -275,7 +279,6 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 这里提高两种暂时的解决方案。
 
 - 第一种方法是开teamviewer。但teamviewer与远程界面有时候有些矛盾，这可能是安的桌面的问题。所有teamviewer不一定100%有效。
-
 - 第二种方法是用ssh命令行模式
 
 > 若链接ssh不成功，可先安装：
@@ -313,9 +316,7 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 因为ubuntu不好实现远程连接，必须通过安装小老鼠界面间接控制ubuntu。ubuntu16可能有解决方案，但ubuntu18较难解决，而我们的ubuntu当初安装的是18版本，所以尽管小老鼠界面不美观，但还得接着使用。
 
 - ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2523/article/details/81152890
-
 - 在ubuntu16下可能存在完美的解决方式请参考：https://blog.csdn.net/qq_37674858/article/details/80931254 ， https://www.cnblogs.com/xuliangxing/p/7642650.html
-
 - 原来服务器配置人员的博客：https://blog.csdn.net/zhouxiaowei1120/article/details/80872919
 
 > 如有在远程上打不开终端，可以使用sudo apt-get remove gnome*
@@ -327,9 +328,7 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 ### 7.3 重装服务器系统后需要做什么
 
 - 配置显卡驱动，cuda，cudnn
-
 - 重新配置IP以便可以远程连接
-
 - 安装ssh以便文件传输：
 
 ​	`apt-get install openssh-server`
