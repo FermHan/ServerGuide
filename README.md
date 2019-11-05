@@ -40,7 +40,11 @@
 
 **传文件的端口是91--，选的协议是sftp。**
 
-> 因为github图床的原因，文中图似乎经常不显示。如不显示，可在`C:\Windows\System32\drivers\etc\hosts`文件的末尾添加如下内容：`199.232.4.133 	raw.githubusercontent.com`。hosts文件需要电脑管理员才能更改。管理员登陆状态下可以把原来hosts文件命名为hosts1，然后在桌面复制原来hosts内容写入文件，注意把后缀txt去掉，然后拖入etc文件中。如不能正确更改hosts，请百度其他方法。此时图就可以正常显示了。
+> 因为github图床的原因，文中图似乎经常不显示。如不显示，可在`C:\Windows\System32\drivers\etc\hosts`文件的末尾添加如下内容：
+>
+> `199.232.4.133  	raw.githubusercontent.com`
+>
+> hosts文件需要电脑管理员才能更改。管理员登陆状态下可以把原来hosts文件命名为hosts1，然后在桌面复制原来hosts内容写入文件，注意把后缀txt去掉，然后拖入etc文件中。如不能正确更改hosts，请百度其他方法。此时图就可以正常显示了。
 
 # 2、登录服务器login
 
@@ -293,7 +297,26 @@ UltraEdit有windows+mac+ubuntu版本，所以你在任何系统下都可以下�
 
 # 6、命令行工具：Xshell
 
-windows的远程的确有时候很卡，目前我也不知道该如何解决，或许在ubuntu18没有解决方案。至于为什么卡还在使用这个远程的原因请看6.2。
+windows的远程的确有时候很卡，目前我也不知道该如何解决，或许在ubuntu18没有解决方案。至于为什么卡还在使用这个远程的原因请看7.1。
+
+ssh命令的简单学习：
+
+```BASH
+pwd #打印当前目录
+cd 目录 #转换目录，分为相对路径和绝对路径，第一位是/的是绝对路径
+wget 连接 #下载文件
+ls #查看当前目录文件
+mkdir #创建目录
+vim #编辑文件
+# vim分为命令模式，插入模式和底线模式。了解前两个即可
+# 刚进去的适合是命令模式，此时只能查看文件，按h左j下k上l右；按i进入插入模式编辑文件
+# 编辑好后按Esc，然后输入:wq代表保存退出，q！代表不保存退出
+# 补充：命令模式下：u撤销 Ctrl+r取消撤销 x删除当前光标字符 X是向前删 x是向后删
+# 其他命令自己学习
+
+```
+
+
 
 这里提高两种暂时的解决方案。
 
@@ -365,6 +388,7 @@ service ssh restart
 vim /etc/ssh/sshd_config
 将PermitRootLoginwithout-password注释，                                
 添加一行： PermitRootLoginyes
+
 ```
 
 ### 7.4 一些其他内容
