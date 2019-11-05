@@ -8,20 +8,21 @@
 - 考虑到留学生，所以采用了中英结合的书写方式
 - 解释了一些虚拟环境、源、ssh，传文件的知识
 
+
 目录：
 
-- [1、服务器列表Server list](#1、服务器列表Server list)
-- [2、登录服务器](#2、登录服务器login)
-- [3、Use python and tensorflow](#3、Use python and tensorflow)
-- [4、How to transfer files 传输文件:Xftp](#4、How to transfer files 传输文件:Xftp)
-- [5、查看文件、修改文件：UltraEdit](#5、查看文件、修改文件：UltraEdit)
-- [6、命令行工具：Xshell](#6、命令行工具：Xshell)
+  - [1、服务器列表Server list](#1、服务器列表Server list)
+  - [2、登录服务器](#2、登录服务器login)
+  - [3、Use python and tensorflow](#3、Use python and tensorflow)
+  - [4、How to transfer files 传输文件:Xftp](#4、How to transfer files 传输文件:Xftp)
+  - [5、查看文件、修改文件：UltraEdit](#5、查看文件、修改文件：UltraEdit)
+  - [6、命令行工具：Xshell](#6、命令行工具：Xshell)
 
 
 
 
 
-
+!!!禁止在服务器上阅读代码与长时间修改代码，浪费资源。
 
 # 1、服务器列表Server list
 
@@ -37,24 +38,39 @@
 
 !!!  port for transporting files is 91-- ,NOT 90--
 
-传文件的端口是91--，选的协议是sftp。
+**传文件的端口是91--，选的协议是sftp。**
+
+> 因为github图床的原因，文中图似乎经常不显示。如不显示，可在`C:\Windows\System32\drivers\etc\hosts`文件的末尾添加如下内容：`199.232.4.133 	raw.githubusercontent.com`。hosts文件需要电脑管理员才能更改。管理员登陆状态下可以把原来hosts文件命名为hosts1，然后在桌面复制原来hosts内容写入文件，注意把后缀txt去掉，然后拖入etc文件中。如不能正确更改hosts，请百度其他方法。此时图就可以正常显示了。
 
 # 2、登录服务器login
 
 **2.1 Find remote connection**
+
+电脑中搜索桌面连接。或者在微软商店里搜远程桌面，道理都是一样的
+
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325172634.png?token=AkTVJfvkXHdCyhSbXbtS6iokfCOR6xZNks5cmJ8MwA%3D%3D)
 
 **2.2 Type in IP:port**
+
+输入IP:port，如`222.195.151.170:6666`
+
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325172652.png?token=AkTVJYakMJzCIiVJDfjlIcg5KLcv0mctks5cmJ8owA%3D%3D)
 
+
+
 **2.3 Type in username and password**
+
+session模式选择Xorg（个别机器选sesman-Xvnc），然后输入账号`ouc-机器后两位id`，密码`b301`
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325135817.png?token=AkTVJVynPSWj1sb4ZEbO8wRyjpg_8P4cks5cmG46wA%3D%3D)
 
 **2.4 Once in the system, modify someone.txt to note your name and usage time.And you can put your personal files in directory  /home/ouc-xx/**在home目录下创建自己的文件夹
+
+进去后，最好在桌面上备注好你的名字以及使用时间。
+
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325144734.png?token=AkTVJRoQTQFVopFyApR5WI9oEZziwdXtks5cmHnIwA%3D%3D)
 
-**2.5 Before you run the code, please type in  ` nvidia-smi ` in the terminal to make sure there's no another user.**(在你正式跑代码之前，请输入`nvidia-smi`查看有没有其他用户在跑程序（通过红框部分看）)。
+**2.5 Before you run the code, please type in  ` nvidia-smi ` in the terminal to make sure there's no another user.**(在你正式跑代码之前，请输入`nvidia-smi`查看有没有其他用户在跑程序（通过红框部分看）)。如果中间的显存占用率只有几十MB，那么就说明没人在跑程序。
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325150409.png?token=AkTVJdMwtfgMAto3CRd4hvoScKzyrl_kks5cmH2rwA%3D%3D)
 
@@ -72,7 +88,7 @@ nvidia-smi参数解释：
 - Compute M：计算模式；
 ```
 
-# 3、Use python and tensorflow
+#  3、Use python and tensorflow
 
 ### 3.1 First and Foremost：`nvidia-smi`
 
@@ -204,7 +220,7 @@ archive下是anaconda安装包
 
 - 添加源：一般常用的是中科大源和清华源
 
-```python 
+``` python 
 #输入gedit ~/.condarc复制以下内容后保存：
 channels:
   - https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
@@ -215,6 +231,7 @@ show_channel_urls: true
 ```
 
 - 删除源：conda config --remove-key channels
+
 
 ### 3.4 navigator
 
@@ -238,11 +255,13 @@ You can install **Xftp** in windows to transfer files. # windows安装xftp软件
 
 Xftp+Xshell下载地址：填写姓名邮件后开始下载（需要科学上网）：https://www.netsarang.com/zh/free-for-home-school/
 
-我在此github也上传了软件，不过可能过期
+
 
 Protocol:sftp  # 协议选sftp
 
 port is NOT 90-- BUT 91--  # 端口号是91--，而不是原来的90--
+
+文件--新建--填写主机、协议SFTP、端口号`91--`（注意不是90）、账号、密码---连接。
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220350.png)![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531222935.png)
 
@@ -279,6 +298,7 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 这里提高两种暂时的解决方案。
 
 - 第一种方法是开teamviewer。但teamviewer与远程界面有时候有些矛盾，这可能是安的桌面的问题。所有teamviewer不一定100%有效。
+
 - 第二种方法是用ssh命令行模式
 
 > 若链接ssh不成功，可先安装：
@@ -293,7 +313,7 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 
 破解xshell地址：https://blog.csdn.net/u011622631/article/details/88991941
 
-安装后，打开xshell，新建链接如图，端口为91--
+安装后，打开xshell，新建链接如图，协议选ssh，其余内容与xftp内容一致。端口为91--
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531232754.png)
 
@@ -313,13 +333,17 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 
 因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
 
-因为ubuntu不好实现远程连接，必须通过安装小老鼠界面间接控制ubuntu。ubuntu16可能有解决方案，但ubuntu18较难解决，而我们的ubuntu当初安装的是18版本，所以尽管小老鼠界面不美观，但还得接着使用。
+因为ubuntu不好实现远程连接，必须通过安装小老鼠界面间接控制ubuntu。ubuntu16有很好的有解决方案（无奈当初别人装的是18系统），而ubuntu18因为版本原因远程桌面的选择很少。所以尽管小老鼠界面不美观，但还得接着使用。
 
 - ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2523/article/details/81152890
+
 - 在ubuntu16下可能存在完美的解决方式请参考：https://blog.csdn.net/qq_37674858/article/details/80931254 ， https://www.cnblogs.com/xuliangxing/p/7642650.html
+
 - 原来服务器配置人员的博客：https://blog.csdn.net/zhouxiaowei1120/article/details/80872919
 
-> 如有在远程上打不开终端，可以使用sudo apt-get remove gnome*
+> 注：安桌面的`echo xfce4-session >~/.xsession`命令是向home目录的`.xsession`文件末尾写入xfce4-session
+>
+> 
 
 ### 7.2 如何安装cuda，显卡驱动等
 
@@ -327,21 +351,21 @@ windows的远程的确有时候很卡，目前我也不知道该如何解决，�
 
 ### 7.3 重装服务器系统后需要做什么
 
-- 配置显卡驱动，cuda，cudnn
-- 重新配置IP以便可以远程连接
-- 安装ssh以便文件传输：
+- 配置显卡驱动，cuda，cudnn https://blog.csdn.net/hancoder/article/details/86634415
+- 重新配置IP以便可以远程连接  https://blog.csdn.net/hancoder/article/details/102881903 
+- 配置远程桌面： https://blog.csdn.net/hancoder/article/details/102882153 
+- 安装ssh以便文件传输： https://blog.csdn.net/hancoder/article/details/102881903 
 
-​	`apt-get install openssh-server`
+```BASH
+一般只需要进行：
+apt-get install openssh-server
+service ssh restart
 
-​	vim /etc/ssh/sshd_config
-
-​	将PermitRootLoginwithout-password注释，                                
-
-​	添加一行： PermitRootLoginyes
-
-​	`service ssh restart`
-
-远程连接方式可看上面小老鼠问题
+特殊情况可以修改文件：
+vim /etc/ssh/sshd_config
+将PermitRootLoginwithout-password注释，                                
+添加一行： PermitRootLoginyes
+```
 
 ### 7.4 一些其他内容
 
@@ -370,3 +394,7 @@ don't press ENTER, you should type in your personal directory such as : `/home/o
 > Do you with the installer to prepend the Anaconda2 install location to PATH in your /home/ouc/.bashrc ?[yes|no]
 
 please type in `no`
+
+### 7.5 contact me
+
+QQ：553736044
