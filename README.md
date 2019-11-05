@@ -6,7 +6,7 @@
 
 - 会让3个人左右共同使用和维护一台专属服务器（自己组的服务器自行解决），也留下了1台机动的服务器。
 - 考虑到留学生，所以采用了中英结合的书写方式
-- 解释了一些虚拟环境、源、ssh，传文件的知识
+- 解释了一些虚拟环境、ssh，xftp等可能用到的知识
 
 
 目录：
@@ -45,6 +45,10 @@
 > `199.232.4.133  	raw.githubusercontent.com`
 >
 > hosts文件需要电脑管理员才能更改。管理员登陆状态下可以把原来hosts文件命名为hosts1，然后在桌面复制原来hosts内容写入文件，注意把后缀txt去掉，然后拖入etc文件中。如不能正确更改hosts，请百度其他方法。此时图就可以正常显示了。
+>
+> 或者在CSDN上查看： https://blog.csdn.net/hancoder/article/details/88803079 
+
+
 
 # 2、登录服务器login
 
@@ -313,7 +317,6 @@ vim #编辑文件
 # 编辑好后按Esc，然后输入:wq代表保存退出，q！代表不保存退出
 # 补充：命令模式下：u撤销 Ctrl+r取消撤销 x删除当前光标字符 X是向前删 x是向后删
 # 其他命令自己学习
-
 ```
 
 
@@ -388,7 +391,6 @@ service ssh restart
 vim /etc/ssh/sshd_config
 将PermitRootLoginwithout-password注释，                                
 添加一行： PermitRootLoginyes
-
 ```
 
 ### 7.4 一些其他内容
@@ -421,4 +423,4 @@ please type in `no`
 
 ### 7.5 contact me
 
-QQ：553736044
+QQ：553736044@qq.com
