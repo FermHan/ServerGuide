@@ -120,6 +120,7 @@ nvidia-smi参数解释：
 # How to create a new environment创建环境
 conda create -n YOURENAME python=PYTHONVERSION
 # 如conda create -n hanfeng python=3.6。可以指定python版本，重要的是指定python版本。名称任意，推荐自己名字。anaconda3上也可安装python2.7。创建完可在/home/Anaconda3/env/YOURNAME/python目录下找到你的python
+# 如遇到权限问题，可以尝试先执行如 sudo chown -R ouc-19:ouc-19 /home/ouc-19/anaconda3
 
 # 创建完自己的环境后，接下来一切操作都是在【进入自己创建的环境】的基础上进行的，下面语句是进入自己环境的方式，二选一。注：若使用python，但凡打开终端，第一步都该的进入自己的环境，否则操作都不是针对自己的环境的。
 source activate YOURENAME 
@@ -279,8 +280,6 @@ port is NOT 90-- BUT 91--  # 端口号是91--，而不是原来的90--
 
 # 5、查看文件、修改文件：UltraEdit
 
-
-
 在此给大家推荐一个软件UltraEdit：这是一个文本编辑软件，类似于windows下的记事本。想必大家很喜欢用ubuntu下的gedit命令，因为vim命令太难了。而UltraEdit是比gedit还要好用的一个文本编辑器。
 
 UltraEdit有windows+mac+ubuntu版本，所以你在任何系统下都可以下载这个软件
@@ -317,7 +316,6 @@ vim #编辑文件
 # 编辑好后按Esc，然后输入:wq代表保存退出，q！代表不保存退出
 # 补充：命令模式下：u撤销 Ctrl+r取消撤销 x删除当前光标字符 X是向前删 x是向后删
 # 其他命令自己学习
-
 ```
 
 
@@ -354,32 +352,27 @@ vim #编辑文件
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190605152403.png)
 
-# 7、What's more
+# 7、重装系统（非常不建议）
 
-### 7.1 为什么要安装小老鼠这个界面？
+首先说明：非常不建议自己重装系统。即使要重装系统，也要负责地把需要的各项都装好，不给别人添麻烦。
 
-因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
+重装系统后需要把第7部分的内容全部配置好
 
-因为ubuntu不好实现远程连接，必须通过安装小老鼠界面间接控制ubuntu。ubuntu16有很好的有解决方案（无奈当初别人装的是18系统），而ubuntu18因为版本原因远程桌面的选择很少。所以尽管小老鼠界面不美观，但还得接着使用。
+### 7.1 安装系统
 
-- ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2523/article/details/81152890
+如果真有需要安装系统，比较推荐安装ubuntu16，因为ubuntu16对远程桌面支持比较好。要保证用户名密码与原来设定一致。
 
-- 在ubuntu16下可能存在完美的解决方式请参考：https://blog.csdn.net/qq_37674858/article/details/80931254 ， https://www.cnblogs.com/xuliangxing/p/7642650.html
+### 7.2 设置IP
 
-- 原来服务器配置人员的博客：https://blog.csdn.net/zhouxiaowei1120/article/details/80872919
+重新配置IP以便可以远程连接  https://blog.csdn.net/hancoder/article/details/102881903 
 
-> 注：安桌面的`echo xfce4-session >~/.xsession`命令是向home目录的`.xsession`文件末尾写入xfce4-session
->
-> 
-
-### 7.2 如何安装cuda，显卡驱动等
+### 7.3 如何安装cuda，显卡驱动等
 
 参考链接 https://blog.csdn.net/hancoder/article/details/86634415
 
-### 7.3 重装服务器系统后需要做什么
+### 7.4 远程内容
 
 - 配置显卡驱动，cuda，cudnn https://blog.csdn.net/hancoder/article/details/86634415
-- 重新配置IP以便可以远程连接  https://blog.csdn.net/hancoder/article/details/102881903 
 - 配置远程桌面： https://blog.csdn.net/hancoder/article/details/102882153 
 - 安装ssh以便文件传输： https://blog.csdn.net/hancoder/article/details/102881903 
 
@@ -392,20 +385,37 @@ service ssh restart
 vim /etc/ssh/sshd_config
 将PermitRootLoginwithout-password注释，                                
 添加一行： PermitRootLoginyes
-
 ```
 
-### 7.4 一些其他内容
+安装anaconda
 
-7.5.1 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
+# 8、What's more
 
-7.5.2 please debug your code on your PC to save server resources.
+### 8.1 为什么要安装小老鼠这个界面？
 
-7.5.3 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
+因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
 
-7.5.4 以后更新尽量在此github更新IP等内容，账号即OUCvisionLab，密码可问管理员索要。
+因为ubuntu不好实现远程连接，必须通过安装小老鼠界面间接控制ubuntu。ubuntu16有很好的有解决方案（无奈当初别人装的是18系统），而ubuntu18因为版本原因远程桌面的选择很少。所以尽管小老鼠界面不美观，但还得接着使用。
 
-7.5.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
+- ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2523/article/details/81152890
+
+- 在ubuntu16下可能存在完美的解决方式请参考：https://blog.csdn.net/qq_37674858/article/details/80931254 ， https://www.cnblogs.com/xuliangxing/p/7642650.html
+
+- 原来服务器配置人员的博客：https://blog.csdn.net/zhouxiaowei1120/article/details/80872919
+
+> 注：安桌面的`echo xfce4-session >~/.xsession`命令是向home目录的`.xsession`文件末尾写入xfce4-session
+
+### 8.2 一些其他内容
+
+8.2.1 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
+
+8.2.2 please debug your code on your PC to save server resources.
+
+8.2.3 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
+
+8.2.4 以后更新尽量在此github更新IP等内容，账号即OUCvisionLab，密码可问管理员索要。
+
+8.2.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
 
 > Anaconda2 will now be installed into this location:home/xx/anaconda2
 >
