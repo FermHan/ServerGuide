@@ -1,12 +1,15 @@
+[TOC]
+
 ==**For theory and texture group only.**==
 
 为增加查阅体验与防止后续服务器内容的更改，请直接在github观看 https://github.com/OUCvisionLab/ServerGuide
 
-本次更新内容：
+19.11.08次更新内容：
 
-- 会让3个人左右共同使用和维护一台专属服务器（自己组的服务器自行解决），也留下了1台机动的服务器。
+- 会让2个人左右共同使用和维护一台专属服务器（自己组的服务器自行解决），也留下了1台机动的服务器。
 - 考虑到留学生，所以采用了中英结合的书写方式
 - 解释了一些虚拟环境、ssh，xftp等可能用到的知识
+- 如有跑实验需要，是可以临时调换的。
 
 
 目录：
@@ -14,9 +17,11 @@
   - [1、服务器列表Server list](#1、服务器列表Server list)
   - [2、登录服务器](#2、登录服务器login)
   - [3、Use python and tensorflow](#3、Use python and tensorflow)
-  - [4、How to transfer files 传输文件:Xftp](#4、How to transfer files 传输文件:Xftp)
-  - [5、查看文件、修改文件：UltraEdit](#5、查看文件、修改文件：UltraEdit)
-  - [6、命令行工具：Xshell](#6、命令行工具：Xshell)
+  - [4、Xftp](#4、How to transfer files 传输文件:Xftp)
+  - [5、UltraEdit](#5、查看文件、修改文件：UltraEdit)
+  - [6、Xshell](#6、命令行工具：Xshell)
+  - [7、重装系统](#7、重装系统（非常不建议）)
+  - [8、What's more](#8、What's more)
 
 
 
@@ -26,15 +31,16 @@
 
 # 1、服务器列表Server list
 
-| IP              | 端口号Port | capacity                                       | user name | password | Note            |
-| --------------- | ---------- | :--------------------------------------------- | --------- | -------- | --------------- |
-| 222.195.151.170 | 9013       | RAM:128G, CPU:2.3GHz*40, GPU:none              | ouc-13    | b301     | GPU:none        |
-| 222.195.151.170 | 9015       | RAM:128G, CPU:2.3GHz*40, GPU:TESLA K40c 11G *1 | ouc-15    | b301     | LY,ZTG          |
-| 222.195.151.170 | 9028       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-28    | b301     | LJX,HF          |
-| 222.195.151.170 | 9029       | RAM:32G, CPU:3.5GHz*8, GPU:2080 8G *2          | ouc-29    | b301     | YYW             |
-| 222.195.151.66  | 9010       | RAM:32G, CPU:3.3GHz*4, GPU:TITAN X 12G         | ouc-10    | b301     | Aman,Israel,LWX |
-| 222.195.151.66  | 9018       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-18    | b301     | ZQQ,LJH,Sadia   |
-| 222.195.151.66  | 9019       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-19    | b301     | SQY,SCX         |
+| IP              | 端口号Port | capacity                                       | user name | password | Note           |
+| --------------- | ---------- | :--------------------------------------------- | --------- | -------- | -------------- |
+| 222.195.151.170 | 9013       | RAM:128G, CPU:2.3GHz*40, GPU:none              | ouc-13    | b301     | GPU:none;FTP   |
+| 222.195.151.170 | 9015       | RAM:128G, CPU:2.3GHz*40, GPU:TESLA K40c 11G *1 | ouc-15    | b301     | LY,ZTG         |
+| 222.195.151.170 | 9028       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-28    | b301     | LJX,LJH        |
+| 222.195.151.170 | 9029       | RAM:32G, CPU:3.5GHz*8, GPU:2080 8G *2          | ouc-29    | b301     | YYW,someone    |
+| 222.195.151.66  | 9010       | RAM:32G, CPU:3.3GHz*4, GPU:TITAN X 12G         | ouc-10    | b301     | Aman,Israel    |
+| 222.195.151.66  | 9018       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-18    | b301     | ZZD,LWX        |
+| 222.195.151.66  | 9019       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-19    | b301     | SCX,Sadia      |
+|                 | 9055       |                                                |           |          | SQY,ZQQ,HF,GYH |
 
 !!!  port for transporting files is 91-- ,NOT 90--
 
@@ -366,13 +372,12 @@ vim #编辑文件
 
 重新配置IP以便可以远程连接  https://blog.csdn.net/hancoder/article/details/102881903 
 
-### 7.3 如何安装cuda，显卡驱动等
+### 7.3 安装cuda，显卡驱动等
 
 参考链接 https://blog.csdn.net/hancoder/article/details/86634415
 
 ### 7.4 远程内容
 
-- 配置显卡驱动，cuda，cudnn https://blog.csdn.net/hancoder/article/details/86634415
 - 配置远程桌面： https://blog.csdn.net/hancoder/article/details/102882153 
 - 安装ssh以便文件传输： https://blog.csdn.net/hancoder/article/details/102881903 
 
