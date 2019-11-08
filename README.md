@@ -17,7 +17,7 @@
   - [1、Server-list](#1、Server-list)
   - [2、login](#2、login)
   - [3、python-and-tensorflow](#3、python-and-tensorflow)
-  - [4、Xftp](#4、transfer-files:Xftp)
+  - [4、transfer-files:Xftp](#4、transfer-files:Xftp)
   - [5、UltraEdit](#5、查看文件、修改文件：UltraEdit)
   - [6、Xshell](#6、命令行工具：Xshell)
   - [7、重装系统](#7、重装系统（非常不建议）)
