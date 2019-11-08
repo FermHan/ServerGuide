@@ -14,14 +14,14 @@
 
 目录：
 
-  - [1、服务器列表Server list](#1、服务器列表Server list)
-  - [2、登录服务器](#2、登录服务器login)
-  - [3、Use python and tensorflow](#3、Use python and tensorflow)
-  - [4、Xftp](#4、How to transfer files 传输文件:Xftp)
+  - [1、Server list](#1、Server list)
+  - [2、login](#2、login)
+  - [3、python-and-tensorflow](#3、python-and-tensorflow)
+  - [4、Xftp](#4、transfer-files:Xftp)
   - [5、UltraEdit](#5、查看文件、修改文件：UltraEdit)
   - [6、Xshell](#6、命令行工具：Xshell)
   - [7、重装系统](#7、重装系统（非常不建议）)
-  - [8、What's more](#8、What's more)
+  - [8、What's-more](#8、What's-more)
 
 
 
@@ -29,7 +29,7 @@
 
 !!!禁止在服务器上阅读代码与长时间修改代码，浪费资源。
 
-# 1、服务器列表Server list
+# 1、Server-list
 
 | IP              | 端口号Port | capacity                                       | user name | password | Note           |
 | --------------- | ---------- | :--------------------------------------------- | --------- | -------- | -------------- |
@@ -56,7 +56,7 @@
 
 
 
-# 2、登录服务器login
+# 2、login
 
 **2.1 Find remote connection**
 
@@ -102,7 +102,7 @@ nvidia-smi参数解释：
 - Compute M：计算模式；
 ```
 
-#  3、Use python and tensorflow
+#  3、python-and-tensorflow
 
 ### 3.1 First and Foremost：`nvidia-smi`
 
@@ -262,7 +262,7 @@ in the terminal to open NAVIGATOR, and choose python from NAVIGATOR.
 
 
 
-# 4、How to transfer files 传输文件:Xftp
+# 4、transfer-files:Xftp
 
 如果需要传文件，无需去机房拷贝，用Xftp传即可，文件可在网上下载破解版。
 
@@ -394,7 +394,7 @@ vim /etc/ssh/sshd_config
 
 安装anaconda
 
-# 8、What's more
+# 8、What's-more
 
 ### 8.1 为什么要安装小老鼠这个界面？
 
