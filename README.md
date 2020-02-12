@@ -322,6 +322,7 @@ vim #编辑文件
 # 编辑好后按Esc，然后输入:wq代表保存退出，q！代表不保存退出
 # 补充：命令模式下：u撤销 Ctrl+r取消撤销 x删除当前光标字符 X是向前删 x是向后删
 # 其他命令自己学习
+
 ```
 
 
@@ -358,25 +359,65 @@ vim #编辑文件
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190605152403.png)
 
-# 7、重装系统（非常不建议）
+# 7、外网使用服务器
+
+我们通过zerotier这个软件映射校园网到家中局域网
+
+操作步骤：
+
+1. 去官网注册一个账号： [https://www.zerotier.com/](https://link.jianshu.com/?t=https%3A%2F%2Fwww.zerotier.com%2F) 
+2. 在下载页面https://www.zerotier.com/download/ ，下载Windows版本的Zerotier：`MSI Installer (x86/x64)`（为方便，临时提供百度云方式下载连接：https://pan.baidu.com/s/1heG8HUlcouDvG6VhzEPrxQ 
+   提取码：cytg ）
+3. 下载完后安装好后，打开软件，在软件界面（或者在任务栏小图标上右键），点击join  Netwok，输入ID号：a09acf023363b091。需要后台管理员通过才能访问。
+4. IP：访问新的指定的服务器IP（与校园网IP不一样了）。==新的IP地址为：`192.168.192.两位IP号`，比如你原来的服务器是ouc-28，那么服务器新的IP即：`192.168.192.28`==
+5. 端口：因为IP已改变，原来映射的端口也就无需使用了。远程的端口号是3389，SSH的端口号是22。
+
+- 连接远程桌面：还是按原来方法，但是输入的端口应该是3389。示例：`192.168.192.10:3389`
+
+- 连接ssh/xftp：端口是22。示例`192.168.192.10:22`
+
+-----------------分割线----------------
+
+目前29和15服务器还未分配成功，可能是被关闭或者被更改设置了。
+
+### 7.2 附：
+
+管理员复合分配zerotier IP给新的服务器：
+
+百度如何获取Network ID，我们之前已经创建过了，所以无需再次创建
+
+在服务器上：
+
+```bash
+# 安装zerotier
+curl -s https://install.zerotier.com | sudo bash
+# 加入指定的"局域网"
+sudo zerotier-cli join a09acf023363b091
+# 在zerotier官网登录创建该"局域网"ID的用户，允许上一步的服务器加入网络，在列表前面的勾选框里勾选新加入的服务器，然后就可以通过Managed IPs访问了
+
+```
+
+
+
+# 8、重装系统（非常不建议）
 
 首先说明：非常不建议自己重装系统。即使要重装系统，也要负责地把需要的各项都装好，不给别人添麻烦。
 
 重装系统后需要把第7部分的内容全部配置好
 
-### 7.1 安装系统
+### 8.1 安装系统
 
 如果真有需要安装系统，比较推荐安装ubuntu16，因为ubuntu16对远程桌面支持比较好。要保证用户名密码与原来设定一致。
 
-### 7.2 设置IP
+### 8.2 设置IP
 
 重新配置IP以便可以远程连接  https://blog.csdn.net/hancoder/article/details/102881903 
 
-### 7.3 安装cuda，显卡驱动等
+### 8.3 安装cuda，显卡驱动等
 
 参考链接 https://blog.csdn.net/hancoder/article/details/86634415
 
-### 7.4 远程内容
+### 8.4 远程内容
 
 - 配置远程桌面： https://blog.csdn.net/hancoder/article/details/102882153 
 - 安装ssh以便文件传输： https://blog.csdn.net/hancoder/article/details/102881903 
@@ -390,13 +431,14 @@ service ssh restart
 vim /etc/ssh/sshd_config
 将PermitRootLoginwithout-password注释，                                
 添加一行： PermitRootLoginyes
+
 ```
 
 安装anaconda
 
-# 8、What's-more
+# 9、What's-more
 
-### 8.1 为什么要安装小老鼠这个界面？
+### 9.1 为什么要安装小老鼠这个界面？
 
 因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
 
@@ -410,7 +452,7 @@ vim /etc/ssh/sshd_config
 
 > 注：安桌面的`echo xfce4-session >~/.xsession`命令是向home目录的`.xsession`文件末尾写入xfce4-session
 
-### 8.2 一些其他内容
+### 9.2 一些其他内容
 
 8.2.1 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
 
@@ -438,6 +480,6 @@ don't press ENTER, you should type in your personal directory such as : `/home/o
 
 please type in `no`
 
-### 7.5 contact me
+### 9.3 contact me
 
 QQ：553736044@qq.com
