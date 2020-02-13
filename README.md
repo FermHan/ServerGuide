@@ -322,7 +322,6 @@ vim #编辑文件
 # 编辑好后按Esc，然后输入:wq代表保存退出，q！代表不保存退出
 # 补充：命令模式下：u撤销 Ctrl+r取消撤销 x删除当前光标字符 X是向前删 x是向后删
 # 其他命令自己学习
-
 ```
 
 
@@ -366,14 +365,16 @@ vim #编辑文件
 操作步骤：
 
 1. 去官网注册一个账号： [https://www.zerotier.com/](https://link.jianshu.com/?t=https%3A%2F%2Fwww.zerotier.com%2F) 
-2. 在下载页面https://www.zerotier.com/download/ ，下载Windows版本的Zerotier：`MSI Installer (x86/x64)`（为方便，临时提供百度云方式下载连接：：https://pan.baidu.com/s/1eiJy2A5PxT-o0yyhnR3dWA 提取码：f58H  ）
-3. 下载完后安装好后，打开软件，在软件界面（或者在任务栏小图标上右键），点击join  Netwok，输入ID号：a09acf023363b091。需要后台管理员通过才能访问。
-4. IP：访问新的指定的服务器IP（与校园网IP不一样了）。==新的IP地址为：`192.168.192.两位IP号`，比如你原来的服务器是ouc-28，那么服务器新的IP即：`192.168.192.28`==
-5. 端口：因为IP已改变，原来映射的端口也就无需使用了。远程的端口号是3389，SSH的端口号是22。
+2. 在下载页面https://www.zerotier.com/download/ ，下载Windows版本的Zerotier：`MSI Installer (x86/x64)`（为方便，临时提供百度云方式下载连接：
+3. https://pan.baidu.com/s/1eiJy2A5PxT-o0yyhnR3dWA 提取码：f58H ）
+4. 下载完后安装好后，打开软件，在软件界面（或者在任务栏小图标上右键），点击join Netwok，输入ID号：a09acf023363b091。需要后台管理员通过才能访问。
+5. IP：访问新的指定的服务器IP（与校园网IP不一样了）。==新的IP地址为：`192.168.192.两位IP号`，比如你原来的服务器是ouc-28，那么服务器新的IP即：`192.168.192.28`==
+6. 端口：因为IP已改变，原来映射的端口也就无需使用了。远程的端口号是3389，SSH的端口号是22。
 
-- 连接远程桌面：还是按原来方法，但是输入的端口应该是3389。示例：`192.168.192.10:3389` （目前zerotier网络很慢，所以桌面应该访问不到）
+- 连接远程桌面：还是按原来方法，但是输入的端口应该是3389。示例：`192.168.192.10:3389` （我连不上，但山东省内同学好像能连上，延迟也能接受，可能跟地区有关。）
+- 连接ssh/xftp：端口是22。示例`192.168.192.10:22` 
 
-- 连接ssh/xftp：端口是22。示例`192.168.192.10:22` （有些许延迟，后续看能否解决）
+延迟问题再解决吧
 
 -----------------分割线----------------
 
@@ -381,7 +382,7 @@ vim #编辑文件
 
 ### 7.2 附：
 
-管理员复合分配zerotier IP给新的服务器：
+管理员分配zerotier IP给新的服务器：
 
 百度如何获取Network ID，我们之前已经创建过了，所以无需再次创建
 
@@ -393,7 +394,6 @@ curl -s https://install.zerotier.com | sudo bash
 # 加入指定的"局域网"
 sudo zerotier-cli join a09acf023363b091
 # 在zerotier官网登录创建该"局域网"ID的用户，允许上一步的服务器加入网络，在列表前面的勾选框里勾选新加入的服务器，然后就可以通过Managed IPs访问了
-
 ```
 
 
@@ -430,7 +430,6 @@ service ssh restart
 vim /etc/ssh/sshd_config
 将PermitRootLoginwithout-password注释，                                
 添加一行： PermitRootLoginyes
-
 ```
 
 安装anaconda
