@@ -378,7 +378,9 @@ vim #编辑文件
 
 -----------------分割线----------------
 
-目前29和15服务器还未分配成功，可能是被关闭或者被更改设置了。
+目前29和15服务器还未分配成功，可能是被关闭或者被更改设置了。 
+
+moon方式没起作用。可以管理员打开shell后输入：zerotier-cli orbit 11bdb40555 11bdb40555
 
 ### 7.2 附：
 
@@ -394,6 +396,9 @@ curl -s https://install.zerotier.com | sudo bash
 # 加入指定的"局域网"
 sudo zerotier-cli join a09acf023363b091
 # 在zerotier官网登录创建该"局域网"ID的用户，允许上一步的服务器加入网络，在列表前面的勾选框里勾选新加入的服务器，然后就可以通过Managed IPs访问了
+
+#尝试了moon。好像也没什么效果，可能有错误
+zerotier-cli orbit 11bdb40555 11bdb40555
 ```
 
 
