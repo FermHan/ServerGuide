@@ -366,8 +366,7 @@ vim #编辑文件
 操作步骤：
 
 1. 去官网注册一个账号： [https://www.zerotier.com/](https://link.jianshu.com/?t=https%3A%2F%2Fwww.zerotier.com%2F) 
-2. 在下载页面https://www.zerotier.com/download/ ，下载Windows版本的Zerotier：`MSI Installer (x86/x64)`（为方便，临时提供百度云方式下载连接：https://pan.baidu.com/s/1heG8HUlcouDvG6VhzEPrxQ 
-   提取码：cytg ）
+2. 在下载页面https://www.zerotier.com/download/ ，下载Windows版本的Zerotier：`MSI Installer (x86/x64)`（为方便，临时提供百度云方式下载连接：：https://pan.baidu.com/s/1eiJy2A5PxT-o0yyhnR3dWA 提取码：f58H  ）
 3. 下载完后安装好后，打开软件，在软件界面（或者在任务栏小图标上右键），点击join  Netwok，输入ID号：a09acf023363b091。需要后台管理员通过才能访问。
 4. IP：访问新的指定的服务器IP（与校园网IP不一样了）。==新的IP地址为：`192.168.192.两位IP号`，比如你原来的服务器是ouc-28，那么服务器新的IP即：`192.168.192.28`==
 5. 端口：因为IP已改变，原来映射的端口也就无需使用了。远程的端口号是3389，SSH的端口号是22。
