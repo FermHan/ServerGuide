@@ -20,8 +20,9 @@
   - [4、transfer-files：Xftp](#4、transfer-files：Xftp)
   - [5、UltraEdit](#5、查看文件、修改文件：UltraEdit)
   - [6、Xshell](#6、命令行工具：Xshell)
-  - [7、重装系统](#7、重装系统（非常不建议）)
-  - [8、What's-more](#8、What's-more)
+  - 7、外网访问
+  - [8、重装系统](#7、重装系统（非常不建议）)
+  - [9、What's-more](#8、What's-more)
 
 
 
@@ -45,6 +46,8 @@
 !!!  port for transporting files is 91-- ,NOT 90--
 
 **传文件的端口是91--，选的协议是sftp。**
+
+#### github显示问题
 
 > 因为github图床的原因，文中图似乎经常不显示。如不显示，可在`C:\Windows\System32\drivers\etc\hosts`文件的末尾添加如下内容：
 >
@@ -364,23 +367,24 @@ vim #编辑文件
 
 操作步骤：
 
-1. 去官网注册一个账号： [https://www.zerotier.com/](https://link.jianshu.com/?t=https%3A%2F%2Fwww.zerotier.com%2F) 
-2. 在下载页面https://www.zerotier.com/download/ ，下载Windows版本的Zerotier：`MSI Installer (x86/x64)`（为方便，临时提供百度云方式下载连接：
-3. https://pan.baidu.com/s/1eiJy2A5PxT-o0yyhnR3dWA 提取码：f58H ）
-4. 下载完后安装好后，打开软件，在软件界面（或者在任务栏小图标上右键），点击join Netwok，输入ID号：a09acf023363b091。需要后台管理员通过才能访问。
-5. IP：访问新的指定的服务器IP（与校园网IP不一样了）。==新的IP地址为：`192.168.192.两位IP号`，比如你原来的服务器是ouc-28，那么服务器新的IP即：`192.168.192.28`==
-6. 端口：因为IP已改变，原来映射的端口也就无需使用了。远程的端口号是3389，SSH的端口号是22。
+1. 在下载页面https://www.zerotier.com/download/ ，下载Windows版本的Zerotier：`MSI Installer (x86/x64)`（为方便，临时提供百度云方式下载连接：
+
+   https://pan.baidu.com/s/1eiJy2A5PxT-o0yyhnR3dWA 提取码：f58H ） 应该不需要注册账号，如果提示需要账号的话再注册账号吧
+
+2. 下载完后安装好后，打开软件，在软件界面（或者在任务栏小图标上右键），点击join Netwok，输入ID号：a09acf023363b091。需要联系后台管理员通过才能访问（请主动联系一下，要不然不知道请求访问的ip具体是谁，也不能及时通过请求）。
+
+3. IP：访问新的指定的服务器IP（与校园网IP不一样了）。==新的IP地址为：`192.168.192.两位IP号`，比如你原来的服务器是ouc-28，那么服务器新的IP即：`192.168.192.28`==
+
+4. 端口：因为IP已改变，原来映射的端口也就无需使用了。远程桌面的端口号是3389，SSH与XFTP的端口号是22。账号密码不变
 
 - 连接远程桌面：还是按原来方法，但是输入的端口应该是3389。示例：`192.168.192.10:3389` （我连不上，但山东省内同学好像能连上，延迟也能接受，可能跟地区有关。）
 - 连接ssh/xftp：端口是22。示例`192.168.192.10:22` 
 
-延迟问题再解决吧
+延迟问题不太方便解决，有的地区连接就很稳定，有的地区可能只能连ssh体会一下龟速网络。
 
 -----------------分割线----------------
 
 目前29和15服务器还未分配成功，可能是被关闭或者被更改设置了。 
-
-moon方式没起作用。可以管理员打开shell后输入：zerotier-cli orbit 11bdb40555 11bdb40555
 
 ### 7.2 附：
 
@@ -399,6 +403,7 @@ sudo zerotier-cli join a09acf023363b091
 
 #尝试了moon。好像也没什么效果，可能有错误
 zerotier-cli orbit 11bdb40555 11bdb40555
+# 云使用的是三丰云，如果过期了就去免费签到续时一下
 ```
 
 
