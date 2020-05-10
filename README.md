@@ -4,33 +4,17 @@
 
 为增加查阅体验与防止后续服务器内容的更改，请直接在github观看 https://github.com/OUCvisionLab/ServerGuide
 
-19.11.08次更新内容：
+20.03.08次更新内容：
 
 - 会让2个人左右共同使用和维护一台专属服务器（自己组的服务器自行解决），也留下了1台机动的服务器。
-- 考虑到留学生，所以采用了中英结合的书写方式
-- 解释了一些虚拟环境、ssh，xftp等可能用到的知识
+- 解释了一些虚拟环境、ssh，xftp、zerotier等可能用到的知识
 - 如有跑实验需要，是可以临时调换的。
-
-
-目录：
-
-  - [1、Server-list](#1、Server-list)
-  - [2、login](#2、login)
-  - [3、python-and-tensorflow](#3、python-and-tensorflow)
-  - [4、transfer-files：Xftp](#4、transfer-files：Xftp)
-  - [5、UltraEdit](#5、查看文件、修改文件：UltraEdit)
-  - [6、Xshell](#6、命令行工具：Xshell)
-  - 7、外网访问
-  - [8、重装系统](#7、重装系统（非常不建议）)
-  - [9、What's-more](#8、What's-more)
-
-
 
 
 
 !!!禁止在服务器上阅读代码与长时间修改代码，浪费资源。
 
-# 1、Server-list
+# 1、服务器列表
 
 | IP              | 端口号Port | capacity                                       | user name | password | Note           |
 | --------------- | ---------- | :--------------------------------------------- | --------- | -------- | -------------- |
@@ -43,9 +27,13 @@
 | 222.195.151.66  | 9019       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-19    | b301     | SCX,Sadia      |
 |                 | 9055       |                                                |           |          | SQY,ZQQ,HF,GYH |
 
-!!!  port for transporting files is 91-- ,NOT 90--
+注：
 
-**传文件的端口是91--，选的协议是sftp。**
+- 请注意区别端口是90XX还是91XX，一个是远程桌面，一个是ssh
+- **传文件的端口是91--，选的协议是sftp。**
+- 校园外网或者手机流量开的网络无法访问校园网，外网访问需要借助于第7部分的zerotier软件
+
+
 
 #### github显示问题
 
@@ -59,15 +47,15 @@
 
 
 
-# 2、login
+# 2、登录
 
-**2.1 Find remote connection**
+**2.1 windows软件**
 
 电脑中搜索桌面连接。或者在微软商店里搜远程桌面，道理都是一样的
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325172634.png?token=AkTVJfvkXHdCyhSbXbtS6iokfCOR6xZNks5cmJ8MwA%3D%3D)
 
-**2.2 Type in IP:port**
+**2.2 输入IP和端口**
 
 输入IP:port，如`222.195.151.170:6666`
 
@@ -75,19 +63,19 @@
 
 
 
-**2.3 Type in username and password**
+**2.3 输入用户名密码**
 
 session模式选择Xorg（个别机器选sesman-Xvnc），然后输入账号`ouc-机器后两位id`，密码`b301`
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325135817.png?token=AkTVJVynPSWj1sb4ZEbO8wRyjpg_8P4cks5cmG46wA%3D%3D)
 
-**2.4 Once in the system, modify someone.txt to note your name and usage time.And you can put your personal files in directory  /home/ouc-xx/**在home目录下创建自己的文件夹
+**2.4 登录系统后 在home目录下(/home/ouc-xx/)创建自己的文件夹，请勿随意放置个人文件**
 
 进去后，最好在桌面上备注好你的名字以及使用时间。
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325144734.png?token=AkTVJRoQTQFVopFyApR5WI9oEZziwdXtks5cmHnIwA%3D%3D)
 
-**2.5 Before you run the code, please type in  ` nvidia-smi ` in the terminal to make sure there's no another user.**(在你正式跑代码之前，请输入`nvidia-smi`查看有没有其他用户在跑程序（通过红框部分看）)。如果中间的显存占用率只有几十MB，那么就说明没人在跑程序。
+2.5 ==**在你正式跑代码之前，请输入`nvidia-smi`查看有没有其他用户在跑程序（通过红框部分看）)。如果中间的显存占用率只有几十MB，那么就说明没人在跑程序。**==
 
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325150409.png?token=AkTVJdMwtfgMAto3CRd4hvoScKzyrl_kks5cmH2rwA%3D%3D)
 
@@ -105,13 +93,13 @@ nvidia-smi参数解释：
 - Compute M：计算模式；
 ```
 
-#  3、python-and-tensorflow
+#  3、使用python、tensorflow
 
-### 3.1 First and Foremost：`nvidia-smi`
+### 3.1 `nvidia-smi`
 
-此处是作用是验证没有人在使用此服务器
+输入 `nvidia-smi`，此处是作用是验证没有人在使用此服务器
 
-### 3.2 create environment # 创建你自己的环境
+### 3.2 创建你自己的环境
 
 > 环境解释：
 >
@@ -126,7 +114,7 @@ nvidia-smi参数解释：
 创建于使用虚拟环境方法：
 
 ```python 
-# How to create a new environment创建环境
+# 创建python环境
 conda create -n YOURENAME python=PYTHONVERSION
 # 如conda create -n hanfeng python=3.6。可以指定python版本，重要的是指定python版本。名称任意，推荐自己名字。anaconda3上也可安装python2.7。创建完可在/home/Anaconda3/env/YOURNAME/python目录下找到你的python
 # 如遇到权限问题，可以尝试先执行如 sudo chown -R ouc-19:ouc-19 /home/ouc-19/anaconda3
@@ -137,22 +125,22 @@ source activate YOURENAME
 conda activate YOURENAME
 -------------------------------
 # 不常用命令：
-# View existing conda list 查看现有环境
+# 查看现有环境
 conda info -e
 
 source deactivate  #退出私有环境，返回公共环境
 #or#conda deactivate
 
-# How to delete your personal environment 删除虚拟环境
+# 删除虚拟环境
 conda remove -n YOURNAME --all
 ```
 
-### 3.3 install modules安装包：
+### 3.3 安装包：
 
 #### 3.3.1 conda install
 
 ```PYTHON
-1. # use conda。conda安装方式，必须先激活到自己创建的环境中
+1. # conda安装方式，必须先激活到自己创建的环境中
 conda activate YOURENAME # or：source activate YOURENAME
 conda install tensorflow-gpu=版本号
 ```
@@ -164,7 +152,7 @@ conda install tensorflow-gpu=版本号
 - pip在线安装：
 
 ```PYTHON
-conda activate YOURENAME # or：source activate YOURENAME
+conda activate YOURENAME # 或：source activate YOURENAME
 python -m pip install 模块 # 
 ```
 
@@ -195,11 +183,11 @@ python -m pip install FILE下载的文件
 
   使用`which pip3`或`which pip`可以查看默认的pip3和pip在哪里。如图，pip3在/usr/bin目录下，pip在anaconda3/bin目录下
 
-  ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164105.png)
+  ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621164105.png)
 
   输入`gedit /usr/local/pip3`可以打开pip3修改第一行，修改为自己python的路径以后pip3以后默认的安装的就是你的python了。
 
-  ![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621164221.png)
+  ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621164221.png)
 
   但是上面只是介绍原理，实例使用中最实用的还是直接使用`python -m pip install 在线/离线包`，相当于指定了为哪个python安装包。
 
@@ -214,7 +202,7 @@ python -m pip install FILE下载的文件（在线离线均可）
 
 例：pytorch，官网https://pytorch.org/ 给出的pip安装方式显示的网址即是包的下载地址，可以去掉pip复制网址到浏览器下载。如下图选中部分即下载地址。
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621160354.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621160354.png)
 
 注：经测试cuda-9.0官网没给出下载pytorch地址，第三方给的下载文件https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/linux-64/ 测试时有次未安装成功，可以自己尝试。
 
@@ -232,7 +220,7 @@ archive下是anaconda安装包
 
 清华源在2019-04-16被迫停止了anaconda镜像服务，但随后2019-06-15又获得了Anaconda镜像的授权。见下图，所以以后又能继续在线使用anaconda安装module了。
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190621155850.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621155850.png)
 
 更改conda源的方式：
 
@@ -255,15 +243,25 @@ show_channel_urls: true
 
 ps：你也可以使用navigator界面的方式进行上面创建虚拟环境安装包等操作
 
-ps: Similarly,you can type in 
-
-`anaconda-navigator`
-
-in the terminal to open NAVIGATOR, and choose python from NAVIGATOR.
-
 ![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325170518.jpg?token=AkTVJfCdox_AKmenkZWtbZejKnxxdoVMks5cmJoSwA%3D%3D)
 
+### Anaconda2
 
+若有特殊情况需要安装Anaconda2（Anaconda3里有python2.7），可以使用如下方法：
+
+> Anaconda2 will now be installed into this location:home/xx/anaconda2
+>
+> -Press ENTER to confirm the location
+>
+> -Press CTRL-C to abort the installation
+>
+> -Or specify a different location below
+>
+> 这时不要选择回车，否则会覆盖原来的Anaconda3的环境变量。自己输入一个home下的路径即可
+>
+> Do you with the installer to prepend the Anaconda2 install location to PATH in your /home/ouc/.bashrc ?[yes|no]
+>
+> 要选择no，否则会覆盖原来的Anaconda环境变量，使别人无法正常使用
 
 # 4、transfer-files：Xftp
 
@@ -281,11 +279,11 @@ port is NOT 90-- BUT 91--  # 端口号是91--，而不是原来的90--
 
 文件--新建--填写主机、协议SFTP、端口号`91--`（注意不是90）、账号、密码---连接。
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220350.png)![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531222935.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190531220350.png)![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190531222935.png)
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220703.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190531220703.png)
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531220819.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190531220819.png)
 
 # 5、查看文件、修改文件：UltraEdit
 
@@ -295,15 +293,15 @@ UltraEdit有windows+mac+ubuntu版本，所以你在任何系统下都可以下�
 
 首先去UltraEdit官网下载UltraEdit，购(po)买(jie)后点击菜单栏中的FTP，点击从FTP打开。
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20191025145530.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025145530.png)
 
 然后像xftp一样填写信息，填写后点击确定，再点击链接，就可以看到文件了。
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20191025145928.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025145928.png)
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20191025150213.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025150213.png)
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20191025150724.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025150724.png)
 
 我们在上面解决了传文件、看文件、修改文件的需求，我们跑程序时候还有使用命令行，xshell就是命令行工具
 
@@ -349,38 +347,38 @@ vim #编辑文件
 
 安装后，打开xshell，新建链接如图，协议选ssh，其余内容与xftp内容一致。端口为91--
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531232754.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190531232754.png)
 
 然后输入账户密码 后点ok
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531232837.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190531232837.png)
 
 连接成功，界面如下：
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190531233523.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190531233523.png)
 
-![](https://raw.githubusercontent.com/FermHan/tuchuang/master/20190605152403.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190605152403.png)
 
 # 7、外网使用服务器
 
-我们通过zerotier这个软件映射校园网到家中局域网
+我们通过zerotier这个软件映射校园网到校园外网(家中局域网)
 
 操作步骤：
 
-1. 下载Windows版本的Zerotier：`MSI Installer (x86/x64)`（为方便，临时提供百度云方式下载连接：
+2. 下载Windows版本的Zerotier：`MSI Installer (x86/x64)`（为方便，临时提供百度云方式下载连接：
 
-   https://pan.baidu.com/s/1eiJy2A5PxT-o0yyhnR3dWA 提取码：f58H ）。（百度云链接失效的话可以去官网下载：https://www.zerotier.com/download/  。应该不需要注册账号，如果提示需要账号的话再注册账号吧）
+   https://pan.baidu.com/s/1eiJy2A5PxT-o0yyhnR3dWA 提取码：f58H ）。（百度云链接失效的话可以去官网下载：https://www.zerotier.com/download/  。只是加入网络的话不需要注册账号）
 
-2. 安装好后，在Zerotier软件界面（或者在任务栏小图标上右键），点击join Netwok，输入ID号：a09acf023363b091。需要联系后台管理员通过才能通过授权（请主动联系一下，要不然不知道请求访问的ip具体是谁，也不能及时通过请求）。
+3. 安装好后，在Zerotier软件界面（或者在任务栏小图标上右键），点击join Netwok，输入ID号：a09acf023363b091。需要联系后台管理员通过才能通过授权（请主动联系一下，要不然不知道请求访问的ip具体是谁，也不能及时通过请求）。
 
-3. IP：访问新的指定的服务器IP（与校园网IP不一样了）。==新的IP地址为：`192.168.192.两位IP号`，比如你原来的服务器是ouc-28，那么服务器新的IP即：`192.168.192.28`==
+4. IP：访问新的指定的服务器IP（与校园网IP不一样了）。==新的IP地址为：`192.168.192.两位IP号`，比如你原来的服务器是ouc-28，那么服务器新的IP即：`192.168.192.28`==
 
-4. 端口：因为IP已改变，原来映射的端口也就无需使用了。远程桌面的端口号是3389，SSH/XFTP的端口号是22。账号密码不变
+5. 端口：因为IP已改变，原来映射的端口也就无需使用了。远程桌面的端口号是3389，SSH/XFTP的端口号是22。账号密码不变
 
 - 连接远程桌面：还是按原来方法，但是输入的端口应该是3389。示例：`192.168.192.10:3389` （起作用，但是有些地区被墙的原因，网速慢会连接不上）
 - 连接ssh/xftp：端口是22。示例`192.168.192.10:22` 
 
-延迟问题不太方便解决，有的地区连接就很稳定，有的地区可能只能连ssh体会一下龟速网络。
+延迟问题不太方便解决，有的地区连接就很稳定，有的地区可能只能连ssh体会一下龟速网络，所以请学习一下ssh使用。
 
 -----------------分割线----------------
 
@@ -404,6 +402,11 @@ sudo zerotier-cli join a09acf023363b091
 #尝试了moon。好像也没什么效果，可能有错误
 zerotier-cli orbit 11bdb40555 11bdb40555
 # 云使用的是三丰云，如果过期了就去免费签到续时一下
+
+ssh -p 9012 ouc@222.195.151.170
+ssh -p 9011 ouc@222.195.151.170
+
+ssh -p 9128 ouc-28@222.195.151.170
 ```
 
 
@@ -442,7 +445,7 @@ vim /etc/ssh/sshd_config
 添加一行： PermitRootLoginyes
 ```
 
-安装anaconda
+还需要安装anaconda
 
 # 9、What's-more
 
@@ -462,31 +465,20 @@ vim /etc/ssh/sshd_config
 
 ### 9.2 一些其他内容
 
-8.2.1 配置环境变量的文件Some environment variables are configured in `~/.bashrc`
+- 配置环境变量的文件：`~/.bashrc`
+- 服务器应只跑实验时使用，调试代码请尽量在个人电脑上线调试好
+- 有问题咨询组内
+- 以后更新尽量在此github账号更新IP等内容，以便同步。账号即OUCvisionLab，密码可问管理员索要。
 
-8.2.2 please debug your code on your PC to save server resources.
+### 9.3 linux必备技能
 
-8.2.3 If your server resources are insufficient, please contact HAN. There may be servers unallocated for you.
-
-8.2.4 以后更新尽量在此github更新IP等内容，账号即OUCvisionLab，密码可问管理员索要。
-
-8.2.5 Maybe you want to install Anaconda2.To be honest, it's not usually used, because python2.7 has been involved in Anaconda3. If you think about it, what is noteworthy is that when you install anaconda2,
-
-> Anaconda2 will now be installed into this location:home/xx/anaconda2
->
-> -Press ENTER to confirm the location
->
-> -Press CTRL-C to abort the installation
->
-> -Or specify a different location below
->
-> [/home/xx/anaconda2]>>>
-
-don't press ENTER, you should type in your personal directory such as : `/home/ouc/Tom/Anaconda2/`
-
-> Do you with the installer to prepend the Anaconda2 install location to PATH in your /home/ouc/.bashrc ?[yes|no]
-
-please type in `no`
+- linux基础指令：https://blog.csdn.net/hancoder/article/details/104304735
+- vim基础用法：https://blog.csdn.net/hancoder/article/details/104304509
+- ip配置： https://blog.csdn.net/hancoder/article/details/102881903 
+- cuda、显卡驱动：https://blog.csdn.net/hancoder/article/details/86634415
+- 配置远程桌面： https://blog.csdn.net/hancoder/article/details/102882153
+- 安装ssh： https://blog.csdn.net/hancoder/article/details/102881903 
+- ftp配置：https://blog.csdn.net/hancoder/article/details/100988807
 
 ### 9.3 contact me
 
