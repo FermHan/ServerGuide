@@ -2,7 +2,7 @@
 
 ==**For theory and texture group only.**==
 
-为增加查阅体验与防止后续服务器内容的更改，请直接在github观看 https://github.com/OUCvisionLab/ServerGuide
+为增加查阅体验与防止后续服务器内容的更改，请直接在github观看 https://github.com/OUCvisionLab/ServerGuide ， 若github网速慢也可去CSDN观看：https://blog.csdn.net/hancoder/article/details/88803079
 
 20.03.08次更新内容：
 
