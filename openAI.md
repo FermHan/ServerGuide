@@ -11,7 +11,7 @@ https://cr.console.aliyun.com/cn-qingdao/instances/repositories
 
 ### 0 账号信息：
 
-- 平台账号：(密)：向管理员申请账号
+- openAI平台账号：(密)：向管理员申请账号
 - nfs存储服务器：222.195.151.85:8011( 192.168.1.4)  用户名ouc  密码123
 - 镜像仓库cvlab.qdxnzn.com：账号admin 密码ouc123456。push密码也是ouc123456
 - 集群(非管理员勿登录)：用户名ouc  密码123
