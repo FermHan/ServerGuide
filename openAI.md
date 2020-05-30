@@ -3,7 +3,6 @@
 - github：https://github.com/OUCvisionLab/ServerGuide/blob/master/openAI.md
 - CSDN：https://blog.csdn.net/hancoder/article/details/106423288
 
-https://cr.console.aliyun.com/cn-qingdao/instances/repositories
 
 # 一、理论组集群使用方法
 
@@ -60,9 +59,8 @@ mkdir /data/姓名全字母
 点击左侧Submit Job，在右侧的Task_role_1的Command栏中填入命令
 
 ```sh
+echo "task start..."
 apt update # 更新原
-# 安装nfs客户端，以便下一步挂载存储(保证每个节点服务器安装过一次即可)
-apt install -y nfs-common 
 
 # 挂载 #(从存储服务器挂载到docker容器里)
 mount -o nolock -t nfs 192.168.1.4:/data/姓名 /mnt
@@ -83,10 +81,21 @@ python /mnt/test.py
 
 如下用法：
 
+测试环境1
+
+```sh
+echo "task start..."
+apt update
+echo "task end..."
+```
+
+测试环境2
+
 ```sh
 #测试环境
+echo "task start..."
 apt update
-apt install -y nfs-common 
+
 mount -o nolock -t nfs 192.168.1.4:/data/module /mnt
 # 存储服务器和docker容器的文件对应关系如下：
 # /data/models/research/slim/download_and_convert_data.py 
@@ -98,9 +107,15 @@ python /mnt/research/slim/train_image_classifier.py --dataset_name=cifar10 --dat
 
 
 
+> apt install -y nfs-common 已经安装过了
+
 ### 4 提交任务
 
+网页：222.195.151.231
+
 ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529172131.png)
+
+提交完任务后，可以取Jobs页面查看运行情况与标准输入、标准错误
 
 ### 5 自定义制作docker镜像
 
@@ -146,9 +161,24 @@ docker tag 【ImageId】 cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号
 docker push cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
 ```
 
+因为docker的分层概念，所以你基于我的镜像进行修改的话push速度也是很快的，相当于只提交你的修改部分。
+
 然后复制你的镜像的网络地址，去openAI平台使用，openAI平台会自动拉取，复制你在3部分写好的命令，然后填入镜像地址即可。然后点submit
 
 ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200530001019.jpg)
+
+只填入地址看，没有前缀docker push
+
+```sh
+# 提交的镜像直接在网页上复制pull地址也可以(@sha格式)，自己编写也可以(:tag格式)。
+# 格式1
+cvlab.qdxnzn.com/ouc/theory-repository@sha256:d2e056809cd55fc2605524e335efa9cc72b07ecffacb8cabf57335dc918d4fc3
+
+# 格式2
+cvlab.qdxnzn.com/ouc/theory-repository:cuda10.0-cudnn7.6-python6-tf15
+```
+
+
 
 
 
@@ -199,30 +229,23 @@ docker build [OPTIONS] PATH | URL | -
 docker build -t 机构/镜像名<:tags> 生成Dockerfile目录
 
 # 删除镜像
-docker image rm 
-
+docker image rm
 ```
 
 #### push与pull
 
 ```sh
-# 1. 登录阿里云Docker Registry 
-docker login --username=韩锋626 registry.cn-qingdao.aliyuncs.com
-#输入密码 visionlab2020
-## username中有中文是若干年前创建阿里云账号的时候不小心舔的中文,更改不了，所以
+# 1.先登录再push
+docker login --username=admin  cvlab.qdxnzn.com
+#输入密码 ouc123456
 
-#2. 将镜像推送到Registry,需要先登录完
-## 打标签
-docker tag [ImageId] registry.cn-qingdao.aliyuncs.com/oucvisionlab/docker-repository:[镜像版本号]
+#2. 将镜像推送到远程仓库,需要先登录
+## 打标签，新的tag要写明该镜像中软件的版本，如python6-tf15-cuda10.0-cudnn7.6.0
+docker tag 【ImageId】 cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
+
 ## push
-docker push registry.cn-qingdao.aliyuncs.com/oucvisionlab/docker-repository:[镜像版本号]
-
-
-
-# 3. 从Registry中拉取镜像
-sudo docker pull registry.cn-qingdao.aliyuncs.com/oucvisionlab/docker-repository:[镜像版本号]
+docker push cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
 ```
-
 
 
 ### 3 Dockerfile
@@ -384,17 +407,7 @@ RUN   ldconfig && \
 EXPOSE 8888 6006
 ```
 
-cuda安装
 
-```sh
-wget http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run
-sudo sh cuda_10.1.243_418.87.00_linux.run
-
-wget https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.0.130_410.48_linux
-sudo sh cuda_10.0.130_410.48_linux.run
-```
-
-更换pip源
 
 # 三 阿里云仓库
 
