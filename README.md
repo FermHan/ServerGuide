@@ -2,7 +2,12 @@
 
 ==**For theory and texture group only.**==
 
-为增加查阅体验与防止后续服务器内容的更改，请直接在github观看 https://github.com/OUCvisionLab/ServerGuide ， 若github网速慢也可去CSDN观看：https://blog.csdn.net/hancoder/article/details/88803079
+为增加查阅体验与防止后续服务器内容的更改，请直接在github观看 https://github.com/OUCvisionLab/ServerGuide  ， 若github网速慢也可去CSDN观看：https://blog.csdn.net/hancoder/article/details/88803079 
+
+主要内容：
+
+- IP设置：https://blog.csdn.net/hancoder/article/details/102881903 
+- openAI集群+docker：https://blog.csdn.net/hancoder/article/details/106423288 
 
 20.03.08次更新内容：
 
@@ -33,33 +38,19 @@
 - **传文件的端口是91--，选的协议是sftp。**
 - 校园外网或者手机流量开的网络无法访问校园网，外网访问需要借助于第7部分的zerotier软件
 
-
-
-#### github显示问题
-
-> 因为github图床的原因，文中图似乎经常不显示。如不显示，可在`C:\Windows\System32\drivers\etc\hosts`文件的末尾添加如下内容：
->
-> `199.232.4.133  	raw.githubusercontent.com`
->
-> hosts文件需要电脑管理员才能更改。管理员登陆状态下可以把原来hosts文件命名为hosts1，然后在桌面复制原来hosts内容写入文件，注意把后缀txt去掉，然后拖入etc文件中。如不能正确更改hosts，请百度其他方法。此时图就可以正常显示了。
->
-> 或者在CSDN上查看： https://blog.csdn.net/hancoder/article/details/88803079 
-
-
-
 # 2、登录
 
 **2.1 windows软件**
 
 电脑中搜索桌面连接。或者在微软商店里搜远程桌面，道理都是一样的
 
-![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325172634.png?token=AkTVJfvkXHdCyhSbXbtS6iokfCOR6xZNks5cmJ8MwA%3D%3D)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190325172634.png?token=AkTVJfvkXHdCyhSbXbtS6iokfCOR6xZNks5cmJ8MwA%3D%3D)
 
 **2.2 输入IP和端口**
 
 输入IP:port，如`222.195.151.170:6666`
 
-![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325172652.png?token=AkTVJYakMJzCIiVJDfjlIcg5KLcv0mctks5cmJ8owA%3D%3D)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190325172652.png?token=AkTVJYakMJzCIiVJDfjlIcg5KLcv0mctks5cmJ8owA%3D%3D)
 
 
 
@@ -67,17 +58,17 @@
 
 session模式选择Xorg（个别机器选sesman-Xvnc），然后输入账号`ouc-机器后两位id`，密码`b301`
 
-![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325135817.png?token=AkTVJVynPSWj1sb4ZEbO8wRyjpg_8P4cks5cmG46wA%3D%3D)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190325135817.png?token=AkTVJVynPSWj1sb4ZEbO8wRyjpg_8P4cks5cmG46wA%3D%3D)
 
 **2.4 登录系统后 在home目录下(/home/ouc-xx/)创建自己的文件夹，请勿随意放置个人文件**
 
 进去后，最好在桌面上备注好你的名字以及使用时间。
 
-![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325144734.png?token=AkTVJRoQTQFVopFyApR5WI9oEZziwdXtks5cmHnIwA%3D%3D)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190325144734.png?token=AkTVJRoQTQFVopFyApR5WI9oEZziwdXtks5cmHnIwA%3D%3D)
 
 2.5 ==**在你正式跑代码之前，请输入`nvidia-smi`查看有没有其他用户在跑程序（通过红框部分看）)。如果中间的显存占用率只有几十MB，那么就说明没人在跑程序。**==
 
-![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325150409.png?token=AkTVJdMwtfgMAto3CRd4hvoScKzyrl_kks5cmH2rwA%3D%3D)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190325150409.png?token=AkTVJdMwtfgMAto3CRd4hvoScKzyrl_kks5cmH2rwA%3D%3D)
 
 nvidia-smi参数解释：
 
@@ -137,6 +128,10 @@ conda remove -n YOURNAME --all
 
 ### 3.3 安装包：
 
+推荐离线安装。去https://pypi.org/ 下载离线包。`pip install 离线包`
+
+在线安装容易失败。
+
 #### 3.3.1 conda install
 
 ```PYTHON
@@ -163,19 +158,15 @@ python -m pip install 模块 #
 #下载后用pip安装，安装时候输入完python -m pip install 把文件拖进去即可，相当于要输入文件绝对路径。注意文件两侧各有一个'号，压缩包直接拖进去即可，无需解压
 conda activate YOURENAME # or：source activate YOURENAME
 python -m pip install FILE下载的文件
+如
+python -m pip install tensorflow-gpu==1.15
 ```
 
 - pip知识补充
 
-  - 更换pip源方式
+  - 更换pip源方式：见后文
 
-  ```PYTHON
-  终端输入gedit  ~/.pip/pip.conf，打开后复制以下内容保存：
-  [global]
-  index-url = https://pypi.tuna.tsinghua.edu.cn/simple
-  ```
-
-  - 如果你要使用pip，**务必先激活到自己的虚拟环境`conda activate YOURENAME`，然后使用`python -m pip install XXX`的形式代替`pip install xxx`的形式**。因为直接输入的pip指向的并不是你的python，而是别人的。想要一探究竟可以打开/usr/local/bin下的pip文件看其原理
+  - 如果你要使用pip，**务必先激活到自己的虚拟环境`conda activate YOURENAME`，然后使用`python -m pip install XXX`的形式代替`pip install xxx`的形式**。因为直接输入的pip指向的并不是你的python，而是linux里的python。想要一探究竟可以打开/usr/local/bin下的pip文件看其原理
     尤其是像pytorch这种包，conda命令经常安不上，使用pip命令的时候一定要使用'python -m'方式。
   - pip3和pip是两个文件。
 
@@ -183,13 +174,13 @@ python -m pip install FILE下载的文件
 
   使用`which pip3`或`which pip`可以查看默认的pip3和pip在哪里。如图，pip3在/usr/bin目录下，pip在anaconda3/bin目录下
 
-  ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621164105.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621164105.png)
+	
+输入`gedit /usr/local/pip3`可以打开pip3修改第一行，修改为自己python的路径以后pip3以后默认的安装的就是你的python了。
 
-  输入`gedit /usr/local/pip3`可以打开pip3修改第一行，修改为自己python的路径以后pip3以后默认的安装的就是你的python了。
-
-  ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621164221.png)
-
-  但是上面只是介绍原理，实例使用中最实用的还是直接使用`python -m pip install 在线/离线包`，相当于指定了为哪个python安装包。
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621164221.png)
+	
+但是上面只是介绍原理，实例使用中最实用的还是直接使用`python -m pip install 在线/离线包`，相当于指定了为哪个python安装包。
 
 ```PYTHON
 conda activate YOURENAME # or：source activate YOURENAME
@@ -216,13 +207,20 @@ archive下是anaconda安装包
 
 - 方式三：anaconda官网给的离线包：https://repo.continuum.io/pkgs/free/linux-64/
 
+- 方式四：pip地址：https://pypi.org/
+
+  ```sh
+  #以numpy为例，下载下来离线包之后
+  python -m pip install ./numpy-1.15.0-cp27-cp27mu-manylinux1_x86_64.whl
+  ```
+
+  
+
 #### 3.3.4 源问题
 
-清华源在2019-04-16被迫停止了anaconda镜像服务，但随后2019-06-15又获得了Anaconda镜像的授权。见下图，所以以后又能继续在线使用anaconda安装module了。
+linux软件源：https://developer.aliyun.com/mirror/ubuntu?spm=a2c6h.13651102.0.0.3e221b11JFiKUi
 
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621155850.png)
-
-更改conda源的方式：
+##### 更改conda源
 
 - 添加源：一般常用的是中科大源和清华源
 
@@ -238,12 +236,33 @@ show_channel_urls: true
 
 - 删除源：conda config --remove-key channels
 
+##### 更改pip源
+
+```sh
+# 临时更换：-i后面跟上源地址
+pip install pythonModuleName -i https://mirrors.aliyun.com/pypi/simple
+
+#永久更改
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+或者采用如下方式：
+#创建目录
+mkdir -p ~/.pip
+#修改配置文件
+vim  ~/.pip/pip.conf
+#写入以下内容并保存
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
+
+
 
 ### 3.4 navigator
 
 ps：你也可以使用navigator界面的方式进行上面创建虚拟环境安装包等操作
 
-![](https://raw.githubusercontent.com/FermHan/tuchuangsimi/master/20190325170518.jpg?token=AkTVJfCdox_AKmenkZWtbZejKnxxdoVMks5cmJoSwA%3D%3D)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190325170518.jpg?token=AkTVJfCdox_AKmenkZWtbZejKnxxdoVMks5cmJoSwA%3D%3D)
 
 ### Anaconda2
 
@@ -421,11 +440,11 @@ ssh -p 9128 ouc-28@222.195.151.170
 
 如果真有需要安装系统，比较推荐安装ubuntu16，因为ubuntu16对远程桌面支持比较好。要保证用户名密码与原来设定一致。
 
-### 8.2 设置IP
+### 8.2 ==设置IP==
 
 重新配置IP以便可以远程连接  https://blog.csdn.net/hancoder/article/details/102881903 
 
-### 8.3 安装cuda，显卡驱动等
+### 8.3 ==安装cuda，显卡驱动等==
 
 参考链接 https://blog.csdn.net/hancoder/article/details/86634415
 
