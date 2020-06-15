@@ -54,12 +54,57 @@ mkdir /data/姓名全字母
 
 
 
-### 3 编写进入docker后的命令
+
+
+### 3 自定义制作docker镜像
+
+我们可以直接选择https://cvlab.qdxnzn.com/harbor/projects/69/repositories/theory-repository   里现有的镜像、可以基于这些镜像重新制作、也可以看第三部分自己从0开始制作。账号密码在开头
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529234716.png)
+
+进入命名空间
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529234331.png)
+
+点开仓库可以看到我们组的镜像，你也要把你的镜像传到这里，且命名要规范。垃圾镜像及时删除。
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529233843.png)
+
+注：由些镜像在openpai里不好用，最好用openpai官方提供的镜像，非官方的什么镜像好用我也没太研究，只知道普通镜像是不好用的。
+
+push和pull例子：
+
+```sh
+# pull基础镜像
+sudo docker pull cvlab.qdxnzn.com/ouc/theory-repository:【tag】
+
+sudo docker pull cvlab.qdxnzn.com/ouc/theory-repository:cuda10.0-cudnn7.6-python6-tf15
+```
+
+```sh
+# 1.先登录再push
+docker login --username=admin  cvlab.qdxnzn.com
+#输入密码 ouc123456
+
+#2. 将镜像推送到远程仓库,需要先登录
+## 打标签，新的tag要写明该镜像中软件的版本，如python6-tf15-cuda10.0-cudnn7.6.0
+docker tag 【ImageId】 cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
+
+## push
+docker push cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
+```
+
+因为docker的分层概念，所以你基于我的镜像进行修改的话push速度也是很快的，相当于只提交你的修改部分。
+
+
+
+### 4 编写进入docker后的命令
 
 点击左侧Submit Job，在右侧的Task_role_1的Command栏中填入命令
 
 ```sh
 echo "task start..."
+apt install -y nfs-common
 apt update # 更新原
 
 # 挂载 #(从存储服务器挂载到docker容器里)
@@ -87,87 +132,42 @@ python /mnt/test.py
 echo "task start..."
 apt update
 echo "task end..."
+
+mount -t nfs -o rw,nolock 192.168.1.4:/data/models /mnt
 ```
 
 测试环境2
 
 ```sh
-#测试环境
 echo "task start..."
 apt update
+apt install -y nfs-common
+echo "task 1..."
+mount -o nolock -t nfs 192.168.1.4:/data/models /mnt
+echo "task 2..."
+python /mnt/research/slim/download_and_convert_data.py --dataset_name=cifar10 --dataset_dir=/tmp/data
+echo "task 3..."
+python /mnt/research/slim/train_image_classifier.py --dataset_name=cifar10 --dataset_dir=/tmp/data --max_number_of_steps=1000 --batch_size 64
 
-mount -o nolock -t nfs 192.168.1.4:/data/module /mnt
+
 # 存储服务器和docker容器的文件对应关系如下：
 # /data/models/research/slim/download_and_convert_data.py 
 # ===> /mnt/research/slim/download_and_convert_data.py
-python /mnt/research/slim/download_and_convert_data.py --dataset_name=cifar10 --dataset_dir=/tmp/data
-
-python /mnt/research/slim/train_image_classifier.py --dataset_name=cifar10 --dataset_dir=/tmp/data --max_number_of_steps=1000 --batch_size 64
 ```
 
 
 
 > apt install -y nfs-common 已经安装过了
 
-### 4 提交任务
+### 5 提交任务
 
 网页：222.195.151.231
 
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529172131.png)
-
-提交完任务后，可以取Jobs页面查看运行情况与标准输入、标准错误
-
-### 5 自定义制作docker镜像
-
-如第4部分我们可以选择openAI里现有的docker镜像创建容器，也可以自己制作docker镜像。
-
-dockerhub中的那些镜像cuda安装不上按照官网来的，所以你不好修改cuda。
-
-所以最好以我仓库中`nocuda-python6-tf1.12` 或者 `cuda10.0-cudnn7.6-python6-tf15`这两个镜像为基础制作，前者镜像中没有cuda，后者镜像中有cuda10。
-
-然后按照我此文的cuda和cudnn重新制作你需要版本的镜像：https://blog.csdn.net/hancoder/article/details/86634415
-
-基础镜像可以在下面地方下载：网址cvlab.qdxnzn.com
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529234716.png)
-
-进入命名空间
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529234331.png)
-
-点开仓库可以看到我们组的镜像，你也要把你的镜像传到这里，且命名要规范。垃圾镜像及时删除。
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529233843.png)
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200531171438.png)
 
 
 
-push和pull例子：
-
-```sh
-# pull基础镜像
-sudo docker pull cvlab.qdxnzn.com/ouc/theory-repository:【tag】
-```
-
-```sh
-# 1.先登录再push
-docker login --username=admin  cvlab.qdxnzn.com
-#输入密码 ouc123456
-
-#2. 将镜像推送到远程仓库,需要先登录
-## 打标签，新的tag要写明该镜像中软件的版本，如python6-tf15-cuda10.0-cudnn7.6.0
-docker tag 【ImageId】 cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
-
-## push
-docker push cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
-```
-
-因为docker的分层概念，所以你基于我的镜像进行修改的话push速度也是很快的，相当于只提交你的修改部分。
-
-然后复制你的镜像的网络地址，去openAI平台使用，openAI平台会自动拉取，复制你在3部分写好的命令，然后填入镜像地址即可。然后点submit
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200530001019.jpg)
-
-只填入地址看，没有前缀docker push
+注意：只填入地址，没有前缀docker push，也没有https前缀
 
 ```sh
 # 提交的镜像直接在网页上复制pull地址也可以(@sha格式)，自己编写也可以(:tag格式)。
@@ -178,13 +178,16 @@ cvlab.qdxnzn.com/ouc/theory-repository@sha256:d2e056809cd55fc2605524e335efa9cc72
 cvlab.qdxnzn.com/ouc/theory-repository:cuda10.0-cudnn7.6-python6-tf15
 ```
 
-
-
-
-
 第二次使用该镜像拉取得很快的，因为集群中有该镜像了。
 
-# 二、docker基础
+- 在job name那里可以自己注解你训练的是什么任务
+- 这里选择的镜像似乎不太好用，所以最好自己制作镜像，先看第5部分
+
+提交完任务后，可以取Jobs页面查看运行情况与标准输入、标准错误
+
+
+
+# 二、docker基础学习
 
 ### 1 docker概念
 
@@ -316,46 +319,43 @@ CMD ["-ef"]
 
 
 
+# 三 Dockerfile模板
 
+看到这说明你不想用我们https://cvlab.qdxnzn.com/harbor/projects/69/repositories 中的镜像，要从0开始制作镜像了。
 
+- 提供几个openPAI可用镜像库：(不要直接基于普通版本ubuntu制作镜像，openPAI识别不了nfs命令)
 
+https://hub.docker.com/u/openpai
 
-### 构建cuda镜像
+https://hub.docker.com/r/nvidia/cuda/tags
+
+这里提供几个openPAI基础镜像
 
 ```sh
-# 安装vim
-apt-get install vim
+docker pull openpai/pai.build.base:hadoop2.7.2-cuda9.0-cudnn7-devel-ubuntu16.04
 
-#备份源
-cp  /etc/apt/sources.list  /etc/apt/sources.list.backup
-#更新源
-vim /etc/apt/resources.list
-替换为：
-# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted universe multiverse
+docker pull openpai/tensorflow-py36-cu90:latest
 
-# 预发布软件源，不建议启用
-# deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
+docker pull openpai/tensorflow-py27-cu90:latest
 
-保存退出
+docker pull openpai/pytorch:1.0-cuda10.0-cudnn7-devel
 
+docker pull openpai/pytorch-py36-cu90:latest
+```
 
-apt update
-apt-get update
+找到镜像地址后，利用下面的Dockerfile模板安装一些必须软件
 
-# ========================
-# tools
-# ------------------------
-apt-get install -y --no-install-recommends \
-		build-essential \
+对于这个Dockerfile，一般来说从nvidia或者openPAI上下载下来基础镜像后，只需要修改第一行FROM就可以了。
+
+我们本地仓库里cvlab.qdxnzn.com/ouc/theory-repository:为前缀的镜像基本已经指向过模板里的命令了，所以用不到这个Dockerfile，只需要基于我们镜像直接修改python、TensorFlow即可。
+
+```sh
+FROM openpai/pytorch:1.0-cuda10.0-cudnn7-devel
+ENV LANG C.UTF-8
+RUN apt-get update && \
+
+	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        build-essential \
         apt-utils \
         ca-certificates \
         wget \
@@ -367,14 +367,60 @@ apt-get install -y --no-install-recommends \
         openssh-server \
         unzip \
         unrar \
-      
-#make
-git clone --depth 10 https://github.com/Kitware/CMake ~/cmake && \
+        nfs-common \
+        && \
+
+    git clone --depth 10 https://github.com/Kitware/CMake ~/cmake && \
+    cd ~/cmake && \
+    ./bootstrap && \
+    make -j"$(nproc)" install && \
+    ldconfig && \
+    apt-get clean && \
+    apt-get autoremove && \
+    rm -rf /var/lib/apt/lists/* /tmp/* ~/* 
+ 
+ 
+RUN apt-get update && \
+	apt-get install -y libreadline-dev 
+
+    
+
+EXPOSE 8888 6006
+```
+
+
+
+```sh
+# ==================================================================
+# tf 1.12.0 cuda9.0 cudnn7 py36
+# ------------------------------------------------------------------
+
+FROM nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04
+ENV LANG C.UTF-8
+RUN apt-get update && \
+
+	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        build-essential \
+        apt-utils \
+        ca-certificates \
+        wget \
+        git \
+        nano \
+        vim \
+        libssl-dev \
+        curl \
+        openssh-server \
+        unzip \
+        unrar \
+        nfs-common \
+        && \
+
+    git clone --depth 10 https://github.com/Kitware/CMake ~/cmake && \
     cd ~/cmake && \
     ./bootstrap && \
     make -j"$(nproc)" install 
-    
-#安装python
+ 
+ 
 RUN apt-get update && \
 apt-get install -y libreadline-dev && \ 
 wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz && \ 
@@ -387,10 +433,10 @@ ln -s /usr/local/bin/python3.6 /usr/local/bin/python && \
 ln -s /usr/local/bin/python3.6-config  /usr/local/bin/python-config
 
 RUN pip3 install --upgrade pip && \
-    pip3 install --upgrade setuptools
+    pip3 install --upgrade setuptools && \
+    pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
     
-RUN pip3 install tensorflow-gpu==1.12.0 -i https://pypi.tuna.tsinghua.edu.cn/simple
-
+#RUN pip3 install tensorflow-gpu==1.12.0 -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # ==================================================================
 # config & cleanup
@@ -409,7 +455,102 @@ EXPOSE 8888 6006
 
 
 
-# 三 阿里云仓库
+```dockerfile
+# ==================================================================
+# tf 1.12.0 cuda9.0 cudnn7 py36
+# cuda10需要安装tf 1.15
+# ------------------------------------------------------------------
+
+FROM nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04
+ENV LANG C.UTF-8
+# 要安装的软件
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        build-essential \
+        apt-utils \
+        ca-certificates \
+        wget \
+        nfs-common \
+        git \
+        nano \
+        vim \
+        libssl-dev \
+        curl \
+        openssh-server \
+        unzip \
+        unrar \
+        && \
+
+    GIT_CLONE="git clone --depth 10 https://github.com/Kitware/CMake ~/cmake && \
+    cd ~/cmake && \
+    ./bootstrap && \
+    make -j"$(nproc)" install 
+ 
+ 
+RUN apt-get update && \
+apt-get install -y libreadline-dev && \ 
+wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz && \ 
+tar -xvf Python-3.6.0.tgz && \ 
+cd Python-3.6.0 && \ 
+./configure && \ 
+make && \ 
+make install && \
+ln -s /usr/local/bin/python3.6 /usr/local/bin/python && \
+ln -s /usr/local/bin/python3.6-config  /usr/local/bin/python-config
+
+RUN pip3 install --upgrade pip && \
+    pip3 install --upgrade setuptools  && \
+    pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+    
+RUN pip3 install tensorflow-gpu==1.12.0 -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# ==================================================================
+# config & cleanup
+# ------------------------------------------------------------------
+
+RUN ldconfig && \
+    apt-get clean && \
+    apt-get autoremove && \
+    rm -rf /var/lib/apt/lists/* /tmp/* ~/*  && \
+    rm -R /Python-3.6.0 && \
+    rm /Python-3.6.0.tgz
+
+
+EXPOSE 8888 6006
+```
+
+在命令行执行生成镜像：
+
+```sh
+docker build  -t 【生成镜像仓库:TAG】   Dockerfile的所在目录
+如
+docker build  -t  cvlab.qdxnzn.com/ouc/theory-repository:python6-tf1.12-cuda9   ./
+```
+
+https://mirrors.aliyun.com/pypi/simple/
+
+# 四 测试通过镜像
+
+这里写一些测试通过的镜像
+
+```sh
+echo "task start..."
+apt update
+apt install -y nfs-common
+echo "task 1..."
+mount -o nolock -t nfs 192.168.1.4:/data/models /mnt
+echo "pip install..."
+python /mnt/research/slim/download_and_convert_data.py --dataset_name=cifar10 --dataset_dir=/tmp/data
+echo "task 3..."
+python /mnt/research/slim/train_image_classifier.py --dataset_name=cifar10 --dataset_dir=/tmp/data --max_number_of_steps=1000 --batch_size 64
+```
+
+该组命令在下面镜像上正常训练过：
+
+- openpai/tensorflow-py36-cu90:latest
+- openpai/pytorch-py36-cu90:latest
+
+# 五 阿里云仓库(过期)
 
 我们有校内仓库了，所以无需阿里云仓库了。此部分可以不看
 
