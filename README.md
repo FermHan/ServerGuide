@@ -307,6 +307,13 @@ You can install **Xftp** in windows to transfer files. # windows安装xftp软件
 
 Xftp+Xshell下载地址：填写姓名邮件后开始下载（需要科学上网）：https://www.netsarang.com/zh/free-for-home-school/
 
+或者直接使用我的链接：链接：https://pan.baidu.com/s/1SGase3_o-qneyuMRKMUk0A 
+提取码：bpj8 
+
+> 里面有xftp5和xshell5两个软件，把他们分别安装，有一步选择免费版本就行，其他直接下一步。然后打开软件测试就行。正常的话这样就可以直接使用了。
+>
+> 另外有个压缩包是xshell6和破解工具，里面有个破解工具可以生成序列号
+
 
 
 Protocol:sftp  # 协议选sftp
@@ -321,29 +328,7 @@ port is NOT 90-- BUT 91--  # 端口号是91--，而不是原来的90--
 
 ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190531220819.png)
 
-# 5、查看文件、修改文件：UltraEdit
-
-在此给大家推荐一个软件UltraEdit：这是一个文本编辑软件，类似于windows下的记事本。想必大家很喜欢用ubuntu下的gedit命令，因为vim命令太难了。而UltraEdit是比gedit还要好用的一个文本编辑器。
-
-UltraEdit有windows+mac+ubuntu版本，所以你在任何系统下都可以下载这个软件
-
-首先去UltraEdit官网下载UltraEdit，购(po)买(jie)后点击菜单栏中的FTP，点击从FTP打开。
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025145530.png)
-
-然后像xftp一样填写信息，填写后点击确定，再点击链接，就可以看到文件了。
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025145928.png)
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025150213.png)
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025150724.png)
-
-我们在上面解决了传文件、看文件、修改文件的需求，我们跑程序时候还有使用命令行，xshell就是命令行工具
-
-# 6、命令行工具：Xshell
-
-windows的远程的确有时候很卡，目前我也不知道该如何解决，或许在ubuntu18没有解决方案。至于为什么卡还在使用这个远程的原因请看7.1。
+# 5、命令行工具：Xshell
 
 ssh命令的简单学习：
 
@@ -359,6 +344,10 @@ vim #编辑文件
 # 编辑好后按Esc，然后输入:wq代表保存退出，q！代表不保存退出
 # 补充：命令模式下：u撤销 Ctrl+r取消撤销 x删除当前光标字符 X是向前删 x是向后删
 # 其他命令自己学习
+
+sudo apt install lrzsz
+rz 上传文件 # 需要先安装sudo apt install lrzsz
+sz下载文件
 ```
 
 
@@ -395,7 +384,29 @@ vim #编辑文件
 
 ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190605152403.png)
 
-# 7、外网使用服务器
+# 6、查看文件、修改文件：UltraEdit
+
+在此给大家推荐一个软件UltraEdit：这是一个文本编辑软件，类似于windows下的记事本。想必大家很喜欢用ubuntu下的gedit命令，因为vim命令太难了。而UltraEdit是比gedit还要好用的一个文本编辑器。
+
+UltraEdit有windows+mac+ubuntu版本，所以你在任何系统下都可以下载这个软件
+
+首先去UltraEdit官网下载UltraEdit，购(po)买(jie)后点击菜单栏中的FTP，点击从FTP打开。
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025145530.png)
+
+然后像xftp一样填写信息，填写后点击确定，再点击链接，就可以看到文件了。
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025145928.png)
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025150213.png)
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20191025150724.png)
+
+我们在上面解决了传文件、看文件、修改文件的需求，我们跑程序时候还有使用命令行，xshell就是命令行工具
+
+
+
+# 7、外网使用服务器zerotier
 
 我们通过zerotier这个软件映射校园网到校园外网(家中局域网)
 
