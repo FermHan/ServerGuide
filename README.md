@@ -21,20 +21,21 @@
 
 # 1、服务器列表
 
-| IP              | 端口Port | capacity                                       | user name | password | Note         |
-| --------------- | -------- | :--------------------------------------------- | --------- | -------- | ------------ |
-| 222.195.151.170 | 9013     | RAM:128G, CPU:2.3GHz*40, ==GPU:none==          | ouc-13    | b301     | GPU:none;FTP |
-| 222.195.151.170 | 9015     | RAM:128G, CPU:2.3GHz*40, GPU:TESLA K40c 11G *1 | ouc-15    | b301     | LY,ZTG       |
-| 222.195.151.170 | 9028     | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-28    | b301     | LJX,LJH      |
-| 222.195.151.170 | 9029     | RAM:32G, CPU:3.5GHz*8, GPU:2080 8G *2          | ouc-29    | b301     | YYW,HF       |
-| 222.195.151.66  | 9010     | RAM:32G, CPU:3.3GHz*4, GPU:TITAN X 12G         | ouc-10    | b301     | Aman,Israel  |
-| 222.195.151.66  | 9018     | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-18    | b301     | ZZD,LWX      |
-| 222.195.151.66  | 9019     | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-19    | b301     | SCX,Sadia    |
-|                 | 9055     |                                                |           |          | SQY,ZQQ,GYH  |
+| IP              | Port            | capacity                                       | user name | password | Note         |
+| --------------- | --------------- | :--------------------------------------------- | --------- | -------- | ------------ |
+| 备注行          | 桌面是0，ssh是1 |                                                |           |          |              |
+| 222.195.151.170 | 9013/9113       | RAM:128G, CPU:2.3GHz*40, ==GPU:none==          | ouc-13    | b301     | GPU:none;FTP |
+| 222.195.151.170 | 9015/9115       | RAM:128G, CPU:2.3GHz*40, GPU:TESLA K40c 11G *1 | ouc-15    | b301     | LY,ZTG       |
+| 222.195.151.170 | 9028/9128       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-28    | b301     | LJX,LJH      |
+| 222.195.151.170 | 9029/9129       | RAM:32G, CPU:3.5GHz*8, GPU:2080 8G *2          | ouc-29    | b301     | YYW,HF       |
+| 222.195.151.66  | 9010/9110       | RAM:32G, CPU:3.3GHz*4, GPU:TITAN X 12G         | ouc-10    | b301     | Aman,Israel  |
+| 222.195.151.66  | 9018/9118       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-18    | b301     | ZZD,LWX      |
+| 222.195.151.66  | 9019/9119       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-19    | b301     | SCX,Sadia    |
+|                 | 9055/9155       |                                                | xx        | XXX      | SQY,ZQQ,GYH  |
 
 注：
 
-- 请注意区别端口是90XX还是91XX，一个是远程桌面，一个是ssh
+- 请注意区别端口是90XX还是91XX，一个是远程桌面，一个是ssh。我们组90XX是桌面，别的组有的90XX是ssh
 - **传文件的端口是91--，选的协议是sftp。**
 - 校园外网或者手机流量开的网络无法访问校园网，外网访问需要借助于第7部分的zerotier软件
 
@@ -299,7 +300,45 @@ ps：你也可以使用navigator界面的方式进行上面创建虚拟环境安
 >
 > 要选择no，否则会覆盖原来的Anaconda环境变量，使别人无法正常使用
 
-# 4、ssh工具MobaXterm
+# 4、后台训练任务screen/nohup &
+
+我们在ssh上`python XXX.py`开始训练任务后，如果关闭了ssh窗口，任务就会中断，我们可以使用如下两种方式之一进行后台训练
+
+- `nohup python train.py 参数 &`：即以nohub开头，以&结尾。默认将当前的输出打印在当前目录的nohup.out文件里
+  - nohup表示不挂断
+  - &表示后台运行命令
+- screen 
+
+### 4.1 screen
+
+场景：比如我们`vi test.txt`编辑到一半的时候要回来了不得不关机，但我们明天重开机编辑的内容就撤销了，我们可以使用如下的方式进行临时保存
+
+```sh
+# 安装screen
+sudo apt install screen
+
+# 在要执行的任务前加上screen
+screen python aaa.py
+# 按Ctrl+a，按完后再按d，就退出了训练页面，但任务还在进行
+
+# 重新连接会话
+#screen -ls找到screen的任务
+screen -ls
+There is a screen on:
+
+        16582.pts-1.tivf06      (Detached)
+
+1 Socket in /tmp/screens/S-root.
+# 连接screen的任务
+screen -r 16582
+# 又能看到训练页面了
+```
+
+4.2 nuhup ... &
+
+ 
+
+# 5、ssh工具MobaXterm
 
 原来我们推荐xftp和xshell作为ssh工具。现在我们推荐MobaXterm作为ssh工具。Xterm可以实现ssh、xftp等功能，界面优美。
 
@@ -335,7 +374,7 @@ sz下载文件
 >
 > 注：ssh也可在安装显卡驱动时使用，无需跑去机房安装。
 
-# 5、外网使用服务器zerotier
+# 6、外网使用服务器zerotier
 
 我们通过zerotier这个软件映射校园网到校园外网(家中局域网)
 
@@ -358,7 +397,7 @@ sz下载文件
 
 -----------------分割线----------------
 
-### 5.2 附：
+### 6.2 附：
 
 管理员分配zerotier IP给新的服务器：
 
@@ -384,25 +423,25 @@ sudo zerotier-cli join a09acf023363b091
 
 
 
-# 6、重装系统（非常不建议）
+# 7、重装系统（非常不建议）
 
 首先说明：非常不建议自己重装系统。即使要重装系统，也要负责地把需要的各项都装好，不给别人添麻烦。
 
 重装系统后需要把第6部分的内容全部配置好
 
-### 6.1 安装系统
+### 7.1 安装系统
 
 如果真有需要安装系统，比较推荐安装ubuntu16，因为ubuntu16对远程桌面支持比较好。要保证用户名密码与原来设定一致。
 
-### 6.2 ==设置IP==
+### 7.2 ==设置IP==
 
 重新配置IP以便可以远程连接  https://blog.csdn.net/hancoder/article/details/102881903 
 
-### 6.3 ==安装cuda，显卡驱动等==
+### 7.3 ==安装cuda，显卡驱动等==
 
 参考链接 https://blog.csdn.net/hancoder/article/details/86634415
 
-### 6.4 远程内容
+### 7.4 远程内容
 
 - 配置远程桌面： https://blog.csdn.net/hancoder/article/details/102882153 
 - 安装ssh以便文件传输： https://blog.csdn.net/hancoder/article/details/102881903 
@@ -420,9 +459,9 @@ vim /etc/ssh/sshd_config
 
 还需要安装anaconda
 
-# 7、What's-more
+# 8、What's-more
 
-### 7.1 为什么要安装小老鼠这个界面？
+### 8.1 为什么要安装小老鼠这个界面？
 
 因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
 
@@ -436,14 +475,14 @@ vim /etc/ssh/sshd_config
 
 > 注：安桌面的`echo xfce4-session >~/.xsession`命令是向home目录的`.xsession`文件末尾写入xfce4-session
 
-### 7.2 一些其他内容
+### 8.2 一些其他内容
 
 - 配置环境变量的文件：`~/.bashrc`
 - 服务器应只跑实验时使用，调试代码请尽量在个人电脑上线调试好
 - 有问题咨询组内
 - 以后更新尽量在此github账号更新IP等内容，以便同步。账号即OUCvisionLab，密码可问管理员索要。
 
-### 7.3 linux必备技能
+### 8.3 linux必备技能
 
 - linux基础指令：https://blog.csdn.net/hancoder/article/details/104304735
 - vim基础用法：https://blog.csdn.net/hancoder/article/details/104304509
@@ -453,6 +492,8 @@ vim /etc/ssh/sshd_config
 - 安装ssh： https://blog.csdn.net/hancoder/article/details/102881903 
 - ftp配置：https://blog.csdn.net/hancoder/article/details/100988807
 
-### 7.3 contact me
+
+
+### 8.3 contact me
 
 QQ：553736044@qq.com
