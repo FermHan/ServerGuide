@@ -39,6 +39,8 @@
 - **传文件的端口是91--，选的协议是sftp。**
 - 校园外网或者手机流量开的网络无法访问校园网，外网访问需要借助于第7部分的zerotier软件
 
+
+
 # 2、登录
 
 **2.1 windows软件**
@@ -107,6 +109,36 @@ sudo dpkg -i 下载的包.deb
 ### 3.1 `nvidia-smi`
 
 输入 `nvidia-smi`，此处是作用是验证没有人在使用此服务器
+
+但要注意这里的cuda版本不准确，要用nvcc -V查cuda版本
+
+#### nvidia-smi报错解决方案
+
+如果报错
+
+```
+NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.
+```
+
+一种方法是重装驱动，但如果已经重装过了但是重启后又报错了，就可以使用下面的方式
+
+```sh
+# 查看之前安装的驱动版本
+ls /usr/src | grep nvidia
+# 比如这里我输出了
+nvidia-440.31
+
+
+sudo apt-get install dkms #DKMS全称是Dynamic Kernel Module Support，它可以帮我们维护内核外的这些驱动程序，在内核版本变动之后可以自动重新生成新的模块。
+
+sudo dkms install -m nvidia -v 440.31 #440.31是安装驱动的版本
+```
+
+然后就可以了。
+
+如果还不可以说明不是内核的问题，是驱动没安好，继续重装吧
+
+
 
 ### 3.2 创建你自己的环境
 
@@ -491,8 +523,6 @@ vim /etc/ssh/sshd_config
 - 配置远程桌面： https://blog.csdn.net/hancoder/article/details/102882153
 - 安装ssh： https://blog.csdn.net/hancoder/article/details/102881903 
 - ftp配置：https://blog.csdn.net/hancoder/article/details/100988807
-
-
 
 ### 8.3 contact me
 
