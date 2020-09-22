@@ -21,6 +21,8 @@
 
 # 1、服务器列表
 
+注：能力比较强的可以申请使用openpai集群，服务器单机资源有限
+
 | IP              | Port            | capacity                                       | user name | password | Note         |
 | --------------- | --------------- | :--------------------------------------------- | --------- | -------- | ------------ |
 | 备注行          | 桌面是0，ssh是1 |                                                |           |          |              |
@@ -29,7 +31,7 @@
 | 222.195.151.170 | 9028/9128       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-28    | b301     | LJX,LJH      |
 | 222.195.151.170 | 9029/9129       | RAM:32G, CPU:3.5GHz*8, GPU:2080 8G *2          | ouc-29    | b301     | YYW,HF       |
 | 222.195.151.66  | 9010/9110       | RAM:32G, CPU:3.3GHz*4, GPU:TITAN X 12G         | ouc-10    | b301     | Aman,Israel  |
-| 222.195.151.66  | 9018/9118       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-18    | b301     | ZZD,LWX      |
+| 222.195.151.66  | 9018/9118       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-18    | b301     | ZZD,LWX,QXF  |
 | 222.195.151.66  | 9019/9119       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-19    | b301     | SCX,Sadia    |
 |                 | 9055/9155       |                                                | xx        | XXX      | SQY,ZQQ,GYH  |
 
@@ -37,7 +39,7 @@
 
 - 请注意区别端口是90XX还是91XX，一个是远程桌面，一个是ssh。我们组90XX是桌面，别的组有的90XX是ssh
 - **传文件的端口是91--，选的协议是sftp。**
-- 校园外网或者手机流量开的网络无法访问校园网，外网访问需要借助于第7部分的zerotier软件
+- 校园外网或者手机流量开的网络无法访问校园网，外网访问需要借助于第6部分的zerotier软件
 
 
 
@@ -45,7 +47,7 @@
 
 **2.1 windows软件**
 
-电脑中搜索桌面连接。或者在微软商店里搜远程桌面，道理都是一样的
+电脑中搜索桌面连接。或者在微软商店里搜远程桌面，道理都是一样的。或windows+r输入mstsc
 
 ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200626192119.png)
 
@@ -361,6 +363,7 @@ There is a screen on:
         16582.pts-1.tivf06      (Detached)
 
 1 Socket in /tmp/screens/S-root.
+
 # 连接screen的任务
 screen -r 16582
 # 又能看到训练页面了
@@ -372,9 +375,9 @@ screen -r 16582
 
 # 5、ssh工具MobaXterm
 
-原来我们推荐xftp和xshell作为ssh工具。现在我们推荐MobaXterm作为ssh工具。Xterm可以实现ssh、xftp等功能，界面优美。
+原来我们推荐xftp和xshell作为ssh工具。现在我们推荐MobaXterm作为ssh工具。Xterm可以实现ssh、xftp等功能，直接文件拖拽互传，对新手友好，界面优美。
 
-百度下载即可。
+下载地址：https://mobaxterm.mobatek.net/download-home-edition.html
 
 端口是91XX，而不是90XX，也有的服务器这两个端口是反的，
 
