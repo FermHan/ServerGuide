@@ -3,10 +3,9 @@
 - github：https://github.com/OUCvisionLab/ServerGuide/blob/master/openAI.md
 - CSDN：https://blog.csdn.net/hancoder/article/details/106423288
 
-
 # 一、理论组集群使用方法
 
-注：docker命令前必须加sudo，本文没写sudo。`sudo  docker ...`
+注：在本服务器中，docker命令前必须加sudo，本文没写sudo。正确命令：`sudo  docker ...`
 
 ### 0 账号信息：
 
