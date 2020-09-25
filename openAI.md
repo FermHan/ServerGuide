@@ -11,7 +11,7 @@
 
 - openAI平台账号：(密)：向管理员申请账号
 - nfs存储服务器：222.195.151.85:8011( 192.168.1.4)  用户名ouc  密码123
-- 镜像仓库cvlab.qdxnzn.com：账号admin 密码ouc123456。push密码也是ouc123456
+- 镜像仓库cvlab.qdxnzn.com：账号admin 密码Harbor12345。push密码也是ouc123456
 - 集群(非管理员勿登录)：用户名ouc  密码123
   - 192.168.1.200 - 206。其中200为master n0，其余为n1-n6
 
