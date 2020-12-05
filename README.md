@@ -114,7 +114,9 @@ sudo dpkg -i 下载的包.deb
 
 输入 `nvidia-smi`，此处是作用是验证没有人在使用此服务器
 
-但要注意这里的cuda版本不准确，要用nvcc -V查cuda版本
+<img src="https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200626192757.png" style="zoom:50%;" />
+
+==但要注意这里的cuda版本不准确，要用`nvcc -V`查看cuda版本==
 
 #### nvidia-smi报错解决方案
 
@@ -249,7 +251,16 @@ conda activate YOURENAME # or：source activate YOURENAME
 conda install tensorflow-gpu=版本号
 ```
 
-附conda更换镜像方式：
+另外需要注意版本的关系，tf、torch与cuda版本有关，要验证自己的版本是否可用，可用如下类似的方式验证
+
+```python
+import torch
+torch.cuda.is_available()  # 输出true才代表当前版本的torch能用
+# false的话更改cuda版本或者torch版本
+# 更改cuda的教程在末尾
+# 可以取torch官网看与cuda的对应关系
+https://pytorch.org/get-started/previous-versions/
+```
 
 #### 3.3.2 pip install
 
@@ -259,7 +270,7 @@ conda install tensorflow-gpu=版本号
 conda activate YOURENAME # 或：source activate YOURENAME
 python -m pip install 模块 # 
 # 还可以在文件中写好后，指定源路径，加速下载
-pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 # 其中requirements.txt内容格式如下
 torch==1.4.0
 torchvision==0.5.0
