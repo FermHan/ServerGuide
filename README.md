@@ -23,6 +23,8 @@
 
 注：能力比较强的可以申请使用openpai集群，服务器单机资源有限
 
+本服务器为OUC理论组管理，供D老师和G老师的学生使用。理论上其他组也有自己的服务器，请尽量使用自己组内服务器，方便管理和调度。
+
 | IP              | Port            | capacity                                       | user name | password | Note         |
 | --------------- | --------------- | :--------------------------------------------- | --------- | -------- | ------------ |
 | 备注行          | 桌面是0，ssh是1 |                                                |           |          |              |
@@ -33,7 +35,7 @@
 | 222.195.151.66  | 9010/9110       | RAM:32G, CPU:3.3GHz*4, GPU:TITAN X 12G         | ouc-10    | b301     | Aman,Israel  |
 | 222.195.151.66  | 9018/9118       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-18    | b301     | ZZD,LWX,QXF  |
 | 222.195.151.66  | 9019/9119       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-19    | b301     | SCX,Sadia    |
-|                 | 9055/9155       |                                                | xx        | XXX      | SQY,ZQQ,GYH  |
+|                 | 9055/9155       |                                                | 密        | 密       | SQY,ZQQ,GYH  |
 
 注：
 
@@ -157,26 +159,64 @@ sudo dkms install -m nvidia -v 440.31 #440.31是安装驱动的版本
 创建于使用虚拟环境方法：
 
 ```python 
-# 创建python环境
+# ---|*_*|--- 查看现有环境 ---|*_*|---
+conda info -e
+
+# ---|*_*|--- 创建python环境 ---|*_*|---
 conda create -n YOURENAME python=PYTHONVERSION
 # 如conda create -n hanfeng python=3.6。可以指定python版本，重要的是指定python版本。名称任意，推荐自己名字。anaconda3上也可安装python2.7。创建完可在/home/Anaconda3/env/YOURNAME/python目录下找到你的python
-# 如遇到权限问题，可以尝试先执行如 sudo chown -R ouc-19:ouc-19 /home/ouc-19/anaconda3
+# 如遇到权限问题，可以尝试先执行如 sudo chmod 777 /home/ouc-19/anaconda3
 
+# ---|*_*|--- 以下两条指令都要执行一下，之前发现过不执行莫名其妙进去别人环境的问题 ---|*_*|---
+source activate # 重新进入虚拟环境
+conda deactivate # 退出虚拟环境
+
+# ---|*_*|--- 激活环境 ---|*_*|---
 # 创建完自己的环境后，接下来一切操作都是在【进入自己创建的环境】的基础上进行的，下面语句是进入自己环境的方式，二选一。注：若使用python，但凡打开终端，第一步都该的进入自己的环境，否则操作都不是针对自己的环境的。
 source activate YOURENAME 
 #or 
 conda activate YOURENAME
 -------------------------------
-# 不常用命令：
-# 查看现有环境
-conda info -e
+#  ---|*_*|--- 不常用命令 ---|*_*|--- 
+# 退出环境：
+source activate # 重新进入虚拟环境
+conda deactivate # 退出虚拟环境
+#or#source deactivate 
 
-source deactivate  #退出私有环境，返回公共环境
-#or#conda deactivate
-
-# 删除虚拟环境
+#  ---|*_*|--- 删除虚拟环境 ---|*_*|--- 
 conda remove -n YOURNAME --all
 ```
+
+##### 使用自己环境示例：
+
+```sh
+# 查看是否创建好环境
+conda info -e
+
+# 进入自己的环境
+source activate YOURENAME 
+# 或
+conda activate YOURENAME
+
+# 验证是否进入自己的环境
+which python
+# 案例：
+(hanfeng) ouc-10@ouc-10:~$ which python
+# 输出如下python路径，说明你键入python进入的是自己创建的python环境
+/home/ouc-10/anaconda3/envs/hanfeng/bin/python
+
+# 安装包 
+python -m pip install tensorflow-gpu
+说明：请一定要使用如上的方式安装包，不要直接pip install tensorflow-gpu或者pip3 install
+原因：我们可以输入which pip查看当前默认使用的pip，可以发现pip可能确实匹配到了正确的自己环境，
+但pip3就不是自己的环境，所以尽量使用python -m pip install的命令。下面有更详细的说明
+(hanfeng) ouc-10@ouc-10:~$ which pip
+/home/ouc-10/anaconda3/envs/hanfeng/bin/pip
+(hanfeng) ouc-10@ouc-10:~$ which pip3
+/usr/bin/pip3
+```
+
+
 
 ### 3.3 安装包：
 
@@ -187,7 +227,7 @@ conda remove -n YOURNAME --all
 #### 3.3.1 conda install
 
 ```PYTHON
-1. # conda安装方式，必须先激活到自己创建的环境中
+# conda安装方式，必须先激活到自己创建的环境中
 conda activate YOURENAME # or：source activate YOURENAME
 conda install tensorflow-gpu=版本号
 ```
@@ -220,11 +260,28 @@ python -m pip install tensorflow-gpu==1.15
 
   - 如果你要使用pip，**务必先激活到自己的虚拟环境`conda activate YOURENAME`，然后使用`python -m pip install XXX`的形式代替`pip install xxx`的形式**。因为直接输入的pip指向的并不是你的python，而是linux里的python。想要一探究竟可以打开/usr/local/bin下的pip文件看其原理
     尤其是像pytorch这种包，conda命令经常安不上，使用pip命令的时候一定要使用'python -m'方式。
-  - pip3和pip是两个文件。
+  - pip3和pip是两个文件
 
-  如下图，使用`pip3 -V`或`pip -V`可以查看这两个文件指向哪里，即使用pip时默认为哪个python安装包。如图，分别指向的python是系统的python和anaconda的其中一个python。
+```sh
+(hanfeng) ouc-10@ouc-10:~$ which python
+/home/ouc-10/anaconda3/envs/hanfeng/bin/python
 
-  使用`which pip3`或`which pip`可以查看默认的pip3和pip在哪里。如图，pip3在/usr/bin目录下，pip在anaconda3/bin目录下
+# 使用`pip3 -V`或`pip -V`可以查看这两个文件指向哪里，即使用pip时默认为哪个python安装包。如图，分别指向的python是系统的python和anaconda的其中一个python。
+(hanfeng) ouc-10@ouc-10:~$ pip -V
+pip 9.0.1 from /home/ouc-10/anaconda3/envs/hanfeng/lib/python3.6/site-packages (python 3.6)
+
+(hanfeng) ouc-10@ouc-10:~$ pip3 -V
+pip 20.2.2 from /home/ouc-10/anaconda3/lib/python3.7/site-packages/pip (python 3.7)
+
+# 使用`which pip3`或`which pip`可以查看默认的pip3和pip在哪里 #如下，pip3在/usr/bin目录下
+(hanfeng) ouc-10@ouc-10:~$ which pip
+/home/ouc-10/anaconda3/envs/hanfeng/bin/pip
+
+(hanfeng) ouc-10@ouc-10:~$ which pip3
+/usr/bin/pip3
+```
+
+
 
 ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621164105.png)
 	
