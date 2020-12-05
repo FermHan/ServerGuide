@@ -190,20 +190,37 @@ conda remove -n YOURNAME --all
 ##### 使用自己环境示例：
 
 ```sh
-# 查看是否创建好环境
-conda info -e
+(hanfeng) ouc-10@ouc-10:~$ conda info -e
+# conda environments:
+base                     /home/ouc-10/anaconda3
+hanfeng               *  /home/ouc-10/anaconda3/envs/hanfeng
 
-# 进入自己的环境
-source activate YOURENAME 
-# 或
-conda activate YOURENAME
+(base) ouc-10@ouc-10:~$ python -V
+Python 3.7.4
 
-# 验证是否进入自己的环境
-which python
-# 案例：
+(base) ouc-10@ouc-10:~$ conda activate hanfeng
+
+(hanfeng) ouc-10@ouc-10:~$ python -V
+Python 3.7.4 # 还是3.7的环境，明显不是我自己的
+
 (hanfeng) ouc-10@ouc-10:~$ which python
-# 输出如下python路径，说明你键入python进入的是自己创建的python环境
-/home/ouc-10/anaconda3/envs/hanfeng/bin/python
+/home/ouc-10/anaconda3/envs/hanfeng/bin/python # 路径居然正确？
+
+# 执行退出
+(hanfeng) ouc-10@ouc-10:~$ source activate
+(base) ouc-10@ouc-10:~$ conda deactivate
+# 重新进入
+ouc-10@ouc-10:~$ conda activate hanfeng
+
+(hanfeng) ouc-10@ouc-10:~$ python -V # 版本正确了
+Python 3.6.2 :: Continuum Analytics, Inc.
+
+(hanfeng) ouc-10@ouc-10:~$ pip -V
+pip 9.0.1 from /home/ouc-10/anaconda3/envs/hanfeng/lib/python3.6/site-packages (python 3.6)
+
+(hanfeng) ouc-10@ouc-10:~$ pip3 -V
+pip 20.2.2 from /home/ouc-10/anaconda3/lib/python3.7/site-packages/pip (python 3.7)
+
 
 # 安装包 
 python -m pip install tensorflow-gpu
@@ -280,8 +297,6 @@ pip 20.2.2 from /home/ouc-10/anaconda3/lib/python3.7/site-packages/pip (python 3
 (hanfeng) ouc-10@ouc-10:~$ which pip3
 /usr/bin/pip3
 ```
-
-
 
 ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621164105.png)
 	
@@ -443,7 +458,7 @@ screen -r 16582
 ```BASH
 pwd #打印当前目录
 cd 目录 #转换目录，分为相对路径和绝对路径，第一位是/的是绝对路径
-wget 连接 #下载文件
+wget www.链接 #下载文件
 ls #查看当前目录文件
 mkdir #创建目录
 vim #编辑文件
