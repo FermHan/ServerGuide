@@ -41,7 +41,7 @@
 
 - 请注意区别端口是90XX还是91XX，一个是远程桌面，一个是ssh。我们组90XX是桌面，别的组有的90XX是ssh
 - **传文件的端口是91--，选的协议是sftp。**
-- 校园外网或者手机流量开的网络无法访问校园网，外网访问需要借助于第6部分的zerotier软件
+- 校园网有墙，校园外是无法访问无法访问服务器的，需要借助于part 6的zerotier软件
 
 
 
@@ -258,6 +258,11 @@ conda install tensorflow-gpu=版本号
 ```PYTHON
 conda activate YOURENAME # 或：source activate YOURENAME
 python -m pip install 模块 # 
+# 还可以在文件中写好后，指定源路径，加速下载
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+# 其中requirements.txt内容格式如下
+torch==1.4.0
+torchvision==0.5.0
 ```
 
 - pip离线安装
