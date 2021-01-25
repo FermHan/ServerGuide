@@ -3,9 +3,15 @@
 - github：https://github.com/OUCvisionLab/ServerGuide/blob/master/openPAI.md
 - CSDN：https://blog.csdn.net/hancoder/article/details/106423288
 
+因为校园网访问github图片经常不显示，推荐去csdn看。另外csdn对代码部分也有颜色变化，容易区分命令
+
+> 后续管理员需要更新内容可以联系我，我在管理员教程里有写github的账号密码
+
 # 一、理论组集群使用方法
 
 注：在本服务器中，docker命令前必须加sudo，本文没写sudo。正确命令：`sudo  docker ...`
+
+> 没使用过docker的用户先下拉倒第二章1、2部分简单看一下pull、push
 
 ### 0 账号信息：
 
@@ -28,86 +34,77 @@
 
 ### 2 传数据
 
-把数据从个人电脑上传到集群的fs存储服务器上：
+把数据从个人电脑上传到集群的fs存储服务器上：222.195.151.85:8011( 192.168.1.4)  用户名ouc  密码123
 
-用ssh/xftp工具登录存储服务器。（存储服务器账号信息在上面0章节）
+用`ssh/xftp`工具(MobaXterm软件)登录存储服务器。服务器间文件的互传可以看rsync命令https://blog.csdn.net/hancoder/article/details/113172109
 
-创建自己的文件夹
+登录文件服务器后，创建自己的文件夹
 
-```sh
-# 创建个人文件夹(一定要创建在data目录下)
+```bash
+# 创建个人文件夹(一定要创建在data目录下，而且注意是 /data，不是home下的)
 mkdir /data/姓名全字母
+
+# 可以在文件服务器里对你的文件进行一些操作
+# 过后把自己的data文件删了，因为数据集一般太占内存
 ```
 
-将上传个人文件到`/data/YOURNAME`目录下
+将上传个人文件到`/data/YOURNAME`目录下。在后面的页面命令中，我们会让他挂载在`/mnt`下。
 
-注：
-
-> #在文件服务器下/etc/exports有如下内容： /data/ 192.168.1.0/24(rw,sync,fsid=0)
-> 表示只允许把存储服务器/data目录下的内容挂载到192.168.1.X的网段的/mnt目录上。所以把个人文件放到其他地方是挂载不上的。
+> 注：为什么不能放到别的目录下？
 >
-> 千万不要在存储服务器的ssh里挂载，在存储服务器挂载的/mnt在docker容器里是读不到的。如果不小心在存储服务器里使用了挂载命令，请卸载
+> 在文件服务器下`/etc/exports`有如下内容：` /data/ 192.168.1.0/24(rw,sync,fsid=0)`
+> 表示只允许把存储服务器`/data`子目录的内容挂载到`192.168.1.X`的网段的`/mnt`目录上。所以把个人文件放到其他地方是挂载不上的。
 >
-> cd /
-> sudo umount /mnt
+> 千万不要在存储服务器的ssh里挂载，要在后面的网页命令里进行挂载，在存储服务器挂载的`/mnt`在docker容器里是读不到的。如果不小心在存储服务器里使用了挂载命令，请卸载`sudo umount /mnt`
 
 
 
+### 3 docker的拉取与提交
+
+在任务提交网页http://222.195.151.231/submit.html 的最下面有一个`Docker images`选项，
+
+- 可以选择下拉列表的选项（未都测试过），
+- 也可以选择`Custom`自定义按钮来上传镜像。填写的格式是docker的格式
+
+> 下拉列表的选择完后可以看4小节了，选custom的接着往下看
+
+##### 3.1 Custom
+
+可以去如下docker hub链接里去搜`openpai`支持的docker镜像，这里提供几个常用链接
+
+- https://hub.docker.com/r/openpai/standard/tags
+
+- https://hub.docker.com/u/openpai
+
+- ```sh
+  
+  ```
+
+- 也可以去镜像仓库里找别人的镜像使用https://cvlab.qdxnzn.com/
 
 
-### 3 自定义制作docker镜像
 
-我们可以直接选择https://cvlab.qdxnzn.com/harbor/projects/69/repositories/theory-repository   里现有的镜像、可以基于这些镜像重新制作、也可以看第三部分自己从0开始制作。账号密码在开头
+Custom填写格式：
 
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529234716.png)
-
-进入命名空间
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529234331.png)
-
-点开仓库可以看到我们组的镜像，你也要把你的镜像传到这里，且命名要规范。垃圾镜像及时删除。
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529233843.png)
-
-注：由些镜像在openpai里不好用，最好用openpai官方提供的镜像，非官方的什么镜像好用我也没太研究，只知道普通镜像是不好用的。
-
-push和pull例子：
-
-```sh
-# pull基础镜像
-sudo docker pull cvlab.qdxnzn.com/ouc/theory-repository:【tag】
-
-sudo docker pull cvlab.qdxnzn.com/ouc/theory-repository:cuda10.0-cudnn7.6-python6-tf15
-```
-
-```sh
-# 1.先登录再push
-docker login --username=admin  cvlab.qdxnzn.com
-#输入密码 ouc123456
-
-#2. 将镜像推送到远程仓库,需要先登录
-## 打标签，新的tag要写明该镜像中软件的版本，如python6-tf15-cuda10.0-cudnn7.6.0
-docker tag 【ImageId】 cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
-
-## push
-docker push cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
-```
-
-因为docker的分层概念，所以你基于我的镜像进行修改的话push速度也是很快的，相当于只提交你的修改部分。
+- 简写方式：`ufoym/deepo:tensorflow-py36-cu90`  
+  - 代表docker hub里`ufoym`这个用户的`deepo`项目，提交版本`tag`是`tensorflow-py36-cu90`
+- 如果要用我们自己镜像仓库里的，加上com前缀与目录地址``cvlab.qdxnzn.com/目录`
+  - 如`cvlab.qdxnzn.com/ouc/theory-repository:cuda10.0-cudnn7.6-python6-tf15`
 
 
 
 ### 4 编写进入docker后的命令
 
-点击左侧Submit Job，在右侧的Task_role_1的Command栏中填入命令
+点击左侧`Submit Job`，在右侧的Task_role_1的`Command`栏中填入命令
 
-```sh
+```bash
 echo "task start..."
+# 防止镜像里没有挂载命令
 apt install -y nfs-common
-apt update # 更新原
+apt update # 更新源
 
-# 挂载 #(从存储服务器挂载到docker容器里)
-mount -o nolock -t nfs 192.168.1.4:/data/姓名 /mnt
+# 挂载 #(把存储服务器/data 挂载到 docker容器/mnt)
+mount -o nolock -t nfs 192.168.1.4:/data/姓名  /mnt
 ##挂载完后你的文件传到了/mnt里，
 ##比如原来文件地址：/data/hanfeng/test.sh，现在地址为：/mnt/test.sh。
 ##注意没有了姓名
@@ -127,7 +124,7 @@ python /mnt/test.py
 
 测试环境1
 
-```sh
+```bash
 echo "task start..."
 apt update
 echo "task end..."
@@ -137,7 +134,7 @@ mount -t nfs -o rw,nolock 192.168.1.4:/data/models /mnt
 
 测试环境2
 
-```sh
+```bash
 echo "task start..."
 apt update
 apt install -y nfs-common
@@ -162,27 +159,72 @@ python /mnt/research/slim/train_image_classifier.py --dataset_name=cifar10 --dat
 
 网页：222.195.151.231
 
+在command里写上面小节4里编写好的训练命令
+
 ![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200531171438.png)
 
 
 
-注意：只填入地址，没有前缀docker push，也没有https前缀
+注意：只填入地址，没有前缀docker push
 
-```sh
+```bash
 # 提交的镜像直接在网页上复制pull地址也可以(@sha格式)，自己编写也可以(:tag格式)。
 # 格式1
 cvlab.qdxnzn.com/ouc/theory-repository@sha256:d2e056809cd55fc2605524e335efa9cc72b07ecffacb8cabf57335dc918d4fc3
 
 # 格式2
+openpai/pytorch-py36-cu90:lastest
+# 或
 cvlab.qdxnzn.com/ouc/theory-repository:cuda10.0-cudnn7.6-python6-tf15
 ```
 
 第二次使用该镜像拉取得很快的，因为集群中有该镜像了。
 
 - 在job name那里可以自己注解你训练的是什么任务
-- 这里选择的镜像似乎不太好用，所以最好自己制作镜像，先看第5部分
 
 提交完任务后，可以取Jobs页面查看运行情况与标准输入、标准错误
+
+### 6 自定义制作docker镜像
+
+> 此部分是自己镜像仓库的使用，可以跳过
+
+我们可以直接选择https://cvlab.qdxnzn.com/harbor/projects/69/repositories/theory-repository   里现有的镜像、可以基于这些镜像重新制作、也可以看第三部分自己从0开始制作。账号密码在开头
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529234716.png)
+
+进入命名空间
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529234331.png)
+
+点开仓库可以看到我们组的镜像，你也要把你的镜像传到这里，且命名要规范。垃圾镜像及时删除。
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529233843.png)
+
+注：由些镜像在openpai里不好用，最好用openpai官方提供的镜像，非官方的什么镜像好用我也没太研究，只知道普通镜像是不好用的。
+
+push和pull例子：
+
+```bash
+# pull基础镜像
+sudo docker pull cvlab.qdxnzn.com/ouc/theory-repository:【tag】
+
+sudo docker pull cvlab.qdxnzn.com/ouc/theory-repository:cuda10.0-cudnn7.6-python6-tf15
+```
+
+```bash
+# 1.先登录再push
+docker login --username=admin  cvlab.qdxnzn.com
+#输入密码 ouc123456
+
+#2. 将镜像推送到远程仓库,需要先登录
+## 打标签，新的tag要写明该镜像中软件的版本，如python6-tf15-cuda10.0-cudnn7.6.0
+docker tag 【ImageId】 cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
+
+## push
+docker push cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
+```
+
+因为docker的分层概念，所以你基于我的镜像进行修改的话push速度也是很快的，相当于只提交你的修改部分。
 
 
 
@@ -200,7 +242,9 @@ ID可以唯一标识一个镜像，REPOSITORY:TAG也能唯一标识一个镜像�
 
 ### 2 docker基本命令
 
-```sh
+```bash
+# 有的系统用户可能得加sudo
+
 #查看镜像，会显示IMAGE_ID、REPOSITORY、TAG
 docker images 
 
@@ -236,7 +280,7 @@ docker image rm
 
 #### push与pull
 
-```sh
+```bash
 # 1.先登录再push
 docker login --username=admin  cvlab.qdxnzn.com
 #输入密码 ouc123456
@@ -249,8 +293,9 @@ docker tag 【ImageId】 cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号
 docker push cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
 ```
 
-
 ### 3 Dockerfile
+
+> 无需观看
 
 Dockerfile镜像描述文件
 
@@ -260,7 +305,7 @@ Dockerfile镜像描述文件
 
 基本命令：
 
-```sh
+```bash
 FROM 【基准镜像】#基准镜像
 FROM scratch # 不依赖任何镜像标准
 MAINTAINER # 说明信息
@@ -288,7 +333,7 @@ EXPOSE 7000
 
 3种执行命令的方法：
 
-```sh
+```bash
 # 1 RUN方式：在docker build构建时执行命令
 RUN yum install -y vim # Shell命令格式
 RUN ["yum","install","-y","vim"] # Exec命令格式，推荐
@@ -330,7 +375,7 @@ https://hub.docker.com/r/nvidia/cuda/tags
 
 这里提供几个openPAI基础镜像
 
-```sh
+```bash
 docker pull openpai/pai.build.base:hadoop2.7.2-cuda9.0-cudnn7-devel-ubuntu16.04
 
 docker pull openpai/tensorflow-py36-cu90:latest
@@ -348,7 +393,7 @@ docker pull openpai/pytorch-py36-cu90:latest
 
 我们本地仓库里cvlab.qdxnzn.com/ouc/theory-repository:为前缀的镜像基本已经指向过模板里的命令了，所以用不到这个Dockerfile，只需要基于我们镜像直接修改python、TensorFlow即可。
 
-```sh
+```bash
 FROM openpai/pytorch:1.0-cuda10.0-cudnn7-devel
 ENV LANG C.UTF-8
 RUN apt-get update && \
@@ -389,7 +434,7 @@ EXPOSE 8888 6006
 
 
 
-```sh
+```bash
 # ==================================================================
 # tf 1.12.0 cuda9.0 cudnn7 py36
 # ------------------------------------------------------------------
@@ -520,7 +565,7 @@ EXPOSE 8888 6006
 
 在命令行执行生成镜像：
 
-```sh
+```bash
 docker build  -t 【生成镜像仓库:TAG】   Dockerfile的所在目录
 如
 docker build  -t  cvlab.qdxnzn.com/ouc/theory-repository:python6-tf1.12-cuda9   ./
@@ -532,7 +577,7 @@ https://mirrors.aliyun.com/pypi/simple/
 
 这里写一些测试通过的镜像
 
-```sh
+```bash
 echo "task start..."
 apt update
 apt install -y nfs-common
@@ -569,7 +614,7 @@ python /mnt/research/slim/train_image_classifier.py --dataset_name=cifar10 --dat
 
 创建完阿里云仓库后重新看第5部分，push到你阿里云仓库即可。
 
-```sh
+```bash
 # 1. 登录阿里云Docker Registry 
 docker login --username=韩锋626 registry.cn-qingdao.aliyuncs.com
 #输入密码 visionlab2020
