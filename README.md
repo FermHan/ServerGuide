@@ -436,14 +436,21 @@ ps：你也可以使用navigator界面的方式进行上面创建虚拟环境安
 场景：比如我们`vi test.txt`编辑到一半的时候要回来了不得不关机，但我们明天重开机编辑的内容就撤销了，我们可以使用如下的方式进行临时保存
 
 ```sh
-# 安装screen
+# ===安装screen===
 sudo apt install screen
 
-# 在要执行的任务前加上screen
+# ===在要执行的任务前加上screen===
 screen python aaa.py
-# 按Ctrl+a，按完后再按d，就退出了训练页面，但任务还在进行
+# 也可以使用-S指定任务名: screen -S jobName python aaa.py  
+# 可以用-L指定输出的日志，会在当前目录下生成screenlog.0文件。可以通过tail查看最终的日志。可以参考https://blog.csdn.net/weixin_44058333/article/details/99693489
+建议的用法如下：
+screen -L -S job123 python aaa.py
 
-# 重新连接会话
+# 暂时离开刚页面
+# 按Ctrl+a，按完后再按d，就退出了训练页面，但任务还在进行
+# 给窗口自定义命名：ctrl+a 按完后再按A
+
+# ===重新连接会话===
 #screen -ls找到screen的任务
 screen -ls
 There is a screen on:
@@ -452,9 +459,20 @@ There is a screen on:
 
 1 Socket in /tmp/screens/S-root.
 
-# 连接screen的任务
+# ===连接screen的任务===
 screen -r 16582
 # 又能看到训练页面了
+
+# ======其他内容========
+# 将当前在另一个终端attach的会话强制退出，在当前终端接管：screen -d name screen -r name
+
+# 上下移动：ctrl-a w向前，b向后
+
+# Ctrl-a +S 分隔屏幕，Ctrl-a+Tab可以切换区域，Ctrl-a+Q关闭其他区域块
+
+# 如果连不上，可能是其他页面没有关掉
+# screen -ls ，发现其状态是 Attached，正常可连接的是 Detached，说明之前用户还占有那个session，直接踢掉他。
+screen -D  -r [name]
 ```
 
 4.2 nuhup ... &
