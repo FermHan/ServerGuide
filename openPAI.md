@@ -6,6 +6,8 @@
 因为校园网访问github图片经常不显示，推荐去csdn看。另外csdn对代码部分也有颜色变化，容易区分命令
 
 > 后续管理员需要更新内容可以联系我，我在管理员教程里有写github的账号密码
+>
+> 有疑问可以评论留言
 
 # 一、理论组集群使用方法
 
@@ -17,7 +19,7 @@
 
 - openAI平台账号：(密)：向管理员申请账号
 - nfs存储服务器：222.195.151.85:8011( 192.168.1.4)  用户名ouc  密码123
-- 镜像仓库cvlab.qdxnzn.com：账号admin 密码ouc123456。push密码也是ouc123456
+- 镜像仓库cvlab.qdxnzn.com：账号admin 密码Harbor12345。push密码可能是ouc123456
 - 集群(非管理员勿登录)：用户名ouc  密码123
   - 192.168.1.200 - 206。其中200为master n0，其余为n1-n6
 
@@ -36,7 +38,11 @@
 
 把数据从个人电脑上传到集群的fs存储服务器上：222.195.151.85:8011( 192.168.1.4)  用户名ouc  密码123
 
-用`ssh/xftp`工具(MobaXterm软件)登录存储服务器。服务器间文件的互传可以看rsync命令https://blog.csdn.net/hancoder/article/details/113172109
+window与linux互传用`ssh/xftp`工具(推荐MobaXterm软件)登录存储服务器。
+
+>  如果是linux服务器间文件的互传可以看rsync命令https://blog.csdn.net/hancoder/article/details/113172109
+>
+> 里面的scp命令可以用于镜像里传数据集使用，可以写到网页中的命令中
 
 登录文件服务器后，创建自己的文件夹
 
@@ -56,6 +62,8 @@ mkdir /data/姓名全字母
 > 表示只允许把存储服务器`/data`子目录的内容挂载到`192.168.1.X`的网段的`/mnt`目录上。所以把个人文件放到其他地方是挂载不上的。
 >
 > 千万不要在存储服务器的ssh里挂载，要在后面的网页命令里进行挂载，在存储服务器挂载的`/mnt`在docker容器里是读不到的。如果不小心在存储服务器里使用了挂载命令，请卸载`sudo umount /mnt`
+>
+> 文件服务器是centos系统，要用yum install
 
 
 
@@ -293,7 +301,7 @@ docker tag 【ImageId】 cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号
 docker push cvlab.qdxnzn.com/ouc/theory-repository:[镜像版本号]
 ```
 
-### 3 Dockerfile
+### 3 Dockerfile(附录)
 
 > 无需观看
 
@@ -363,7 +371,7 @@ CMD ["-ef"]
 
 
 
-# 三 Dockerfile模板
+# 三 Dockerfile模板(附录)
 
 看到这说明你不想用我们https://cvlab.qdxnzn.com/harbor/projects/69/repositories 中的镜像，要从0开始制作镜像了。
 
@@ -573,7 +581,7 @@ docker build  -t  cvlab.qdxnzn.com/ouc/theory-repository:python6-tf1.12-cuda9   
 
 https://mirrors.aliyun.com/pypi/simple/
 
-# 四 测试通过镜像
+# 四 测试通过镜像(附录)
 
 这里写一些测试通过的镜像
 
