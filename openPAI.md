@@ -2,6 +2,7 @@
 
 - github：https://github.com/OUCvisionLab/ServerGuide/blob/master/openPAI.md
 - CSDN：https://blog.csdn.net/hancoder/article/details/106423288
+- linux基础使用可以参考：https://github.com/OUCvisionLab/ServerGuide/blob/master/README.md
 
 因为校园网访问github图片经常不显示，推荐去csdn看。另外csdn对代码部分也有颜色变化，容易区分命令
 
@@ -121,6 +122,8 @@ mount -o nolock -t nfs 192.168.1.4:/data/姓名  /mnt
 cd /mnt
 # 修改python环境 
 # 如pip pip install tensorflow-gpu=1.12
+
+# 除挂载外，可以用scp命令传另外一些文件到镜像里
 
 # 执行训练任务 # 尽量使用绝对路径，注意是没有你姓名那层目录的
 python /mnt/test.py
