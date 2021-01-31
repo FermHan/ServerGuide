@@ -4,7 +4,7 @@
 - CSDN：https://blog.csdn.net/hancoder/article/details/106423288
 - linux基础使用可以参考：https://github.com/OUCvisionLab/ServerGuide/blob/master/README.md
 
-因为校园网访问github图片经常不显示，推荐去csdn看。另外csdn对代码部分也有颜色变化，容易区分命令
+因为校园网访问github图片经常不显示，css样式也比较少，推荐去csdn看，容易区分命令
 
 > 后续管理员需要更新内容可以联系我，我在管理员教程里有写github的账号密码
 >
@@ -21,10 +21,10 @@
 ### 0 账号信息：
 
 - openAI平台账号：(密)：向管理员申请账号
-- nfs存储服务器：222.195.151.85:8011( 192.168.1.4)  用户名ouc  密码123
-- 镜像仓库cvlab.qdxnzn.com：账号admin 密码Harbor12345。push密码也是Harbor12345
-  - `sudo docker login --username=admin  cvlab.qdxnzn.com`   输入Harbor12345
-- 集群(非管理员勿登录)：用户名ouc  密码123
+- nfs存储服务器：222.195.151.85:8011( 192.168.1.4)  用户名`ouc`  密码`123`
+- 镜像仓库cvlab.qdxnzn.com：账号`admin` 密码`Harbor12345`。push密码也是`Harbor12345`
+  - `sudo docker login --username=admin  cvlab.qdxnzn.com`   输入`Harbor12345`
+- 集群(非管理员勿登录)：用户名`ouc`  密码`123`
   - 192.168.1.200 - 206。其中200为master n0，其余为n1-n6
 
 ### 1 登录集群平台
@@ -32,7 +32,7 @@
 浏览器输入：222.195.151.231 ，输入账号密码。账号密码分为管理员账户和普通账户。
 
 - 管理员账户用于注册普通账户和查看集群运行情况。
-- 普通账户用于添加训练任务
+- 普通账户用于添加训练任务(保证外来人员无集群账号)
 
 管理员账户如何添加普通账户：(需在管理员账户下进行)，点击左侧Administration/User Management，点击右侧Add User，填入Name和Password。然后退出管理员账户后，重启登录普通用户即可
 
@@ -58,16 +58,16 @@ mkdir /data/姓名全字母
 # 过后把自己的data文件删了，因为数据集一般太占内存
 ```
 
-将上传个人文件到`/data/YOURNAME`目录下。在后面的页面命令中，我们会让他挂载在`/mnt`下。
+将上传个人文件到`/data/YOURNAME`目录下。在后面的页面命令中，我们会让他挂载到镜像目录（如`/mnt`）下。
 
 > 注：为什么不能放到别的目录下？
 >
 > 在文件服务器下`/etc/exports`有如下内容：` /data/ 192.168.1.0/24(rw,sync,fsid=0)`
-> 表示只允许把存储服务器`/data`子目录的内容挂载到`192.168.1.X`的网段的`/mnt`目录上。所以把个人文件放到其他地方是挂载不上的。
+> 表示只允许把存储服务器`/data`子目录的内容挂载到`192.168.1.X`的网段的目录上(镜像里的目录是任意的，如`/mnt`)。所以把个人文件放到文件服务器的除/data其他地方是挂载不上的。
 >
 > 千万不要在存储服务器的ssh里挂载，要在后面的网页命令里进行挂载，在存储服务器挂载的`/mnt`在docker容器里是读不到的。如果不小心在存储服务器里使用了挂载命令，请卸载`sudo umount /mnt`
 >
-> 文件服务器是centos系统，要用yum install
+> 另注：文件服务器是centos系统，要用yum install
 
 
 
@@ -106,14 +106,12 @@ mkdir /data/姓名全字母
   pip install -r requirements.txt
   ```
 
-- 
-
-Custom填写格式：
+Custom自定义镜像填写格式：
 
 - 简写方式：`ufoym/deepo:tensorflow-py36-cu90`  
-  - 代表docker hub里`ufoym`这个用户的`deepo`项目，提交版本`tag`是`tensorflow-py36-cu90`
-- 如果要用我们自己镜像仓库里的，加上com前缀与目录地址``cvlab.qdxnzn.com/目录`
-  - 如`cvlab.qdxnzn.com/ouc/theory-repository:cuda10.0-cudnn7.6-python6-tf15`
+  - 代表docker hub里`ufoym`这个用户的`deepo`项目（就是镜像名字），提交版本`tag`是`tensorflow-py36-cu90`
+- 如果要用我们自己镜像仓库里的，加上com前缀与目录地址`cvlab.qdxnzn.com/目录`
+  - 如`cvlab.qdxnzn.com/目录/镜像名字:镜像版本号`
 
 
 
@@ -135,8 +133,9 @@ mount -o nolock -t nfs 192.168.1.4:/data/姓名  /mnt
 
 # cd找你的个人文件，
 cd /mnt
-# 修改python环境 
-# 如pip pip install tensorflow-gpu=1.12
+# 修改python环境
+# source activate py38
+# 如 pip install tensorflow-gpu=1.12
 
 # 除挂载外，可以用scp命令传另外一些文件到镜像里
 # 文件服务器外网ip端口：222.195.151.85:8011
@@ -196,13 +195,13 @@ python /mnt/research/slim/train_image_classifier.py --dataset_name=cifar10 --dat
 
 ```bash
 # 提交的镜像直接在网页上复制pull地址也可以(@sha格式)，自己编写也可以(:tag格式)。
-# 格式1
-cvlab.qdxnzn.com/ouc/theory-repository@sha256:d2e056809cd55fc2605524e335efa9cc72b07ecffacb8cabf57335dc918d4fc3
+# 格式1 # sha是版本号的编码
+cvlab.qdxnzn.com/ouc/镜像名字@镜像版本号sha256:d2e056809cd55fc2605524e335efa9cc72b07ecffacb8cabf57335dc918d4fc3
 
 # 格式2 # 拉取的是docker hub的，不是学校仓库的
 openpai/pytorch-py36-cu90:lastest
 # 或
-cvlab.qdxnzn.com/ouc/theory-repository:cuda10.0-cudnn7.6-python6-tf15
+cvlab.qdxnzn.com/ouc/镜像名字:镜像版本号cuda10.0-cudnn7.6-python6-tf15
 ```
 
 第二次使用该镜像拉取得很快的，因为集群中有该镜像了。
@@ -231,11 +230,11 @@ sudo docker images
 
 #2. 将镜像推送到远程仓库,需要先登录
 ## 打标签，新的tag要写明该镜像中软件的版本，如python6-tf15-cuda10.0-cudnn7.6.0
-sudo docker tag 【ImageId】 cvlab.qdxnzn.com/ouc/镜像名字:[镜像版本号]
+sudo docker tag 【ImageId】 cvlab.qdxnzn.com/ouc目录/myYolo5镜像名字:v1版本号
 # 无论你怎么起名，要注意学校仓库里要com之后那个单词的目录。其余都是你的镜像名字
 
 ## push
-sudo docker push cvlab.qdxnzn.com/ouc/镜像名字:[镜像版本号]
+sudo docker push cvlab.qdxnzn.com/ouc目录/myYolo5镜像名字:v1版本号
 
 # 注意我们为什么不直接在网页上pull拉取别人的镜像而要提交到学校的仓库？
 # 是为了有时候我们会修改docker镜像，然后push提交到某一仓库我们在网页上才能有地址可拉取
@@ -256,8 +255,8 @@ sudo docker images
 #ultralytics/yolov5    latest    418a139445f7    16 hours ago   14.5GB
 
 
-sudo docker tag 418a139445f7 cvlab.qdxnzn.com/ouc/myyolo5:empty
-sudo docker push  cvlab.qdxnzn.com/ouc/myyolo5:empty
+sudo docker tag 418a139445f7 cvlab.qdxnzn.com/ouc目录/myYolo5镜像名字:v1版本号
+sudo docker push  cvlab.qdxnzn.com/ouc目录/myYolo5镜像名字:v1版本号
 # 然后就可以在镜像仓库里看到你的镜像了
 ```
 
@@ -301,7 +300,7 @@ exit 或Ctrl+D
 # 容器形成镜像
 docker commit [OPTIONS] CONTAINER_ID [REPOSITORY[:TAG]]
 # 为方便使用，我们要求把TAG以其容器中软件版本命名，越详细越好，方便我们分辨
-#如nocuda-python6-tf1.12。这样REPOSITORY[:TAG]表示为oucvisionlab/docker-repository:
+#如nocuda-python6-tf1.12。这样REPOSITORY[:TAG]表示为 cvlab.qdxnzn.com/docker-xxx:py38-tf12
 
 # 打标签，相当于复制且重命名镜像，方便指定上传的仓库
 docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
