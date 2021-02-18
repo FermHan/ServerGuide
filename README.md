@@ -1,687 +1,661 @@
-本文教程地址：
+[TOC]
 
-- github：https://github.com/OUCvisionLab/ServerGuide/blob/master/openPAI.md
-- CSDN：https://blog.csdn.net/hancoder/article/details/106423288
-- linux基础使用可以参考：https://github.com/OUCvisionLab/ServerGuide/blob/master/README.md
+==**For theory and texture group only.**==
 
-因为校园网访问github图片经常不显示，css样式也比较少，推荐去csdn看，容易区分命令
+为增加查阅体验与防止后续服务器内容的更改，请直接在github观看 https://github.com/OUCvisionLab/ServerGuide  ， 若github网速慢也可去CSDN观看：https://blog.csdn.net/hancoder/article/details/88803079 
 
-> 后续管理员需要更新内容可以联系我，我在管理员教程里有写github的账号密码
->
-> 有疑问可以评论留言
+主要内容：
 
-@[toc]
+- IP设置：https://blog.csdn.net/hancoder/article/details/102881903 
+- openAI集群+docker：https://blog.csdn.net/hancoder/article/details/106423288 
 
-# 一、理论组集群使用方法
+20.03.08次更新内容：
 
-注：在本服务器中，docker命令前必须加sudo，本文没写sudo。正确命令：`sudo  docker ...`
-
-> 没使用过docker的用户先下拉倒第二章1、2部分简单看一下pull、push
-
-### 0 账号信息：
-
-- openAI(222.195.151.231)平台账号：(密)：向管理员申请账号
-- nfs存储服务器：222.195.151.85:8011( 192.168.1.4)  用户名`ouc`  密码`123`
-- 镜像仓库cvlab.qdxnzn.com：账号`admin` 密码`Harbor12345`。push密码也是`Harbor12345`
-  - `sudo docker login --username=admin  cvlab.qdxnzn.com`   输入`Harbor12345`
-- 集群(非管理员勿登录)：用户名`ouc`  密码`123`
-  - 192.168.1.200 - 206。其中200为master n0，其余为n1-n6
-
-### 1 登录集群平台
-
-浏览器输入：222.195.151.231 ，输入账号密码。账号密码分为管理员账户和普通账户。
-
-- 管理员账户用于注册普通账户和查看集群运行情况。
-- 普通账户用于添加训练任务(保证外来人员无集群账号)
-
-管理员账户如何添加普通账户：(需在管理员账户下进行)，点击左侧Administration/User Management，点击右侧Add User，填入Name和Password。然后退出管理员账户后，重启登录普通用户即可
+- 会让2个人左右共同使用和维护一台专属服务器（自己组的服务器自行解决），也留下了1台机动的服务器。
+- 解释了一些虚拟环境、ssh，xftp、zerotier等可能用到的知识
+- 如有跑实验需要，是可以临时调换的。
 
 
 
-### 2 传数据
+!!!禁止在服务器上阅读代码与长时间修改代码，浪费资源。
 
-把数据从个人电脑上传到集群的fs存储服务器上：222.195.151.85:8011( 192.168.1.4)  用户名ouc  密码123
+# 1、服务器列表
 
-window与linux互传用`ssh/xftp`工具(推荐MobaXterm软件)登录存储服务器。
+注：能力比较强的可以申请使用openpai集群，服务器单机资源有限
 
-> 如果是linux服务器间文件的互传可以看rsync命令https://blog.csdn.net/hancoder/article/details/113172109
->
-> 里面的scp命令可以用于镜像里传数据集使用，也可以写到网页中的命令中。（要注意scp的软链接问题）
+本服务器为OUC理论组管理，供D老师和G老师的学生使用。理论上其他组也有自己的服务器，请尽量使用自己组内服务器，方便管理和调度。
 
-登录文件服务器后，创建自己的文件夹
+| IP              | Port            | capacity                                       | user name | password | Note         |
+| --------------- | --------------- | :--------------------------------------------- | --------- | -------- | ------------ |
+| 备注行          | 桌面是0，ssh是1 |                                                |           |          |              |
+| 222.195.151.170 | 9013/9113       | RAM:128G, CPU:2.3GHz*40, ==GPU:none==          | ouc-13    | b301     | GPU:none;FTP |
+| 222.195.151.170 | 9015/9115       | RAM:128G, CPU:2.3GHz*40, GPU:TESLA K40c 11G *1 | ouc-15    | b301     | LY,ZTG       |
+| 222.195.151.170 | 9028/9128       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-28    | b301     | LJX,LJH      |
+| 222.195.151.170 | 9029/9129       | RAM:32G, CPU:3.5GHz*8, GPU:2080 8G *2          | ouc-29    | b301     | YYW,HF       |
+| 222.195.151.66  | 9010/9110       | RAM:32G, CPU:3.3GHz*4, GPU:TITAN X 12G         | ouc-10    | b301     | Aman,Israel  |
+| 222.195.151.66  | 9018/9118       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-18    | b301     | ZZD,LWX,QXF  |
+| 222.195.151.66  | 9019/9119       | RAM:32G, CPU:3.5GHz*8, GPU:1080Ti 11G *2       | ouc-19    | b301     | SCX,Sadia    |
+|                 | 9055/9155       |                                                | 密        | 密       | SQY,ZQQ,GYH  |
 
-```bash
-# 创建个人文件夹(一定要创建在data目录下，而且注意是 /data，不是home下的)
-mkdir /data/姓名全字母
+注：
 
-# 可以在文件服务器里对你的文件进行一些操作
-# 过后把自己的data文件删了，因为数据集一般太占内存
+- 请注意区别端口是90XX还是91XX，一个是远程桌面，一个是ssh。我们组90XX是桌面，别的组有的90XX是ssh
+- **传文件的端口是91--，选的协议是sftp。**
+- 校园网有墙，校园外是无法访问无法访问服务器的，需要借助于part 6的zerotier软件
+
+
+
+# 2、登录
+
+**2.1 windows软件**
+
+电脑中搜索桌面连接。或者在微软商店里搜远程桌面，道理都是一样的。或windows+r输入mstsc
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200626192119.png)
+
+**2.2 输入IP和端口**
+
+输入IP:port，如`222.195.151.170:6666`
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200626192215.png)
+
+端口是90XX，其他组的服务器有的是91XX是桌面端口。
+
+**2.3 输入用户名密码**
+
+session模式选择Xorg（个别机器选sesman-Xvnc），然后输入账号`ouc-机器后两位id`，密码`b301`
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200626192344.png)
+
+**2.4 登录系统后 在home目录下(/home/ouc-xx/)创建自己的文件夹，请勿随意放置个人文件**
+
+进去后，最好在桌面上备注好你的名字以及使用时间。
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190325144734.png?token=AkTVJRoQTQFVopFyApR5WI9oEZziwdXtks5cmHnIwA%3D%3D)
+
+2.5 ==**在你正式跑代码之前，请输入`nvidia-smi`查看有没有其他用户在跑程序（通过红框部分看）)。如果中间的显存占用率只有几十MB，那么就说明没人在跑程序。**==
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200626192757.png)
+
+nvidia-smi参数解释：
+
+```
+- Fan：显示风扇转速，数值在0到100%之间，是计算机的期望转速，如果计算机不是通过风扇冷却或者风扇坏了，显示出来就是N/A；
+- Temp：显卡内部的温度，单位是摄氏度；
+- Perf：表征性能状态，从P0到P12，P0表示最大性能，P12表示状态最小性能；
+- Pwr：能耗表示；
+- Bus-Id：涉及GPU总线的相关信息；
+- Disp.A：是Display Active的意思，表示GPU的显示是否初始化；
+- Memory Usage：显存的使用率；
+- Volatile GPU-Util：浮动的GPU利用率；
+- Compute M：计算模式；
 ```
 
-将上传个人文件到`/data/YOURNAME`目录下。在后面的页面命令中，我们会让他挂载到镜像目录（如`/mnt`）下。
+### 浏览器问题
 
-> 注：为什么不能放到别的目录下？
+如果发现打不开服务器的浏览器，可能是因为bug的原因，我们可以安装谷歌浏览器代替：
+
+安装方法：去谷歌官网找安装包(下载地址在页面下方其他平台里)  或者用wget方式下载
+
+下载后传到服务器上
+
+然后
+
+```
+sudo dpkg -i 下载的包.deb
+然后就可以在左上角的浏览器里找到了
+```
+
+
+
+#  3、使用python、tensorflow
+
+### 3.1 `nvidia-smi`
+
+输入 `nvidia-smi`，此处是作用是验证没有人在使用此服务器
+
+<img src="https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200626192757.png" style="zoom:50%;" />
+
+==但要注意这里的cuda版本不准确，要用`nvcc -V`查看cuda版本==
+
+#### nvidia-smi报错解决方案
+
+如果报错
+
+```
+NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.
+```
+
+一种方法是重装驱动，但如果已经重装过了但是重启后又报错了，就可以使用下面的方式
+
+```sh
+# 查看之前安装的驱动版本
+ls /usr/src | grep nvidia
+# 比如这里我输出了
+nvidia-440.31
+
+
+sudo apt-get install dkms #DKMS全称是Dynamic Kernel Module Support，它可以帮我们维护内核外的这些驱动程序，在内核版本变动之后可以自动重新生成新的模块。
+
+sudo dkms install -m nvidia -v 440.31 #440.31是安装驱动的版本
+```
+
+然后就可以了。
+
+如果还不可以说明不是内核的问题，是驱动没安好，继续重装吧
+
+
+
+### 3.2 创建你自己的环境
+
+> 环境解释：
 >
-> 在文件服务器下`/etc/exports`有如下内容：` /data/ 192.168.1.0/24(rw,sync,fsid=0)`
-> 表示只允许把存储服务器`/data`子目录的内容挂载到`192.168.1.X`的网段的目录上(镜像里的目录是任意的，如`/mnt`)。所以把个人文件放到文件服务器的除/data其他地方是挂载不上的。
+> 之前为大家创建过公用的python3.6和python2.7等，但是大家好像更倾向于使用很特殊的环境。所以此处修改为创建自己虚拟环境的注意项。 
 >
-> 千万不要在存储服务器的ssh里挂载，要在后面的网页命令里进行挂载，在存储服务器挂载的`/mnt`在docker容器里是读不到的。如果不小心在存储服务器里使用了挂载命令，请卸载`sudo umount /mnt`
+> 虚拟环境的原因：相当于两台服务器，互相使用的python不影响，即安装模块是安装到了指定某一python上，而不是为全部python安装模块。
 >
-> 另注：文件服务器是centos系统，要用yum install
+> 公共python的位置：Anaconda原有的python路径是/home/ouc/Anaconda3/python。而你创建私有的python地址是/home/Anaconda3/env/YOURNAME/python
+>
+> 环境变量在~/.bashrc文件里，不要轻易改动。~代表home目录。安装anaconda时一路默认会自动写入bashrc中。
+
+创建于使用虚拟环境方法：
+
+```python 
+# ---|*_*|--- 查看现有环境 ---|*_*|---
+conda info -e
+
+# ---|*_*|--- 创建python环境 ---|*_*|---
+conda create -n YOURENAME python=PYTHONVERSION
+# 如conda create -n hanfeng python=3.6。可以指定python版本，重要的是指定python版本。名称任意，推荐自己名字。anaconda3上也可安装python2.7。创建完可在/home/Anaconda3/env/YOURNAME/python目录下找到你的python
+# 如遇到权限问题，可以尝试先执行如 sudo chmod 777 /home/ouc-19/anaconda3
+
+# ---|*_*|--- 以下两条指令都要执行一下，之前发现过不执行莫名其妙进去别人环境的问题 ---|*_*|---
+source activate # 重新进入虚拟环境
+conda deactivate # 退出虚拟环境
+
+# ---|*_*|--- 激活环境 ---|*_*|---
+# 创建完自己的环境后，接下来一切操作都是在【进入自己创建的环境】的基础上进行的，下面语句是进入自己环境的方式，二选一。注：若使用python，但凡打开终端，第一步都该的进入自己的环境，否则操作都不是针对自己的环境的。
+source activate YOURENAME 
+#or 
+conda activate YOURENAME
+-------------------------------
+#  ---|*_*|--- 不常用命令 ---|*_*|--- 
+# 退出环境：
+source activate # 重新进入虚拟环境
+conda deactivate # 退出虚拟环境
+#or#source deactivate 
+
+#  ---|*_*|--- 删除虚拟环境 ---|*_*|--- 
+conda remove -n YOURNAME --all
+```
+
+##### 使用自己环境示例：
+
+```sh
+(hanfeng) ouc-10@ouc-10:~$ conda info -e
+# conda environments:
+base                     /home/ouc-10/anaconda3
+hanfeng               *  /home/ouc-10/anaconda3/envs/hanfeng
+
+(base) ouc-10@ouc-10:~$ python -V
+Python 3.7.4
+
+(base) ouc-10@ouc-10:~$ conda activate hanfeng
+
+(hanfeng) ouc-10@ouc-10:~$ python -V
+Python 3.7.4 # 还是3.7的环境，明显不是我自己的
+
+(hanfeng) ouc-10@ouc-10:~$ which python
+/home/ouc-10/anaconda3/envs/hanfeng/bin/python # 路径居然正确？
+
+# 执行退出
+(hanfeng) ouc-10@ouc-10:~$ source activate
+(base) ouc-10@ouc-10:~$ conda deactivate
+# 重新进入
+ouc-10@ouc-10:~$ conda activate hanfeng
+
+(hanfeng) ouc-10@ouc-10:~$ python -V # 版本正确了
+Python 3.6.2 :: Continuum Analytics, Inc.
+
+(hanfeng) ouc-10@ouc-10:~$ pip -V
+pip 9.0.1 from /home/ouc-10/anaconda3/envs/hanfeng/lib/python3.6/site-packages (python 3.6)
+
+(hanfeng) ouc-10@ouc-10:~$ pip3 -V
+pip 20.2.2 from /home/ouc-10/anaconda3/lib/python3.7/site-packages/pip (python 3.7)
+
+
+# 安装包 
+python -m pip install tensorflow-gpu
+说明：请一定要使用如上的方式安装包，不要直接pip install tensorflow-gpu或者pip3 install
+原因：我们可以输入which pip查看当前默认使用的pip，可以发现pip可能确实匹配到了正确的自己环境，
+但pip3就不是自己的环境，所以尽量使用python -m pip install的命令。下面有更详细的说明
+(hanfeng) ouc-10@ouc-10:~$ which pip
+/home/ouc-10/anaconda3/envs/hanfeng/bin/pip
+(hanfeng) ouc-10@ouc-10:~$ which pip3
+/usr/bin/pip3
+```
 
 
 
-### 3 docker的拉取与提交
+### 3.3 安装包：
 
-在任务提交网页http://222.195.151.231/submit.html 的最下面有一个`Docker images`选项，
+推荐离线安装。去https://pypi.org/ 下载离线包。`pip install 离线包`
 
-- 可以选择下拉列表的选项（未都测试过），
+在线安装容易失败。
 
-- 也可以选择`Custom`自定义按钮来上传镜像。填写的格式是docker的格式
+#### 3.3.1 conda install
 
-- 此外我提供了一个包含anaconda的镜像（特别适用于你想改变python版本的情况），使用方法如下
+```PYTHON
+# conda安装方式，必须先激活到自己创建的环境中
+conda activate YOURENAME # or：source activate YOURENAME
+conda install tensorflow-gpu=版本号
+```
 
-  ```bash
-  # 这个镜像里已经安装过nfs，直接创建python即可
-  mount -o nolock -t nfs 192.168.1.4:/data/姓名  /mnt
-  cd /mnt
-  
-  # 创建anaconda的虚拟环境。里面已经有个py38
-  conda create -y -n py37 python=3.7
-  # 改变python的相对路径，主要是envs/后面那个路径要写成自己命名的
-  export PATH="/root/anaconda3/envs/py37/bin:$PATH" # 注意顺序，$PATH写到前面测试不生效
-  # 上面已经转变了环境变量，不要使用source activate，因未知原因报错
-  python -V # 确认版本
-  
-  # 正常使用你的python
-  pip install numpy # pip install -r requiements.txt
-  python test.py
-  # 上面export命令其实也可以不写，用python绝对路径代替。但要注意这种情况下pip也要使用绝对六级
-  #  /root/anaconda3/envs/py37/bin/python test.py
-  #  /root/anaconda3/envs/py37/pip install numpy
-  
-  # 然后再custom那里填入我制作的anaconda镜像： cvlab.qdxnzn.com/ouc/anaconda:v3
+另外需要注意版本的关系，tf、torch与cuda版本有关，要验证自己的版本是否可用，可用如下类似的方式验证
+
+```python
+import torch
+torch.cuda.is_available()  # 输出true才代表当前版本的torch能用
+# false的话更改cuda版本或者torch版本
+# 更改cuda的教程在末尾
+# 可以取torch官网看与cuda的对应关系
+https://pytorch.org/get-started/previous-versions/
+```
+
+#### 3.3.2 pip install
+
+- pip在线安装：
+
+```PYTHON
+conda activate YOURENAME # 或：source activate YOURENAME
+python -m pip install 模块 # 
+# 还可以在文件中写好后，指定源路径，加速下载
+python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+# 其中requirements.txt内容格式如下
+torch==1.4.0
+torchvision==0.5.0
+```
+
+- pip离线安装
+
+```PYTHON
+# 如何下载离线包查看3.3.3
+#下载后用pip安装，安装时候输入完python -m pip install 把文件拖进去即可，相当于要输入文件绝对路径。注意文件两侧各有一个'号，压缩包直接拖进去即可，无需解压
+conda activate YOURENAME # or：source activate YOURENAME
+python -m pip install FILE下载的文件
+如
+python -m pip install tensorflow-gpu==1.15
+```
+
+- pip知识补充
+
+  - 更换pip源方式：见后文
+
+  - 如果你要使用pip，**务必先激活到自己的虚拟环境`conda activate YOURENAME`，然后使用`python -m pip install XXX`的形式代替`pip install xxx`的形式**。因为直接输入的pip指向的并不是你的python，而是linux里的python。想要一探究竟可以打开/usr/local/bin下的pip文件看其原理
+    尤其是像pytorch这种包，conda命令经常安不上，使用pip命令的时候一定要使用'python -m'方式。
+  - pip3和pip是两个文件
+
+```sh
+(hanfeng) ouc-10@ouc-10:~$ which python
+/home/ouc-10/anaconda3/envs/hanfeng/bin/python
+
+# 使用`pip3 -V`或`pip -V`可以查看这两个文件指向哪里，即使用pip时默认为哪个python安装包。如图，分别指向的python是系统的python和anaconda的其中一个python。
+(hanfeng) ouc-10@ouc-10:~$ pip -V
+pip 9.0.1 from /home/ouc-10/anaconda3/envs/hanfeng/lib/python3.6/site-packages (python 3.6)
+
+(hanfeng) ouc-10@ouc-10:~$ pip3 -V
+pip 20.2.2 from /home/ouc-10/anaconda3/lib/python3.7/site-packages/pip (python 3.7)
+
+# 使用`which pip3`或`which pip`可以查看默认的pip3和pip在哪里 #如下，pip3在/usr/bin目录下
+(hanfeng) ouc-10@ouc-10:~$ which pip
+/home/ouc-10/anaconda3/envs/hanfeng/bin/pip
+
+(hanfeng) ouc-10@ouc-10:~$ which pip3
+/usr/bin/pip3
+```
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621164105.png)
+	
+输入`gedit /usr/local/pip3`可以打开pip3修改第一行，修改为自己python的路径以后pip3以后默认的安装的就是你的python了。
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621164221.png)
+	
+但是上面只是介绍原理，实例使用中最实用的还是直接使用`python -m pip install 在线/离线包`，相当于指定了为哪个python安装包。
+
+```PYTHON
+conda activate YOURENAME # or：source activate YOURENAME
+python -m pip install FILE下载的文件（在线离线均可）
+```
+
+#### 3.3.3 离线安装包的下载
+
+- 方式一：module官网下载离线包
+
+例：pytorch，官网https://pytorch.org/ 给出的pip安装方式显示的网址即是包的下载地址，可以去掉pip复制网址到浏览器下载。如下图选中部分即下载地址。
+
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190621160354.png)
+
+注：经测试cuda-9.0官网没给出下载pytorch地址，第三方给的下载文件https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/linux-64/ 测试时有次未安装成功，可以自己尝试。
+
+- 方式二：镜像网下载离线包https://mirrors.tuna.tsinghua.edu.cn/anaconda/ 。
+
+archive下是anaconda安装包
+
+/pkgs/free/linux-64/下是如tensorflow等安装包
+
+/cloud/pytorch/linux-64/下是torch和torchvision安装包
+
+- 方式三：anaconda官网给的离线包：https://repo.continuum.io/pkgs/free/linux-64/
+
+- 方式四：pip地址：https://pypi.org/
+
+  ```sh
+  #以numpy为例，下载下来离线包之后
+  python -m pip install ./numpy-1.15.0-cp27-cp27mu-manylinux1_x86_64.whl
   ```
 
   
 
-> 下拉列表的选择完后可以看4小节了，选custom的接着往下看
+#### 3.3.4 源问题
 
-##### 3.1 Custom
+linux软件源：https://developer.aliyun.com/mirror/ubuntu?spm=a2c6h.13651102.0.0.3e221b11JFiKUi
 
-可以去如下docker hub链接里去搜`openpai`支持的docker镜像，这里提供几个常用链接
+##### 更改conda源
 
-- https://hub.docker.com/r/openpai/standard/tags
-- https://hub.docker.com/u/openpai
-- 也可以去镜像仓库里找别人的镜像使用https://cvlab.qdxnzn.com/
-- 尽量使用openpai官方提供的或在此基础上更改，不然大概率是openpai不支持的镜像。
-- 制作openpai支持的镜像可以找个大概能用的镜像后修改python或者其他内容
+- 添加源：一般常用的是中科大源和清华源
 
-Custom自定义镜像填写格式：
-
-- 简写方式：`ufoym/deepo:tensorflow-py36-cu90`  
-  - 代表docker hub里`ufoym`这个用户的`deepo`项目（就是镜像名字），提交版本`tag`是`tensorflow-py36-cu90`
-- 如果要用我们自己镜像仓库里的，加上com前缀与目录地址`cvlab.qdxnzn.com/目录`
-  - 如`cvlab.qdxnzn.com/目录/镜像名字:镜像版本号`
-
-
-
-### 4 编写进入docker后的命令
-
-点击左侧`Submit Job`，在右侧的Task_role_1的`Command`栏中填入命令
-
-```bash
-echo "task start..."
-# 防止镜像里没有挂载命令
-apt install -y nfs-common
-apt update # 更新源
-
-# 挂载 #(把存储服务器/data 挂载到 docker容器/mnt)
-mount -o nolock -t nfs 192.168.1.4:/data/姓名  /mnt
-##挂载完后你的文件传到了/mnt里，
-##比如原来文件地址：/data/hanfeng/test.sh，现在地址为：/mnt/test.sh。
-##注意没有了姓名
-
-# cd找你的个人文件，
-cd /mnt
-# 修改python环境
-# source activate py38
-# 如 pip install tensorflow-gpu=1.12
-
-# 除挂载外，可以用scp命令传另外一些文件到镜像里
-# 文件服务器外网ip端口：222.195.151.85:8011
-
-# 执行训练任务 # 尽量使用绝对路径，注意是没有你姓名那层目录的
-python /mnt/test.py
-
-# 现有python环境是docker容器的python，如果要切换python版本请百度如何卸载python，安装module的原理也一样。
+``` python 
+#输入gedit ~/.condarc复制以下内容后保存：
+channels:
+ - https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
+ - https://mirrors.ustc.edu.cn/anaconda/cloud/conda-forge/
+ - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+ - defaults
+show_channel_urls: true
 ```
 
-如下用法：
+- 删除源：conda config --remove-key channels
 
-测试环境1
+##### 更改pip源
 
-```bash
-echo "task start..."
-apt update
-echo "task end..."
+```sh
+# 临时更换：-i后面跟上源地址
+pip install pythonModuleName -i https://mirrors.aliyun.com/pypi/simple
 
-mount -t nfs -o rw,nolock 192.168.1.4:/data/models /mnt
-```
+#永久更改
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
-测试环境2
-
-```bash
-echo "task start..."
-apt update
-apt install -y nfs-common
-echo "task 1..."
-mount -o nolock -t nfs 192.168.1.4:/data/models /mnt
-echo "task 2..."
-python /mnt/research/slim/download_and_convert_data.py --dataset_name=cifar10 --dataset_dir=/tmp/data
-echo "task 3..."
-python /mnt/research/slim/train_image_classifier.py --dataset_name=cifar10 --dataset_dir=/tmp/data --max_number_of_steps=1000 --batch_size 64
-
-
-# 存储服务器和docker容器的文件对应关系如下：
-# /data/models/research/slim/download_and_convert_data.py 
-# ===> /mnt/research/slim/download_and_convert_data.py
+或者采用如下方式：
+#创建目录
+mkdir -p ~/.pip
+#修改配置文件
+vim  ~/.pip/pip.conf
+#写入以下内容并保存
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 
 
 
+### 3.4 navigator
 
-### 5 提交任务
+ps：你也可以使用navigator界面的方式进行上面创建虚拟环境安装包等操作
 
-网页：222.195.151.231
+![](https://fermhan.oss-cn-qingdao.aliyuncs.com/oldGithub/20190325170518.jpg?token=AkTVJfCdox_AKmenkZWtbZejKnxxdoVMks5cmJoSwA%3D%3D)
 
-在command里写上面小节4里编写好的训练命令
+### Anaconda2
 
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200531171438.png)
+若有特殊情况需要安装Anaconda2（Anaconda3里有python2.7），可以使用如下方法：
 
-
-
-注意：只填入地址，没有前缀docker push
-
-```bash
-# 提交的镜像直接在网页上复制pull地址也可以(@sha格式)，自己编写也可以(:tag格式)。
-# 格式1 # sha是版本号的编码
-cvlab.qdxnzn.com/ouc/镜像名字@镜像版本号sha256:d2e056809cd55fc2605524e335efa9cc72b07ecffacb8cabf57335dc918d4fc3
-
-# 格式2 # 拉取的是docker hub的，不是学校仓库的
-openpai/pytorch-py36-cu90:lastest
-# 或
-cvlab.qdxnzn.com/ouc/镜像名字:镜像版本号cuda10.0-cudnn7.6-python6-tf15
-```
-
-第二次使用该镜像拉取得很快的，因为集群中有该镜像了。
-
-- 在job name那里可以自己注解你训练的是什么任务
-
-提交完任务后，可以取Jobs页面查看运行情况与标准输入、标准错误
-
-### 6 自定义docker镜像/提交学校仓库
-
-> 此部分是自己镜像仓库的使用，可以跳过
-
-我们可以直接选择 cvlab.qdxnzn.com   里现有的镜像、可以基于这些镜像重新制作、也可以看第三部分自己从0开始制作。账号密码在开头
-
-#### push与pull
-
-如果你使用过`docker commit`命令，那你可能必须经历这步
-
-```bash
-# 1.先登录再push
-sudo docker login --username=admin  cvlab.qdxnzn.com
-#输入密码 Harbor12345
-
-# 查看你的镜像id
-sudo docker images 
-
-#2. 将镜像推送到远程仓库,需要先登录
-## 打标签，新的tag要写明该镜像中软件的版本，如python6-tf15-cuda10.0-cudnn7.6.0
-sudo docker tag 【ImageId】 cvlab.qdxnzn.com/ouc目录/myYolo5镜像名字:v1版本号
-# 无论你怎么起名，要注意学校仓库里要com之后那个单词的目录。其余都是你的镜像名字
-
-## push
-sudo docker push cvlab.qdxnzn.com/ouc目录/myYolo5镜像名字:v1版本号
-
-# 注意我们为什么不直接在网页上pull拉取别人的镜像而要提交到学校的仓库？
-# 是为了有时候我们会修改docker镜像，然后push提交到某一仓库我们在网页上才能有地址可拉取
-# 容器形成镜像的
-# docker commit [OPTIONS] CONTAINER_ID [REPOSITORY[:TAG]]
-
-# 无用镜像及时删除整理
-```
-
-示例
-
-```bash
-sudo docker login --username=admin  cvlab.qdxnzn.com
-# Harbor12345
-
-sudo docker images
-#REPOSITORY             TAG        IMAGE ID       CREATED       SIZE
-#ultralytics/yolov5    latest    418a139445f7    16 hours ago   14.5GB
-
-
-sudo docker tag 418a139445f7容器id cvlab.qdxnzn.com/ouc目录/myYolo5镜像名字:v1版本号
-sudo docker push  cvlab.qdxnzn.com/ouc目录/myYolo5镜像名字:v1版本号
-# 然后就可以在镜像仓库里看到你的镜像了
-```
-
-> 注：有些镜像在openpai里不好用，最好用openpai官方提供的镜像，非官方的什么镜像好用我也没太研究，只知道普通镜像是不好用的。
+> Anaconda2 will now be installed into this location:home/xx/anaconda2
 >
-> 你也可以通过阿里云建立自己的仓库
+> -Press ENTER to confirm the location
+>
+> -Press CTRL-C to abort the installation
+>
+> -Or specify a different location below
+>
+> 这时不要选择回车，否则会覆盖原来的Anaconda3的环境变量。自己输入一个home下的路径即可
+>
+> Do you with the installer to prepend the Anaconda2 install location to PATH in your /home/ouc/.bashrc ?[yes|no]
+>
+> 要选择no，否则会覆盖原来的Anaconda环境变量，使别人无法正常使用
 
+# 4、后台训练任务screen/nohup &
 
+我们在ssh上`python XXX.py`开始训练任务后，如果关闭了ssh窗口，任务就会中断，我们可以使用如下两种方式之一进行后台训练
 
-# 二、docker基础学习
+- `nohup python train.py 参数 &`：即以nohub开头，以&结尾。默认将当前的输出打印在当前目录的nohup.out文件里
+  - nohup表示不挂断
+  - &表示后台运行命令
+- screen 
 
-### 1 docker概念
+### 4.1 screen
 
-镜像images相当于模板，容器container相当于模板实例化出来的实例。
+场景：比如我们`vi test.txt`编辑到一半的时候要回来了不得不关机，但我们明天重开机编辑的内容就撤销了，我们可以使用如下的方式进行临时保存
 
-镜像存储分为本地仓库和远程仓库。仓库中只能存放镜像，不能存放容器。要上传到仓库需要先把容器commit为镜像。
+```sh
+# ===安装screen===
+sudo apt install screen
 
-每个镜像有3个主要属性：所在仓库REPOSITORY、标签 TAG、ID号IMAGE ID。
+# ===在要执行的任务前加上screen===
+screen python aaa.py
+# 也可以使用-S指定任务名: screen -S jobName python aaa.py  
+# 可以用-L指定输出的日志，会在当前目录下生成screenlog.0文件。可以通过tail查看最终的日志。可以参考https://blog.csdn.net/weixin_44058333/article/details/99693489
+建议的用法如下：
+screen -L -S job123 python aaa.py
 
-ID可以唯一标识一个镜像，REPOSITORY:TAG也能唯一标识一个镜像。
+# 暂时离开刚页面
+# 按Ctrl+a，按完后再按d，就退出了训练页面，但任务还在进行
+# 给窗口自定义命名：ctrl+a 按完后再按A
 
-### 2 docker基本命令
+# ===重新连接会话===
+#screen -ls找到screen的任务
+screen -ls
+There is a screen on:
 
-```bash
-# 有的系统用户可能得加sudo
+        16582.pts-1.tivf06      (Detached)
 
-#查看镜像，会显示IMAGE_ID、REPOSITORY、TAG
-docker images 
+1 Socket in /tmp/screens/S-root.
 
-# 查看容器
-docker ps 
+# ===连接screen的任务===
+screen -r 16582
+# 又能看到训练页面了
 
-# 创建容器 (以镜像为模板) # 进入后命令行显示[root@容器id]  
-docker run  -it 【REPOSITORY:TAG】 /bin/bash
-# 如果有映射端口需要，可以使用下面命令，将本地8001端口映射到
-docker run -d -p 本地端口:容器内端口  【REPOSITORY:TAG】 
-# 进入运行中的容器
-docker exec -it 容器ID  /bin/bash
+# ======其他内容========
+# 将当前在另一个终端attach的会话强制退出，在当前终端接管：screen -d name screen -r name
 
-# 退出容器
-exit 或Ctrl+D 
+# 上下移动：ctrl-a w向前，b向后
 
-# 容器形成镜像
-docker commit [OPTIONS] CONTAINER_ID [REPOSITORY[:TAG]]
-# 为方便使用，我们要求把TAG以其容器中软件版本命名，越详细越好，方便我们分辨
-#如nocuda-python6-tf1.12。这样REPOSITORY[:TAG]表示为 cvlab.qdxnzn.com/docker-xxx/py38-tf12:v1
+# Ctrl-a +S 分隔屏幕，Ctrl-a+Tab可以切换区域，Ctrl-a+Q关闭其他区域块
 
-# 打标签，相当于复制且重命名镜像，方便指定上传的仓库
-docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
-
-
-# 删除镜像
-docker rmi 镜像id
-# 删除容器
-docker rm 容器id
-
-# 登录仓库
-sudo docker login --username=admin  cvlab.qdxnzn.com
-# Harbor12345
-
-# 1.先登录再push
-sudo docker login --username=admin  cvlab.qdxnzn.com
-#输入密码 Harbor12345
-
-
-#2. 将镜像推送到远程仓库,需要先登录
-## 打标签，新的tag要写明该镜像中软件的版本，如python6-tf15-cuda10.0-cudnn7.6.0
-sudo docker tag 【ImageId】 cvlab.qdxnzn.com/ouc/镜像名字:[镜像版本号]
-# 无论你怎么起名，要注意学校仓库里要com之后那个单词的目录。其余都是你的镜像名字
-
-## push
-sudo docker push cvlab.qdxnzn.com/ouc/镜像名字:[镜像版本号]
-
-
-
-
-#根据Dockerfile创建镜像
-docker build [OPTIONS] PATH | URL | -
-docker build -t 机构/镜像名<:tags> 生成Dockerfile目录
+# 如果连不上，可能是其他页面没有关掉
+# screen -ls ，发现其状态是 Attached，正常可连接的是 Detached，说明之前用户还占有那个session，直接踢掉他。
+screen -D  -r [name]
 ```
 
+4.2 nuhup ... &
 
-
-### 3 Dockerfile(附录)
-
-> 无需观看
-
-Dockerfile镜像描述文件
-
-- 是一个包含组合镜像的命令的文本文档
-- Docker通过读取Dockerfile中的指令按步自动生成镜像
-- 把命令写在Dockerfile中，且Dockerfile必须命名为Dockerfile
-
-基本命令：
-
-```bash
-FROM 【基准镜像】#基准镜像
-FROM scratch # 不依赖任何镜像标准
-MAINTAINER # 说明信息
-# LABEL version= # 版本信息 
-LABEL description =
-
-# cd
-WORKDIR  
-
-# 复制、添加远程文件
-ADD 【本地文件】  【镜像目录】
-
-# 覆盖环境变量
-ENV  JAVA_HOME /usr/local/openjdk8 
-
-# 执行sh命令
-## 方式1：run后直接加命令
-RUN ${JAVA_HOME}/bin/jva -jhar test.jar
-## 方式2：用数组的方式分隔空格
-RUN["echo","123"]
-
-# 暴露端口
-EXPOSE 7000 
-```
-
-3种执行命令的方法：
-
-```bash
-# 1 RUN方式：在docker build构建时执行命令
-RUN yum install -y vim # Shell命令格式
-RUN ["yum","install","-y","vim"] # Exec命令格式，推荐
-
-## shell与Exec命令格式区别：
-###shell方式
-#### 使用shell执行时，当前shell是父进程，生成一个子shell进程
-#### 在子shell进程执行脚本，脚本执行完毕，退出子shell，回到当前shell
-###使用Exec方式
-#### Exec方式会用Exec进程替换当前进程，并且保持PID不变。执行完毕，直接退出，并不会退出之前的父进程环境
-
-# 2 ENTRYPOINT方式：在docker run构建容器 容器启动时执行的命令  
-## 且Dockerfile中只有最后一个ENTRYPOINT会被执行
-ENTRYPOINT ["ps"] #推荐使用Exec格式
-
-# 3 CMD方式：容器启动后执行默认的命令或参数
-## 且Dockerfile中只有最后一个CMD会被执行
-## 如容器启动时附加指令，则CMD被忽略  docker run ... ls
-CMD ["ps","-ef"] #推荐使用Exec格式
-
-# 组合使用方法：
-ENTRYPOINT可以和CMD组合使用  如：
-ENTRYPOINT ["ps"]
-CMD ["-ef"]
-这样我们就可以在build的时候添加另外的参数如-ef|grep ssh，这样就覆盖了CMD
-```
-
-
-
-# 三 Dockerfile模板(附录)
-
-看到这说明你不想用我们https://cvlab.qdxnzn.com/harbor/projects/69/repositories 中的镜像，要从0开始制作镜像了。
-
-- 提供几个openPAI可用镜像库：(不要直接基于普通版本ubuntu制作镜像，openPAI识别不了nfs命令)
-
-https://hub.docker.com/u/openpai
-
-https://hub.docker.com/r/nvidia/cuda/tags
-
-这里提供几个openPAI基础镜像
-
-```bash
-docker pull openpai/pai.build.base:hadoop2.7.2-cuda9.0-cudnn7-devel-ubuntu16.04
-
-docker pull openpai/tensorflow-py36-cu90:latest
-
-docker pull openpai/tensorflow-py27-cu90:latest
-
-docker pull openpai/pytorch:1.0-cuda10.0-cudnn7-devel
-
-docker pull openpai/pytorch-py36-cu90:latest
-```
-
-找到镜像地址后，利用下面的Dockerfile模板安装一些必须软件
-
-对于这个Dockerfile，一般来说从nvidia或者openPAI上下载下来基础镜像后，只需要修改第一行FROM就可以了。
-
-我们本地仓库里cvlab.qdxnzn.com/ouc/theory-repository:为前缀的镜像基本已经指向过模板里的命令了，所以用不到这个Dockerfile，只需要基于我们镜像直接修改python、TensorFlow即可。
-
-```bash
-FROM openpai/pytorch:1.0-cuda10.0-cudnn7-devel
-ENV LANG C.UTF-8
-RUN apt-get update && \
-
-	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        build-essential \
-        apt-utils \
-        ca-certificates \
-        wget \
-        git \
-        nano \
-        vim \
-        libssl-dev \
-        curl \
-        openssh-server \
-        unzip \
-        unrar \
-        nfs-common \
-        && \
-
-    git clone --depth 10 https://github.com/Kitware/CMake ~/cmake && \
-    cd ~/cmake && \
-    ./bootstrap && \
-    make -j"$(nproc)" install && \
-    ldconfig && \
-    apt-get clean && \
-    apt-get autoremove && \
-    rm -rf /var/lib/apt/lists/* /tmp/* ~/* 
  
- 
-RUN apt-get update && \
-	apt-get install -y libreadline-dev 
 
-    
+# 5、ssh工具MobaXterm
 
-EXPOSE 8888 6006
+原来我们推荐xftp和xshell作为ssh工具。现在我们推荐MobaXterm作为ssh工具。Xterm可以实现ssh、xftp等功能，直接文件拖拽互传，对新手友好，界面优美。
+
+下载地址：https://mobaxterm.mobatek.net/download-home-edition.html
+
+端口是91XX，而不是90XX，也有的服务器这两个端口是反的，
+
+#### ssh基础命令
+
+```BASH
+pwd #打印当前目录
+cd 目录 #转换目录，分为相对路径和绝对路径，第一位是/的是绝对路径
+wget www.链接 #下载文件
+ls #查看当前目录文件
+mkdir #创建目录
+vim #编辑文件
+# vim分为命令模式，插入模式和底线模式。了解前两个即可
+# 刚进去的适合是命令模式，此时只能查看文件，按h左j下k上l右；按i进入插入模式编辑文件
+# 编辑好后按Esc，然后输入:wq代表保存退出，q！代表不保存退出
+# 补充：命令模式下：u撤销 Ctrl+r取消撤销 x删除当前光标字符 X是向前删 x是向后删
+# 其他命令自己学习
+
+sudo apt install lrzsz
+rz 上传文件 # 需要先安装sudo apt install lrzsz
+sz下载文件
 ```
 
+> 若链接ssh不成功，可先安装：
+>
+> 如果ubuntu里没有ssh可以通过如下命令安装
+> `sudo apt-get install openssh-server`，在ubuntu端安装ssh。
+> 输入"sudo ps -e |grep ssh"-->回车-->有sshd,说明ssh服务已经启动，如果没有启动，输入"sudo service ssh start"-->回车-->ssh服务就会启动。
+>
+> 注：ssh也可在安装显卡驱动时使用，无需跑去机房安装。
 
+# 6、外网使用服务器zerotier
+
+我们通过zerotier这个软件映射校园网到校园外网(家中局域网)
+
+操作步骤：
+
+2. 下载Windows版本的Zerotier：`MSI Installer (x86/x64)`（为方便，临时提供百度云方式下载连接：
+
+   https://pan.baidu.com/s/1eiJy2A5PxT-o0yyhnR3dWA 提取码：f58H ）。（百度云链接失效的话可以去官网下载：https://www.zerotier.com/download/  。只是加入网络的话不需要注册账号）
+
+3. 安装好后，在Zerotier软件界面（或者在任务栏小图标上右键），点击join Netwok，输入ID号：a09acf023363b091。需要联系后台管理员通过才能通过授权（请主动联系一下，要不然不知道请求访问的ip具体是谁，也不能及时通过请求）。
+
+4. IP：访问新的指定的服务器IP（与校园网IP不一样了）。==新的IP地址为：`192.168.192.两位IP号`，比如你原来的服务器是ouc-28，那么服务器新的IP即：`192.168.192.28`==。zerotier的ip全是这个规则
+
+5. 端口：因为IP已改变，原来映射的端口也就无需使用了。==远程桌面的端口号是3389，SSH/XFTP的端口号是22。账号密码不变==
+
+- 连接远程桌面：端口是3389。示例：`192.168.192.10:3389` （起作用，但是有些地区被墙的原因，网速慢会连接不上）
+- 连接ssh/xftp：端口是22。示例`192.168.192.10:22` 
+
+延迟问题不太方便解决，有的地区连接就很稳定，有的地区可能只能连ssh体会一下龟速网络，所以请学习一下ssh使用。
+
+-----------------分割线----------------
+
+### 6.2 附：
+
+管理员分配zerotier IP给新的服务器：
+
+百度如何获取Network ID，我们之前已经创建过了，所以无需再次创建
+
+在服务器上：
 
 ```bash
-# ==================================================================
-# tf 1.12.0 cuda9.0 cudnn7 py36
-# ------------------------------------------------------------------
+# 安装zerotier
+curl -s https://install.zerotier.com | sudo bash
+# 加入指定的"局域网"
+sudo zerotier-cli join a09acf023363b091
+# 在zerotier官网登录创建该"局域网"ID的用户，允许上一步的服务器加入网络，在列表前面的勾选框里勾选新加入的服务器，然后就可以通过Managed IPs访问了
 
-FROM nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04
-ENV LANG C.UTF-8
-RUN apt-get update && \
+#尝试了moon。好像也没什么效果，可能有错误
+# zerotier-cli orbit 11bdb40555 11bdb40555
 
-	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        build-essential \
-        apt-utils \
-        ca-certificates \
-        wget \
-        git \
-        nano \
-        vim \
-        libssl-dev \
-        curl \
-        openssh-server \
-        unzip \
-        unrar \
-        nfs-common \
-        && \
+#ssh -p 9012 ouc@222.195.151.170
+#ssh -p 9011 ouc@222.195.151.170
 
-    git clone --depth 10 https://github.com/Kitware/CMake ~/cmake && \
-    cd ~/cmake && \
-    ./bootstrap && \
-    make -j"$(nproc)" install 
- 
- 
-RUN apt-get update && \
-apt-get install -y libreadline-dev && \ 
-wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz && \ 
-tar -xvf Python-3.6.0.tgz && \ 
-cd Python-3.6.0 && \ 
-./configure && \ 
-make && \ 
-make install && \
-ln -s /usr/local/bin/python3.6 /usr/local/bin/python && \
-ln -s /usr/local/bin/python3.6-config  /usr/local/bin/python-config
-
-RUN pip3 install --upgrade pip && \
-    pip3 install --upgrade setuptools && \
-    pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
-    
-#RUN pip3 install tensorflow-gpu==1.12.0 -i https://pypi.tuna.tsinghua.edu.cn/simple
-
-# ==================================================================
-# config & cleanup
-# ------------------------------------------------------------------
-
-RUN   ldconfig && \
-    apt-get clean && \
-    apt-get autoremove && \
-    rm -rf /var/lib/apt/lists/* /tmp/* ~/*  && \
-    rm -R /Python-3.6.0 && \
-    rm /Python-3.6.0.tgz
-
-
-EXPOSE 8888 6006
+# ssh -p 9128 ouc-28@222.195.151.170
 ```
 
 
 
-```dockerfile
-# ==================================================================
-# tf 1.12.0 cuda9.0 cudnn7 py36
-# cuda10需要安装tf 1.15
-# ------------------------------------------------------------------
+# 7、重装系统（非常不建议）
 
-FROM nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04
-ENV LANG C.UTF-8
-# 要安装的软件
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        build-essential \
-        apt-utils \
-        ca-certificates \
-        wget \
-        nfs-common \
-        git \
-        nano \
-        vim \
-        libssl-dev \
-        curl \
-        openssh-server \
-        unzip \
-        unrar \
-        && \
+首先说明：非常不建议自己重装系统。即使要重装系统，也要负责地把需要的各项都装好，不给别人添麻烦。
 
-    GIT_CLONE="git clone --depth 10 https://github.com/Kitware/CMake ~/cmake && \
-    cd ~/cmake && \
-    ./bootstrap && \
-    make -j"$(nproc)" install 
- 
- 
-RUN apt-get update && \
-apt-get install -y libreadline-dev && \ 
-wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz && \ 
-tar -xvf Python-3.6.0.tgz && \ 
-cd Python-3.6.0 && \ 
-./configure && \ 
-make && \ 
-make install && \
-ln -s /usr/local/bin/python3.6 /usr/local/bin/python && \
-ln -s /usr/local/bin/python3.6-config  /usr/local/bin/python-config
+重装系统后需要把第6部分的内容全部配置好
 
-RUN pip3 install --upgrade pip && \
-    pip3 install --upgrade setuptools  && \
-    pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
-    
-RUN pip3 install tensorflow-gpu==1.12.0 -i https://pypi.tuna.tsinghua.edu.cn/simple
+### 7.1 安装系统
 
-# ==================================================================
-# config & cleanup
-# ------------------------------------------------------------------
+如果真有需要安装系统，比较推荐安装ubuntu16，因为ubuntu16对远程桌面支持比较好。要保证用户名密码与原来设定一致。
 
-RUN ldconfig && \
-    apt-get clean && \
-    apt-get autoremove && \
-    rm -rf /var/lib/apt/lists/* /tmp/* ~/*  && \
-    rm -R /Python-3.6.0 && \
-    rm /Python-3.6.0.tgz
+### 7.2 ==设置IP==
 
+重新配置IP以便可以远程连接  https://blog.csdn.net/hancoder/article/details/102881903 
 
-EXPOSE 8888 6006
-```
+### 7.3 ==安装cuda，显卡驱动等==
 
-在命令行执行生成镜像：
+参考链接 https://blog.csdn.net/hancoder/article/details/86634415
+
+##### 解决重启后显卡驱动失效的问题
+
+刚才显卡驱动还能用，重启一下， `nvidia-smi` 却报错误
 
 ```bash
-docker build  -t 【生成镜像仓库:TAG】   Dockerfile的所在目录
-如
-docker build  -t  cvlab.qdxnzn.com/ouc/theory-repository:python6-tf1.12-cuda9   ./
+NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. 
+Make sure that the latest NVIDIA driver is installed and running.
+# 这是因为重启后系统内核更新，显卡驱动就不匹配到了，但是显卡驱动还在系统某个角落
 ```
 
-https://mirrors.aliyun.com/pypi/simple/
-
-# 四 测试通过镜像(附录)
-
-这里写一些测试通过的镜像
+参考解决方案：[https://blog.csdn.net/hangzuxi8764/article/details/86572093](https://link.zhihu.com/?target=https%3A//blog.csdn.net/hangzuxi8764/article/details/86572093)
 
 ```bash
-echo "task start..."
-apt update
-apt install -y nfs-common
-echo "task 1..."
-mount -o nolock -t nfs 192.168.1.4:/data/models /mnt
-echo "pip install..."
-python /mnt/research/slim/download_and_convert_data.py --dataset_name=cifar10 --dataset_dir=/tmp/data
-echo "task 3..."
-python /mnt/research/slim/train_image_classifier.py --dataset_name=cifar10 --dataset_dir=/tmp/data --max_number_of_steps=1000 --batch_size 64
+# 查看现有nvidia显卡驱动的版本号
+ls /usr/src | grep nvidia
+# 比如查到了 418.87.00 
+
+sudo apt install dkms
+sudo dkms install -m nvidia -v 418.87.00
 ```
 
-该组命令在下面镜像上正常训练过：
 
-- openpai/tensorflow-py36-cu90:latest
-- openpai/pytorch-py36-cu90:latest
 
-# 五 阿里云仓库(过期)
+### 7.4 远程内容
 
-我们有校内仓库了，所以无需阿里云仓库了。此部分可以不看
+- 配置远程桌面： https://blog.csdn.net/hancoder/article/details/102882153 
+- 安装ssh以便文件传输： https://blog.csdn.net/hancoder/article/details/102881903 
 
-#### 阿里云仓库
+```BASH
+一般只需要进行：
+apt-get install openssh-server
+service ssh restart
 
-浏览器输入https://cr.console.aliyun.com/cn-qingdao/instances/repositories
-
-创建命名空间
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529174457.png)
-
-创建仓库：
-
-![](https://fermhan.oss-cn-qingdao.aliyuncs.com/img/20200529195534.png)
-
-然后点击创建好的仓库，在页面下面就提示了你怎么使用你的阿里云仓库。
-
-创建完阿里云仓库后重新看第5部分，push到你阿里云仓库即可。
-
-```bash
-# 1. 登录阿里云Docker Registry 
-docker login --username=韩锋626 registry.cn-qingdao.aliyuncs.com
-#输入密码 visionlab2020
-## username中有中文是若干年前创建阿里云账号的时候不小心舔的中文,更改不了，所以
-
-#2. 将镜像推送到Registry,需要先登录完
-## 打标签
-docker tag [ImageId] registry.cn-qingdao.aliyuncs.com/oucvisionlab/docker-repository:[镜像版本号]
-## push
-docker push registry.cn-qingdao.aliyuncs.com/oucvisionlab/docker-repository:[镜像版本号]
+特殊情况可以修改文件：
+vim /etc/ssh/sshd_config
+将PermitRootLoginwithout-password注释，                                
+添加一行： PermitRootLoginyes
 ```
 
+还需要安装anaconda
+
+# 8、What's-more
+
+### 8.1 为什么要安装小老鼠这个界面？
+
+因为teamviewer总会出现商业版问题，所以无奈选择远程连接的方式，如果你使用时间较长，可以试着连teamviewer使用。
+
+因为ubuntu不好实现远程连接，必须通过安装小老鼠界面间接控制ubuntu。ubuntu16有很好的有解决方案（无奈当初别人装的是18系统），而ubuntu18因为版本原因远程桌面的选择很少。所以尽管小老鼠界面不美观，但还得接着使用。
+
+- ubuntu18配置远程参考此链接的第二个方法https://blog.csdn.net/star2523/article/details/81152890
+
+- 在ubuntu16下可能存在完美的解决方式请参考：https://blog.csdn.net/qq_37674858/article/details/80931254 ， https://www.cnblogs.com/xuliangxing/p/7642650.html
+
+- 原来服务器配置人员的博客：https://blog.csdn.net/zhouxiaowei1120/article/details/80872919
+
+> 注：安桌面的`echo xfce4-session >~/.xsession`命令是向home目录的`.xsession`文件末尾写入xfce4-session
+
+### 8.2 一些其他内容
+
+- 配置环境变量的文件：`~/.bashrc`
+- 服务器应只跑实验时使用，调试代码请尽量在个人电脑上线调试好
+- 有问题咨询组内
+- 以后更新尽量在此github账号更新IP等内容，以便同步。账号即OUCvisionLab，密码可问管理员索要。
+
+### 8.3 linux必备技能
+
+- linux基础指令：https://blog.csdn.net/hancoder/article/details/104304735
+- vim基础用法：https://blog.csdn.net/hancoder/article/details/104304509
+- ip配置： https://blog.csdn.net/hancoder/article/details/102881903 
+- cuda、显卡驱动：https://blog.csdn.net/hancoder/article/details/86634415
+- 配置远程桌面： https://blog.csdn.net/hancoder/article/details/102882153
+- 安装ssh： https://blog.csdn.net/hancoder/article/details/102881903 
+- ftp配置：https://blog.csdn.net/hancoder/article/details/100988807
+
+### 8.3 contact me
+
+QQ：553736044@qq.com
